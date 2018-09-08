@@ -25,12 +25,42 @@ export class DocView extends React.Component {
     };
 
     return <div>
-      Hi this is a document
-      <canvas ref="canvas" width={doc.width} height={doc.height} style={style}></canvas>
+      <canvas
+        ref="canvas"
+        width={doc.width}
+        height={doc.height}
+        style={style}
+        onMouseDown={this.onMouseDown.bind(this)}
+        onMouseMove={this.onMouseDown.bind(this)}
+        onMouseUp={this.onMouseDown.bind(this)}
+      >
+      </canvas>
     </div>
   }
 
+  onMouseDown(e) {
+    let fx = (e.pageX - this.refs.canvas.offsetLeft) / this.state.zoom;
+    let fy = (e.pageY - this.refs.canvas.offsetTop) / this.state.zoom;
+
+    var x = Math.floor(fx);
+    var y = Math.floor(fy);
+
+    var doc = this.props.doc;
+    var i = x + y * doc.width;
+    var I = i * 4;
+    doc.pixels[I+0] = 0;
+    doc.pixels[I+1] = 0;
+    doc.pixels[I+2] = 0;
+    doc.pixels[I+3] = 255;
+
+    this.redraw();
+  }
+
   componentDidMount() {
+    this.redraw();
+  }
+
+  redraw() {
     const doc = this.props.doc;
     const ctx = this.refs.canvas.getContext("2d")
 
