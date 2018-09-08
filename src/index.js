@@ -2,16 +2,19 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-class App extends React.Component {
+import { Doc, DocView } from './Doc';
+
+export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      docs: []
+      docs: [new Doc(32, 32)]
     };
   }
 
   render() {
-    return <div>{"I'm an app"}</div>
+    var docs = this.state.docs.map((d) => <DocView doc={d} />);
+    return <div>{docs}</div>
   }
 }
 
