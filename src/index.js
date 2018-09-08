@@ -8,7 +8,7 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      docs: [new Doc(256, 256)]
+      docs: [new Doc(50, 70)]
     };
   }
 
