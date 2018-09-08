@@ -9,10 +9,24 @@ export class Doc {
 }
 
 export class DocView extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      zoom: 4
+    }
+  }
+
   render() {
+    let doc = this.props.doc;
+
+    const style = {
+      width: doc.width * this.state.zoom,
+      height: doc.height * this.state.zoom
+    };
+
     return <div>
       Hi this is a document
-      <canvas ref="canvas" width={this.props.doc.width} height={this.props.doc.height}></canvas>
+      <canvas ref="canvas" width={doc.width} height={doc.height} style={style}></canvas>
     </div>
   }
 
