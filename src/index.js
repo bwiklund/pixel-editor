@@ -8,12 +8,12 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      docs: [new Doc(32, 32)]
+      docs: [new Doc(256, 256)]
     };
   }
 
   render() {
-    var docs = this.state.docs.map((d) => <DocView doc={d} />);
+    var docs = this.state.docs.map((d) => <DocView key={d} doc={d} />);
     return <div>{docs}</div>
   }
 }
