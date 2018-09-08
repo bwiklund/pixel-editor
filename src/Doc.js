@@ -1,36 +1,20 @@
 import React from 'react';
 
-export class Vec {
-  constructor(x, y) {
-    this.x = x;
-    this.y = y;
-  }
-
-  add(o) {
-    return new Vec(this.x + o.x, this.y + o.y);
-  }
-
-  sub(o) {
-    return new Vec(this.x - o.x, this.y - o.y);
-  }
-
-  mag() {
-    return Math.sqrt(this.x * this.x + this.y * this.y);
-  }
-
-  scalarMult(n) {
-    return new Vec(this.x * n, this.y * n);
-  }
-}
+import Vec from './Vec';
 
 export class Doc {
-  constructor(width, height) {
+  constructor(name, width, height) {
+    this.name = name;
     this.width = width;
     this.height = height;
     this.pixels = new Array(width * height * 4).fill(128);
   }
 
   setPixel(v, r, g, b, a) {
+    if (v.x < 0 || v.x > this.width - 1 || v.y < 0 || v.y > this.height - 1) {
+      return;
+    }
+
     var i = ~~v.x + ~~v.y * this.width;
     var I = i * 4;
     this.pixels[I + 0] = r;
@@ -58,12 +42,15 @@ export class DocView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      doc: props.doc,
       zoom: 4
     }
   }
 
   render() {
-    let doc = this.props.doc;
+    let doc = this.state.doc;
+
+    console.log(doc);
 
     const style = {
       width: doc.width * this.state.zoom,
@@ -71,10 +58,11 @@ export class DocView extends React.Component {
     };
 
     return <div>
+      <div>{this.state.doc.name} | {this.state.doc.width}x{this.state.doc.height}px</div>
       <canvas
         ref="canvas"
-        width={doc.width}
-        height={doc.height}
+        width={this.state.doc.width}
+        height={this.state.doc.height}
         style={style}
         onMouseDown={this.onMouseDown.bind(this)}
         onMouseMove={this.onMouseDown.bind(this)}
@@ -90,7 +78,7 @@ export class DocView extends React.Component {
       (e.pageY - this.refs.canvas.offsetTop) / this.state.zoom
     );
 
-    var doc = this.props.doc;
+    var doc = this.state.doc;
 
     // TODO: lastpos is a janky test of line drawing, move this plz
     if (!this.lastPos) {
@@ -107,8 +95,12 @@ export class DocView extends React.Component {
     this.redraw();
   }
 
+  componentDidUpdate() {
+    this.redraw();
+  }
+
   redraw() {
-    const doc = this.props.doc;
+    const doc = this.state.doc;
     const ctx = this.refs.canvas.getContext("2d")
 
     let idata = ctx.getImageData(0, 0, doc.width, doc.height);
