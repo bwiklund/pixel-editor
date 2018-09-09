@@ -30,6 +30,7 @@ header {
 
 main {
   position: relative;
+  flex-grow: 3;
 }
 
 .main-container {
@@ -50,6 +51,7 @@ main {
   top: 0px;
   bottom: 0px;
   width: 100%;
+  overflow: hidden;
 }
 
 .doc-view canvas {

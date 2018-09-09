@@ -54,7 +54,8 @@ export class DocView extends React.Component {
     super(props);
     this.state = {
       doc: props.doc,
-      zoom: 4
+      zoom: 4,
+      offset: new Vec(50, 50) // absolute screen offset of the top left corner of the document
     }
   }
 
@@ -63,12 +64,15 @@ export class DocView extends React.Component {
 
     const style = {
       width: doc.width * this.state.zoom,
-      height: doc.height * this.state.zoom
-    };
+      height: doc.height * this.state.zoom,
+      position: "absolute",
+      top: this.state.offset.y + "px",
+      left: this.state.offset.x + "px",
+    }; // TODO: use 3d transform to move canvas?
 
     // <div>{this.state.doc.name} | {this.state.doc.width}x{this.state.doc.height}px</div>
 
-    return <div className="doc-view">
+    return <div className="doc-view" ref="artboard" onWheel={this.onWheel.bind(this)}>
       <canvas
         ref="canvas"
         width={this.state.doc.width}
@@ -79,11 +83,34 @@ export class DocView extends React.Component {
     </div>
   }
 
+  onWheel(e) {
+    var artboardMousePos = this.mousePositionInScreenSpaceOnArtboard(e);
+    var zoomCoef = Math.pow(2, 0.005 * -e.deltaY);
+    var newZoom = this.state.zoom * zoomCoef;
+
+    var topCornerFromMouseOffset = artboardMousePos.sub(this.state.offset);
+    var newOffset = artboardMousePos.sub(topCornerFromMouseOffset.scalarMult(zoomCoef));
+
+    this.setState({ zoom: newZoom, offset: newOffset });
+  }
+
+  mousePositionInScreenSpaceOnArtboard(e) {
+    var clientRect = this.refs.artboard.getBoundingClientRect();
+    return new Vec(e.pageX - clientRect.left, e.pageY - clientRect.top);
+  }
+
+  mousePositionInScreenSpaceRelativeToCanvasCorner(e) {
+    var clientRect = this.refs.canvas.getBoundingClientRect();
+    return new Vec(e.pageX - clientRect.left, e.pageY - clientRect.top);
+  }
+
+  mousePositionInCanvasSpace(e) {
+    return this.mousePositionInScreenSpaceRelativeToCanvasCorner(e).scalarMult(1 / this.state.zoom);
+  }
+
   onMouseDown(e) {
-    let pos = new Vec(
-      (e.pageX - this.refs.canvas.offsetLeft) / this.state.zoom,
-      (e.pageY - this.refs.canvas.offsetTop) / this.state.zoom
-    );
+    let pos = this.mousePositionInCanvasSpace(e);
+    let posInElement = this.mousePositionInScreenSpaceOnArtboard(e);
 
     var doc = this.state.doc;
 
@@ -93,9 +120,17 @@ export class DocView extends React.Component {
     } else {
       doc.drawLine(pos, this.lastPos, 255, 255, 255, 255);
     }
-    this.lastPos = pos;
 
     this.redraw();
+
+
+    if (e.shiftKey) { // test dragging
+      var diff = posInElement.sub(this.lastPosInElement);
+      this.setState({offset: this.state.offset.add(diff)});
+    }
+
+    this.lastPos = pos;
+    this.lastPosInElement = posInElement;
   }
 
   componentDidMount() {
