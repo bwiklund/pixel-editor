@@ -2,13 +2,14 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-import { Doc, DocView } from './Doc';
+import { Doc, DocHeader, DocView } from './Doc';
 
-export default class App extends React.Component {
+export default class AppView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      docs: []
+      docs: [],
+      activeDocIndex: 0
     };
   }
 
@@ -22,7 +23,7 @@ export default class App extends React.Component {
     this.setState((state, props) => {
       return { docs: state.docs.concat(doc) }
     });
-  
+
     const img = new Image();
     img.src = path; // TODO pull this out when i have more coherent plan for loading images
     img.onload = () => {
@@ -42,11 +43,24 @@ export default class App extends React.Component {
     }
   }
 
+  setActiveDoc(doc) {
+    this.setState((st,pr) => {
+      return {
+        activeDocIndex: st.docs.indexOf(doc)
+      }
+    });
+  }
+
   render() {
-    var docs = this.state.docs.map((d) => <DocView key={d.guid} doc={d} />);
-    return <div>{docs}</div>
+    let activeDoc = this.state.docs[this.state.activeDocIndex];
+    let doc = activeDoc ? <DocView key={activeDoc.guid} doc={activeDoc} /> : "";
+    let docHeaders = this.state.docs.map((d) => <DocHeader key={d.guid} doc={d} onClick={() => this.setActiveDoc(d)} />);
+    return <div>
+      <ol>{docHeaders}</ol>
+      <div>{doc}</div>
+    </div>
   }
 }
 
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<AppView />, document.getElementById('root'));

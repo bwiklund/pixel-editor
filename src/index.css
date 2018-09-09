@@ -1,3 +1,28 @@
+* {
+  margin: 0px;
+  padding: 0px;
+}
+
+body {
+  background: rgb(73, 65, 78);
+  color: white;
+  font-family: sans-serif;
+  user-select: none;
+}
+
+.doc-view {
+  padding: 10px;
+}
+
+.app {
+
+}
+
+.doc-header {
+  display: inline-block;
+  padding: 10px 15px;
+}
+
 canvas {
   image-rendering: optimizeSpeed;
   image-rendering: -moz-crisp-edges;
