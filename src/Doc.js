@@ -54,6 +54,7 @@ export class DocHeader extends React.Component {
 }
 
 export class DocView extends React.Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -61,8 +62,6 @@ export class DocView extends React.Component {
       zoom: 4,
       offset: new Vec(50, 50) // absolute screen offset of the top left corner of the document
     }
-
-    this.activeTool = new Pencil();
   }
 
   render() {
@@ -113,35 +112,6 @@ export class DocView extends React.Component {
   mousePositionInCanvasSpace(e) {
     return this.mousePositionInScreenSpaceRelativeToCanvasCorner(e).scalarMult(1 / this.state.zoom);
   }
-
-  ////////////////////////////////////// start mouse boilerplate ///////////////////////////////////////////////
-  onMouseDown(e) {
-    let pos = this.mousePositionInCanvasSpace(e);
-    let posInElement = this.mousePositionInScreenSpaceOnArtboard(e);
-    this.activeTool.onMouseDown(pos, this.state.doc);
-
-    this.lastPosInElement = posInElement;
-    this.redraw();
-  }
-
-  onMouseMove(e) {
-    let pos = this.mousePositionInCanvasSpace(e);
-    let posInElement = this.mousePositionInScreenSpaceOnArtboard(e);
-    this.activeTool.onMouseMove(pos, this.state.doc);
-
-    this.lastPosInElement = posInElement;
-    this.redraw();
-  }
-
-  onMouseUp(e) {
-    let pos = this.mousePositionInCanvasSpace(e);
-    let posInElement = this.mousePositionInScreenSpaceOnArtboard(e);
-    this.activeTool.onMouseUp(pos, this.state.doc);
-
-    this.lastPosInElement = posInElement;
-    this.redraw();
-  }
-  ////////////////////////////////////// end mouse boilerplate ///////////////////////////////////////////////
 
   componentDidMount() {
     this.redraw();

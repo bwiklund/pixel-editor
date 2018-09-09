@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 import { Doc, DocHeader, DocView } from './Doc';
+import { Tool, Pencil } from './Tools';
 import { ColorPicker } from './ColorPicker';
 import { Palette } from './Palette';
 
@@ -11,7 +12,8 @@ export default class AppView extends React.Component {
     super(props);
     this.state = {
       docs: [],
-      activeDocIndex: 0
+      activeDocIndex: 0,
+      activeTool: new Pencil(),
     };
   }
 
@@ -52,6 +54,42 @@ export default class AppView extends React.Component {
       }
     });
   }
+  
+
+  ////////////////////////////////////// start mouse boilerplate ///////////////////////////////////////////////
+  onMouseDown(e) {
+    var docView = this.refs.activeDocView;
+    var doc = this.state.docs[this.state.activeDocIndex];
+    let pos = docView.mousePositionInCanvasSpace(e);
+    let posInElement = docView.mousePositionInScreenSpaceOnArtboard(e);
+    this.state.activeTool.onMouseDown(pos, doc);
+
+    this.lastPosInElement = posInElement;
+    docView.redraw();
+  }
+
+  onMouseMove(e) {
+    var docView = this.refs.activeDocView;
+    var doc = this.state.docs[this.state.activeDocIndex];
+    let pos = docView.mousePositionInCanvasSpace(e);
+    let posInElement = docView.mousePositionInScreenSpaceOnArtboard(e);
+    this.state.activeTool.onMouseMove(pos, doc);
+
+    this.lastPosInElement = posInElement;
+    docView.redraw();
+  }
+
+  onMouseUp(e) {
+    var docView = this.refs.activeDocView;
+    var doc = this.state.docs[this.state.activeDocIndex];
+    let pos = docView.mousePositionInCanvasSpace(e);
+    let posInElement = docView.mousePositionInScreenSpaceOnArtboard(e);
+    this.state.activeTool.onMouseUp(pos, doc);
+
+    this.lastPosInElement = posInElement;
+    docView.redraw();
+  }
+  ////////////////////////////////////// end mouse boilerplate ///////////////////////////////////////////////
 
   render() {
     let activeDoc = this.state.docs[this.state.activeDocIndex];
@@ -59,9 +97,9 @@ export default class AppView extends React.Component {
     let docHeaders = this.state.docs.map((d) => <DocHeader key={d.guid} doc={d} onClick={() => this.setActiveDoc(d)} />);
     return <div
       className="top-container"
-      onMouseDown={(e) => this.refs.activeDocView.onMouseDown(e)}
-      onMouseMove={(e) => this.refs.activeDocView.onMouseMove(e)}
-      onMouseUp={(e) => this.refs.activeDocView.onMouseUp(e)}>
+      onMouseDown={this.onMouseDown.bind(this)}
+      onMouseMove={this.onMouseMove.bind(this)}
+      onMouseUp={this.onMouseUp.bind(this)}>
       <header>{docHeaders}</header>
       <div className="main-container">
         <div className="sidebar">
