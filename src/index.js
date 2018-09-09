@@ -46,7 +46,7 @@ export default class AppView extends React.Component {
   }
 
   setActiveDoc(doc) {
-    this.setState((st,pr) => {
+    this.setState((st, pr) => {
       return {
         activeDocIndex: st.docs.indexOf(doc)
       }
@@ -63,13 +63,20 @@ export default class AppView extends React.Component {
     let doc = activeDoc ? <DocView ref="activeDocView" key={activeDoc.guid} doc={activeDoc} /> : "";
     let docHeaders = this.state.docs.map((d) => <DocHeader key={d.guid} doc={d} onClick={() => this.setActiveDoc(d)} />);
     return <div
+      className="top-container"
       onMouseDown={this.onMouseDown.bind(this)}
       onMouseMove={this.onMouseDown.bind(this)}
       onMouseUp={this.onMouseDown.bind(this)}>
-      <ol>{docHeaders}</ol>
-      <div>{doc}</div>
-      <ColorPicker />
-      <Palette />
+      <header>{docHeaders}</header>
+      <div className="main-container">
+        <div className="sidebar">
+          <ColorPicker />
+          <Palette />
+        </div>
+        <main>
+          <div>{doc}</div>
+        </main>
+      </div>
     </div>
   }
 }

@@ -4,14 +4,52 @@
 }
 
 body {
-  background: rgb(73, 65, 78);
+  background: hsl(245, 10%, 21%);
   color: white;
   font-family: sans-serif;
   user-select: none;
+  overflow: hidden;
+}
+
+#root {
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  width: 100%;
+}
+
+.top-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+header {
+  background: hsl(245, 10%, 30%);
+}
+
+main {
+  position: relative;
+}
+
+.main-container {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  width: 100%;
+}
+
+.sidebar {
+  width: 264px; /* 256 + 4 border * 2*/
+  background: hsl(245, 10%, 18%);
+
 }
 
 .doc-view {
-  padding: 10px;
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  width: 100%;
 }
 
 .doc-view canvas {
@@ -33,10 +71,22 @@ body {
 }
 
 .color-picker {
-  display: inline-block;
-  border: 4px solid black;
+  display: block;
+  margin: 4px;
 }
 
 .color-picker canvas {
   display: block;
+}
+
+.palette {
+  display: block;
+  margin: 4px;
+}
+
+.palette-cell {
+  width: 32px;
+  height: 32px;
+  display: inline-block;
+  vertical-align:top;
 }
