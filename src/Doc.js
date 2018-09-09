@@ -21,7 +21,8 @@ export class Doc {
 }
 
 export class Layer {
-  constructor(width, height) {
+  constructor(name, width, height) {
+    this.name = name;
     this.width = width;
     this.height = height;
     this.pixels = new Array(this.width * this.height * 4).fill(0);
@@ -74,30 +75,6 @@ export class DocView extends React.Component {
       zoom: 4,
       offset: new Vec(50, 50) // absolute screen offset of the top left corner of the document
     }
-  }
-
-  render() {
-    let doc = this.state.doc;
-
-    const style = {
-      width: doc.width * this.state.zoom,
-      height: doc.height * this.state.zoom,
-      position: "absolute",
-      top: this.state.offset.y + "px",
-      left: this.state.offset.x + "px",
-    }; // TODO: use 3d transform to move canvas?
-
-    // <div>{this.state.doc.name} | {this.state.doc.width}x{this.state.doc.height}px</div>
-
-    return <div className="doc-view" ref="artboard" onWheel={this.onWheel.bind(this)}>
-      <canvas
-        ref="canvas"
-        width={this.state.doc.width}
-        height={this.state.doc.height}
-        style={style}
-      >
-      </canvas>
-    </div>
   }
 
   onWheel(e) {
@@ -160,5 +137,42 @@ export class DocView extends React.Component {
       }
     }
     ctx.putImageData(idata, 0, 0);
+  }
+
+  render() {
+    let doc = this.state.doc;
+
+    const style = {
+      width: doc.width * this.state.zoom,
+      height: doc.height * this.state.zoom,
+      position: "absolute",
+      top: this.state.offset.y + "px",
+      left: this.state.offset.x + "px",
+    }; // TODO: use 3d transform to move canvas?
+
+    // <div>{this.state.doc.name} | {this.state.doc.width}x{this.state.doc.height}px</div>
+
+    return (
+      <div className="artboard-and-timeline">
+        <div className="artboard" ref="artboard" onWheel={this.onWheel.bind(this)}>
+          <canvas
+            ref="canvas"
+            width={this.state.doc.width}
+            height={this.state.doc.height}
+            style={style}
+          >
+          </canvas>
+        </div>
+        <Timeline doc={doc} />
+      </div>)
+  }
+}
+
+export class Timeline extends React.Component {
+  render() {
+    var layerRows = this.props.doc.layers.map((row) => {
+      return <div className="timeline-row" key={row}>{row.name}</div> 
+    });
+    return <div className="timeline">{layerRows}</div>
   }
 }

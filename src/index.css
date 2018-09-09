@@ -46,15 +46,13 @@ main {
 
 }
 
-.doc-view {
-  position: absolute;
-  top: 0px;
-  bottom: 0px;
-  width: 100%;
+.artboard {
   overflow: hidden;
+  flex-grow: 3;
+  min-height: 50px;
 }
 
-.doc-view canvas {
+.artboard canvas {
   image-rendering: optimizeSpeed;
   image-rendering: -moz-crisp-edges;
   image-rendering: -webkit-optimize-contrast;
@@ -63,8 +61,10 @@ main {
   -ms-interpolation-mode: nearest-neighbor;
 }
 
-.app {
-
+.artboard-and-timeline {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .doc-header {
@@ -101,4 +101,9 @@ main {
 .current-colors .palette-cell {
   width: 64px;
   height: 64px;
+}
+
+.timeline {
+  background: hsl(245, 10%, 30%);
+  min-height: 128px;
 }

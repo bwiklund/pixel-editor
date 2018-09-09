@@ -43,7 +43,7 @@ export default class AppView extends React.Component {
 
       doc.height = img.height;
       doc.width = img.width;
-      var layer = new Layer(img.width, img.height);
+      var layer = new Layer("Layer 1", img.width, img.height);
       layer.pixels = loaderData.data;
       doc.layers[0] = layer;
 
@@ -154,7 +154,7 @@ export default class AppView extends React.Component {
           </div>
         </div>
         <main>
-          <div>{doc}</div>
+          {doc}
         </main>
       </div>
     </div>
