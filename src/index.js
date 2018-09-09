@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 import { Doc, DocHeader, DocView } from './Doc';
-import Vec from './Vec';
+import { ColorPicker } from './ColorPicker';
+import { Palette } from './Palette';
 
 export default class AppView extends React.Component {
   constructor(props) {
@@ -67,6 +68,8 @@ export default class AppView extends React.Component {
       onMouseUp={this.onMouseDown.bind(this)}>
       <ol>{docHeaders}</ol>
       <div>{doc}</div>
+      <ColorPicker />
+      <Palette />
     </div>
   }
 }
