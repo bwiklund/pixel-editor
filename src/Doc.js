@@ -18,6 +18,10 @@ export class Doc {
   get activeLayer() {
     return this.layers[this.activeLayerIndex];
   }
+
+  newLayer() {
+    this.layers.push(new Layer("Layer " + (this.layers.length + 1), this.width, this.height));
+  }
 }
 
 export class Layer {
@@ -102,6 +106,11 @@ export class DocView extends React.Component {
     return this.mousePositionInScreenSpaceRelativeToCanvasCorner(e).scalarMult(1 / this.state.zoom);
   }
 
+  onSelectLayer(layerId) {
+    this.state.doc.activeLayerIndex = layerId;
+    this.forceUpdate(); // is this how this is supposed to happen? why does this suck here
+  }
+
   componentDidMount() {
     this.redraw();
   }
@@ -163,15 +172,26 @@ export class DocView extends React.Component {
           >
           </canvas>
         </div>
-        <Timeline doc={doc} />
+        <Timeline doc={doc} onSelectLayer={this.onSelectLayer.bind(this)} />
       </div>)
   }
 }
 
 export class Timeline extends React.Component {
   render() {
-    var layerRows = this.props.doc.layers.map((row) => {
-      return <div className="timeline-row" key={row}>{row.name}</div> 
+    var doc = this.props.doc;
+    var layerRows = doc.layers.map((layer, i) => {
+      var klass = "timeline-row";
+      if ( doc.activeLayer === layer) { klass += " is-active"; }
+      return (
+        <div
+            onMouseDown={() => this.props.onSelectLayer(i)}
+            className={klass}
+            key={i}
+          >
+          {layer.name}
+        </div> 
+      );
     });
     return <div className="timeline">{layerRows}</div>
   }

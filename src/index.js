@@ -102,6 +102,10 @@ export default class AppView extends React.Component {
       this.state.activeTool.interrupt();
       this.setState({ activeTool: this.pannerTool });
     }
+    if (e.keyCode == 78) {// N
+      this.state.docs[this.state.activeDocIndex].newLayer();
+      this.forceUpdate();
+    }
   }
 
   onKeyUp(e) {
@@ -113,7 +117,7 @@ export default class AppView extends React.Component {
     if (e.keyCode == 88) { // X
       let fg = this.state.colorFg;
       let bg = this.state.colorBg;
-      this.setState({colorFg: bg, colorBg: fg});
+      this.setState({ colorFg: bg, colorBg: fg });
     }
   }
 

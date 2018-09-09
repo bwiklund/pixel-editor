@@ -107,3 +107,12 @@ main {
   background: hsl(245, 10%, 30%);
   min-height: 128px;
 }
+
+.timeline-row {
+  padding: 7px 10px;
+  background:  hsl(245, 10%, 40%);
+}
+
+.timeline-row.is-active {
+  font-weight: bold;
+}
