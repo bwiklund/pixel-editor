@@ -5,7 +5,8 @@ import './index.css';
 import { Doc, DocHeader, DocView } from './Doc';
 import { Tool, Pencil, Panner } from './Tools';
 import { ColorPicker } from './ColorPicker';
-import { Palette } from './Palette';
+import { Palette, PaletteCell } from './Palette';
+import { Color } from './Color';
 
 export default class AppView extends React.Component {
   pencilTool = new Pencil();
@@ -17,7 +18,9 @@ export default class AppView extends React.Component {
     this.state = {
       docs: [],
       activeDocIndex: 0,
-      activeTool: this.pencilTool
+      activeTool: this.pencilTool,
+      colorFg: Color.fromHex("#e75952"),
+      colorBg: Color.fromHex("#f9938a"),
     };
   }
 
@@ -53,7 +56,7 @@ export default class AppView extends React.Component {
       }
     });
   }
-  
+
 
   ////////////////////////////////////// start mouse boilerplate ///////////////////////////////////////////////
   onMouseDown(e) {
@@ -61,7 +64,7 @@ export default class AppView extends React.Component {
     var doc = this.state.docs[this.state.activeDocIndex];
     let pos = docView.mousePositionInCanvasSpace(e);
     let posInElement = docView.mousePositionInScreenSpaceOnArtboard(e);
-    this.state.activeTool.onMouseDown(pos, doc, {docView: docView, posInElement: posInElement});
+    this.state.activeTool.onMouseDown(pos, doc, { appView: this, docView: docView, posInElement: posInElement });
 
     this.lastPosInElement = posInElement;
     docView.redraw();
@@ -72,7 +75,7 @@ export default class AppView extends React.Component {
     var doc = this.state.docs[this.state.activeDocIndex];
     let pos = docView.mousePositionInCanvasSpace(e);
     let posInElement = docView.mousePositionInScreenSpaceOnArtboard(e);
-    this.state.activeTool.onMouseMove(pos, doc, {docView: docView, posInElement: posInElement});
+    this.state.activeTool.onMouseMove(pos, doc, { appView: this, docView: docView, posInElement: posInElement });
 
     this.lastPosInElement = posInElement;
     docView.redraw();
@@ -83,7 +86,7 @@ export default class AppView extends React.Component {
     var doc = this.state.docs[this.state.activeDocIndex];
     let pos = docView.mousePositionInCanvasSpace(e);
     let posInElement = docView.mousePositionInScreenSpaceOnArtboard(e);
-    this.state.activeTool.onMouseUp(pos, doc, {docView: docView, posInElement: posInElement});
+    this.state.activeTool.onMouseUp(pos, doc, { appView: this, docView: docView, posInElement: posInElement });
 
     this.lastPosInElement = posInElement;
     docView.redraw();
@@ -95,7 +98,7 @@ export default class AppView extends React.Component {
     if (e.keyCode == 32) { //space
       this.overriddenTool = this.state.activeTool;
       this.state.activeTool.interrupt();
-      this.setState({activeTool: this.pannerTool});
+      this.setState({ activeTool: this.pannerTool });
     }
   }
 
@@ -103,14 +106,19 @@ export default class AppView extends React.Component {
     if (e.repeat) { return; }
     if (e.keyCode == 32) { //space
       this.state.activeTool.interrupt();
-      this.setState({activeTool: this.overriddenTool});
+      this.setState({ activeTool: this.overriddenTool });
+    }
+    if (e.keyCode == 88) { // X
+      let fg = this.state.colorFg;
+      let bg = this.state.colorBg;
+      this.setState({colorFg: bg, colorBg: fg});
     }
   }
 
   componentDidMount() {
     this.onKeyDown = this.onKeyDown.bind(this);
     this.onKeyUp = this.onKeyUp.bind(this);
-  
+
     document.addEventListener("keydown", this.onKeyDown);
     document.addEventListener("keyup", this.onKeyUp);
 
@@ -137,7 +145,11 @@ export default class AppView extends React.Component {
       <div className="main-container">
         <div className="sidebar">
           <ColorPicker />
-          <Palette />
+          <Palette setColor={(color) => this.setState({ colorFg: color })} />
+          <div className="current-colors">
+            <PaletteCell onMouseDown={() => { }} color={this.state.colorFg} />
+            <PaletteCell onMouseDown={() => { }} color={this.state.colorBg} />
+          </div>
         </div>
         <main>
           <div>{doc}</div>

@@ -26,11 +26,12 @@ export class Pencil extends Tool {
   }
 
   drawPencilStrokes(pos, doc, context) {
+    var color = context.appView.state.colorFg;
     if (this.mouseIsDown) {
       if (!this.lastPos) {
-        doc.setPixel(pos, 255, 255, 255, 255);
+        doc.setPixel(pos, color.r, color.g, color.b, 255);
       } else {
-        doc.drawLine(pos, this.lastPos, 255, 255, 255, 255);
+        doc.drawLine(pos, this.lastPos, color.r, color.g, color.b, 255);
       }
       this.lastPos = pos.copy();
     }
