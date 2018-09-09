@@ -3,17 +3,20 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 import { Doc, DocHeader, DocView } from './Doc';
-import { Tool, Pencil } from './Tools';
+import { Tool, Pencil, Panner } from './Tools';
 import { ColorPicker } from './ColorPicker';
 import { Palette } from './Palette';
 
 export default class AppView extends React.Component {
+  pencilTool = new Pencil();
+  pannerTool = new Panner();
+
   constructor(props) {
     super(props);
     this.state = {
       docs: [],
       activeDocIndex: 0,
-      activeTool: new Pencil(),
+      activeTool: this.pannerTool
     };
   }
 
@@ -62,7 +65,7 @@ export default class AppView extends React.Component {
     var doc = this.state.docs[this.state.activeDocIndex];
     let pos = docView.mousePositionInCanvasSpace(e);
     let posInElement = docView.mousePositionInScreenSpaceOnArtboard(e);
-    this.state.activeTool.onMouseDown(pos, doc);
+    this.state.activeTool.onMouseDown(pos, doc, {docView: docView, posInElement: posInElement});
 
     this.lastPosInElement = posInElement;
     docView.redraw();
@@ -73,7 +76,7 @@ export default class AppView extends React.Component {
     var doc = this.state.docs[this.state.activeDocIndex];
     let pos = docView.mousePositionInCanvasSpace(e);
     let posInElement = docView.mousePositionInScreenSpaceOnArtboard(e);
-    this.state.activeTool.onMouseMove(pos, doc);
+    this.state.activeTool.onMouseMove(pos, doc, {docView: docView, posInElement: posInElement});
 
     this.lastPosInElement = posInElement;
     docView.redraw();
@@ -84,7 +87,7 @@ export default class AppView extends React.Component {
     var doc = this.state.docs[this.state.activeDocIndex];
     let pos = docView.mousePositionInCanvasSpace(e);
     let posInElement = docView.mousePositionInScreenSpaceOnArtboard(e);
-    this.state.activeTool.onMouseUp(pos, doc);
+    this.state.activeTool.onMouseUp(pos, doc, {docView: docView, posInElement: posInElement});
 
     this.lastPosInElement = posInElement;
     docView.redraw();
