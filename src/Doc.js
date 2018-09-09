@@ -1,5 +1,5 @@
 import React from 'react';
-
+import {Tool, Pencil} from './Tools';
 import Vec from './Vec';
 
 const BG_CHECKERBOARD_A = [32, 32, 32, 255];
@@ -16,11 +16,11 @@ export class Doc {
   }
 
   setPixel(v, r, g, b, a) {
-    if (v.x < 0 || v.x > this.width - 1 || v.y < 0 || v.y > this.height - 1) {
+    if (v.x < 0 || v.x >= this.width || v.y < 0 || v.y >= this.height) {
       return;
     }
 
-    var i = ~~v.x + ~~v.y * this.width;
+    var i = ~~(v.x) + ~~(v.y) * this.width;
     var I = i * 4;
     this.pixels[I + 0] = r;
     this.pixels[I + 1] = g;
@@ -35,10 +35,14 @@ export class Doc {
     const offset = p2.sub(p1);
     const dist = offset.mag();
     const stepSize = 0.1;
-    for (let n = 0; n <= dist; n += stepSize) {
-      const p = p1.add(offset.scalarMult(n / dist));
+    if (dist == 0) { // avoid NaN
+      this.setPixel(p1, r, g, b, a);
+    } else {
+      for (let n = 0; n <= dist; n += stepSize) {
+        const p = p1.add(offset.scalarMult(n / dist));
 
-      this.setPixel(p, r, g, b, a);
+        this.setPixel(p, r, g, b, a);
+      }
     }
   }
 }
@@ -57,6 +61,8 @@ export class DocView extends React.Component {
       zoom: 4,
       offset: new Vec(50, 50) // absolute screen offset of the top left corner of the document
     }
+
+    this.activeTool = new Pencil();
   }
 
   render() {
@@ -108,30 +114,34 @@ export class DocView extends React.Component {
     return this.mousePositionInScreenSpaceRelativeToCanvasCorner(e).scalarMult(1 / this.state.zoom);
   }
 
+  ////////////////////////////////////// start mouse boilerplate ///////////////////////////////////////////////
   onMouseDown(e) {
     let pos = this.mousePositionInCanvasSpace(e);
     let posInElement = this.mousePositionInScreenSpaceOnArtboard(e);
+    this.activeTool.onMouseDown(pos, this.state.doc);
 
-    var doc = this.state.doc;
-
-    // TODO: lastpos is a janky test of line drawing, move this plz
-    if (!this.lastPos) {
-      doc.setPixel(pos, 255, 255, 255, 255);
-    } else {
-      doc.drawLine(pos, this.lastPos, 255, 255, 255, 255);
-    }
-
-    this.redraw();
-
-
-    if (e.shiftKey) { // test dragging
-      var diff = posInElement.sub(this.lastPosInElement);
-      this.setState({offset: this.state.offset.add(diff)});
-    }
-
-    this.lastPos = pos;
     this.lastPosInElement = posInElement;
+    this.redraw();
   }
+
+  onMouseMove(e) {
+    let pos = this.mousePositionInCanvasSpace(e);
+    let posInElement = this.mousePositionInScreenSpaceOnArtboard(e);
+    this.activeTool.onMouseMove(pos, this.state.doc);
+
+    this.lastPosInElement = posInElement;
+    this.redraw();
+  }
+
+  onMouseUp(e) {
+    let pos = this.mousePositionInCanvasSpace(e);
+    let posInElement = this.mousePositionInScreenSpaceOnArtboard(e);
+    this.activeTool.onMouseUp(pos, this.state.doc);
+
+    this.lastPosInElement = posInElement;
+    this.redraw();
+  }
+  ////////////////////////////////////// end mouse boilerplate ///////////////////////////////////////////////
 
   componentDidMount() {
     this.redraw();

@@ -53,20 +53,15 @@ export default class AppView extends React.Component {
     });
   }
 
-  // we need to capture mouse events at this level so that strokes that go off canvas can continue correctly
-  onMouseDown(e) {
-    this.refs.activeDocView.onMouseDown(e);
-  }
-
   render() {
     let activeDoc = this.state.docs[this.state.activeDocIndex];
     let doc = activeDoc ? <DocView ref="activeDocView" key={activeDoc.guid} doc={activeDoc} /> : "";
     let docHeaders = this.state.docs.map((d) => <DocHeader key={d.guid} doc={d} onClick={() => this.setActiveDoc(d)} />);
     return <div
       className="top-container"
-      onMouseDown={this.onMouseDown.bind(this)}
-      onMouseMove={this.onMouseDown.bind(this)}
-      onMouseUp={this.onMouseDown.bind(this)}>
+      onMouseDown={(e) => this.refs.activeDocView.onMouseDown(e)}
+      onMouseMove={(e) => this.refs.activeDocView.onMouseMove(e)}
+      onMouseUp={(e) => this.refs.activeDocView.onMouseUp(e)}>
       <header>{docHeaders}</header>
       <div className="main-container">
         <div className="sidebar">

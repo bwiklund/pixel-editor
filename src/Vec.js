@@ -4,6 +4,10 @@ export default class Vec {
     this.y = y;
   }
 
+  copy() {
+    return new Vec(this.x, this.y);
+  }
+
   add(o) {
     return new Vec(this.x + o.x, this.y + o.y);
   }
