@@ -29,9 +29,9 @@ export class Pencil extends Tool {
     var color = context.appView.state.colorFg;
     if (this.mouseIsDown) {
       if (!this.lastPos) {
-        doc.setPixel(pos, color.r, color.g, color.b, 255);
+        doc.activeLayer.setPixel(pos, color.r, color.g, color.b, 255);
       } else {
-        doc.drawLine(pos, this.lastPos, color.r, color.g, color.b, 255);
+        doc.activeLayer.drawLine(pos, this.lastPos, color.r, color.g, color.b, 255);
       }
       this.lastPos = pos.copy();
     }

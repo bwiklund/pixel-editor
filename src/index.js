@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-import { Doc, DocHeader, DocView } from './Doc';
+import { Doc, Layer, DocHeader, DocView } from './Doc';
 import { Tool, Pencil, Panner } from './Tools';
 import { ColorPicker } from './ColorPicker';
 import { Palette, PaletteCell } from './Palette';
@@ -41,9 +41,11 @@ export default class AppView extends React.Component {
       loaderCtx.drawImage(img, 0, 0);
       let loaderData = loaderCtx.getImageData(0, 0, img.width, img.height);
 
-      doc.pixels = loaderData.data;
       doc.height = img.height;
       doc.width = img.width;
+      var layer = new Layer(img.width, img.height);
+      layer.pixels = loaderData.data;
+      doc.layers[0] = layer;
 
       this.forceUpdate(); // is there a better way to force a redraw here?
     }
