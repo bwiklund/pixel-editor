@@ -12,14 +12,17 @@ export class Tool {
   onMouseUp(pos, doc, context) {
 
   }
+
+  interrupt() { } // when stuff cuts off the tool mid-action and it needs to reset itself and clean up
 }
 
 export class Pencil extends Tool {
   mouseIsDown = false;
   lastPos = null;
-
-  onEnable() {
-
+  
+  interrupt() {
+    this.mouseIsDown = false;
+    this.lastPos = null;
   }
 
   drawPencilStrokes(pos, doc, context) {
@@ -52,9 +55,10 @@ export class Pencil extends Tool {
 export class Panner {
   mouseIsDown = false;
   lastPos = null;
-
-  onEnable() {
-
+  
+  interrupt() {
+    this.mouseIsDown = false;
+    this.lastPos = null;
   }
 
   doPanning(pos, doc, context) {

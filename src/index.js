@@ -10,19 +10,15 @@ import { Palette } from './Palette';
 export default class AppView extends React.Component {
   pencilTool = new Pencil();
   pannerTool = new Panner();
+  overriddenTool = null; //used to store whatever tool was open before we held down, say, space to pan
 
   constructor(props) {
     super(props);
     this.state = {
       docs: [],
       activeDocIndex: 0,
-      activeTool: this.pannerTool
+      activeTool: this.pencilTool
     };
-  }
-
-  componentDidMount() {
-    this.newDocFromImage("peepAvatar_neutral_0.png");
-    this.newDocFromImage("lunaAvatar_neutral_0.png");
   }
 
   newDocFromImage(path) {
@@ -94,6 +90,39 @@ export default class AppView extends React.Component {
   }
   ////////////////////////////////////// end mouse boilerplate ///////////////////////////////////////////////
 
+  onKeyDown(e) {
+    if (e.repeat) { return; }
+    if (e.keyCode == 32) { //space
+      this.overriddenTool = this.state.activeTool;
+      this.state.activeTool.interrupt();
+      this.setState({activeTool: this.pannerTool});
+    }
+  }
+
+  onKeyUp(e) {
+    if (e.repeat) { return; }
+    if (e.keyCode == 32) { //space
+      this.state.activeTool.interrupt();
+      this.setState({activeTool: this.overriddenTool});
+    }
+  }
+
+  componentDidMount() {
+    this.onKeyDown = this.onKeyDown.bind(this);
+    this.onKeyUp = this.onKeyUp.bind(this);
+  
+    document.addEventListener("keydown", this.onKeyDown);
+    document.addEventListener("keyup", this.onKeyUp);
+
+    this.newDocFromImage("peepAvatar_neutral_0.png");
+    this.newDocFromImage("lunaAvatar_neutral_0.png");
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener("keydown", this.onKeyDown);
+    document.removeEventListener("keyup", this.onKeyUp);
+  }
+
   render() {
     let activeDoc = this.state.docs[this.state.activeDocIndex];
     let doc = activeDoc ? <DocView ref="activeDocView" key={activeDoc.guid} doc={activeDoc} /> : "";
@@ -102,7 +131,8 @@ export default class AppView extends React.Component {
       className="top-container"
       onMouseDown={this.onMouseDown.bind(this)}
       onMouseMove={this.onMouseMove.bind(this)}
-      onMouseUp={this.onMouseUp.bind(this)}>
+      onMouseUp={this.onMouseUp.bind(this)}
+    >
       <header>{docHeaders}</header>
       <div className="main-container">
         <div className="sidebar">
