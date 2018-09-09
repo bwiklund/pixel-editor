@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 import { Doc, DocHeader, DocView } from './Doc';
+import Vec from './Vec';
 
 export default class AppView extends React.Component {
   constructor(props) {
@@ -51,11 +52,19 @@ export default class AppView extends React.Component {
     });
   }
 
+  // we need to capture mouse events at this level so that strokes that go off canvas can continue correctly
+  onMouseDown(e) {
+    this.refs.activeDocView.onMouseDown(e);
+  }
+
   render() {
     let activeDoc = this.state.docs[this.state.activeDocIndex];
-    let doc = activeDoc ? <DocView key={activeDoc.guid} doc={activeDoc} /> : "";
+    let doc = activeDoc ? <DocView ref="activeDocView" key={activeDoc.guid} doc={activeDoc} /> : "";
     let docHeaders = this.state.docs.map((d) => <DocHeader key={d.guid} doc={d} onClick={() => this.setActiveDoc(d)} />);
-    return <div>
+    return <div
+      onMouseDown={this.onMouseDown.bind(this)}
+      onMouseMove={this.onMouseDown.bind(this)}
+      onMouseUp={this.onMouseDown.bind(this)}>
       <ol>{docHeaders}</ol>
       <div>{doc}</div>
     </div>

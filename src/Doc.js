@@ -74,9 +74,6 @@ export class DocView extends React.Component {
         width={this.state.doc.width}
         height={this.state.doc.height}
         style={style}
-        onMouseDown={this.onMouseDown.bind(this)}
-        onMouseMove={this.onMouseDown.bind(this)}
-        onMouseUp={this.onMouseDown.bind(this)}
       >
       </canvas>
     </div>
@@ -92,9 +89,9 @@ export class DocView extends React.Component {
 
     // TODO: lastpos is a janky test of line drawing, move this plz
     if (!this.lastPos) {
-      doc.setPixel(pos, 0, 0, 0, 255);
+      doc.setPixel(pos, 255, 255, 255, 255);
     } else {
-      doc.drawLine(pos, this.lastPos, 0, 0, 0, 255);
+      doc.drawLine(pos, this.lastPos, 255, 255, 255, 255);
     }
     this.lastPos = pos;
 
