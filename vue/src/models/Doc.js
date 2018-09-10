@@ -7,11 +7,15 @@ export class Doc {
     this.activeLayerIndex = 0;
     this.guid = "" + Math.random();
     this.isReady = true;
-    this.version = 0;
+    this.hash = 0;
   }
 
   get activeLayer() {
     return this.layers[this.activeLayerIndex];
+  }
+
+  touch() {
+    this.hash = Math.random();
   }
 
   newLayer() {

@@ -1,14 +1,14 @@
 <template>
   <div class="hello">
     <ol>
-      <li v-for="doc in app.docs" v-bind:key="doc.guid">{{doc.name}}</li>
+      <li v-for="(doc, i) in app.docs" v-bind:key="doc.guid" v-on:click="app.activeDocIndex=i">{{doc.name}}</li>
     </ol>
     <DocView v-bind:doc="app.activeDoc" />
   </div>
 </template>
 
 <script>
-import DocView from './DocView.vue'
+import DocView from "./DocView.vue";
 
 export default {
   name: "AppView",

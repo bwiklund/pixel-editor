@@ -22,7 +22,7 @@ export function newDocFromImage(path, done) {
     layer.pixels = loaderData.data;
     doc.layers[0] = layer;
     doc.isReady = true;
-    doc.version++
+    doc.touch();
 
     done();
   }

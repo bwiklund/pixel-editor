@@ -1,8 +1,6 @@
 <template>
   <div class="doc-view">
-    This is the view for: {{doc.name}}
-    {{doc.version}}
-    <canvas ref="canvas" />
+    <canvas ref="canvas" :style="canvasStyle()" />
   </div>
 </template>
 
@@ -14,7 +12,18 @@ const BG_CHECKERBOARD_B = [40, 40, 40, 255];
 export default {
   name: "DocView",
   props: ["doc"],
+  data() {
+    return {
+      zoom: 4
+    }
+  },
   methods: {
+    canvasStyle() {
+      return {
+        width: (this.doc.width * this.zoom) + "px",
+        height: (this.doc.height * this.zoom) + "px"
+      }
+    },
     updateCanvas() {
       console.log("Updating canvas");
       
@@ -50,7 +59,7 @@ export default {
     }
   },
   watch: {
-    "doc.version"() {
+    "doc.hash"() {
       this.updateCanvas();
     }
   },
@@ -62,4 +71,12 @@ export default {
 </script>
 
 <style scoped>
+canvas {
+  image-rendering: optimizeSpeed;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: -o-crisp-edges;
+  image-rendering: pixelated;
+  -ms-interpolation-mode: nearest-neighbor;
+}
 </style>
