@@ -1,7 +1,8 @@
 <template>
   <div class="hello">
-    <h1>Count: {{ app.a }}</h1>
-    <a v-on:click="app.foo()">More</a>
+    <ol>
+      <li v-for="doc in app.docs" v-bind:key="doc.guid">{{doc.name}}</li>
+    </ol>
   </div>
 </template>
 
