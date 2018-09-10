@@ -1,32 +1,40 @@
 <template>
   <div class="color-picker">
     <canvas ref="canvas" @mousedown="mousedown"/>
+    <canvas ref="hueBar" class="hue-bar" @mousedown="mousedownHueBar"/>
     <div class="big-color" :style="{background: app.colorFg.toHex()}" />
     <div class="big-color" :style="{background: app.colorBg.toHex()}" />
   </div>
 </template>
 
 <script>
-import {Vec} from '../models/Vec';
-import {Color} from '../models/Color';
+import { Vec } from "../models/Vec";
+import { Color } from "../models/Color";
 
 export default {
   name: "colorpicker",
   props: ["app"],
   data() {
-    return  {
+    return {
       hsv: {
         h: 0,
         s: 1,
         v: 0.5
       }
-    }
+    };
   },
   methods: {
     mousedown(e) {
       var clientRect = this.$refs.canvas.getBoundingClientRect();
       var pos = new Vec(e.pageX - clientRect.left, e.pageY - clientRect.top);
-      console.log(pos);
+      var c = Color.fromHSV(this.hsv.h, pos.x / 255, pos.y / 255);
+      this.app.colorFg = c;
+    },
+    mousedownHueBar(e) {
+      var clientRect = this.$refs.canvas.getBoundingClientRect();
+      var pos = new Vec(e.pageX - clientRect.left, e.pageY - clientRect.top);
+      var c = Color.fromHSV(pos.x / 255, this.hsv.s, this.hsv.v);
+      this.app.colorFg = c;
     },
     updateCanvas() {
       const canvas = this.$refs.canvas;
@@ -42,7 +50,29 @@ export default {
           var i = x + y * canvas.width;
           var I = i * 4;
 
-          var c = Color.fromHSV(this.hsv.h, x/255, y/255);
+          var c = Color.fromHSV(this.hsv.h, x / 255, y / 255);
+
+          idata.data[I + 0] = c.r;
+          idata.data[I + 1] = c.g;
+          idata.data[I + 2] = c.b;
+          idata.data[I + 3] = 255; // always falls back to checkerboard, so always actually filled no matter what
+        }
+      }
+      ctx.putImageData(idata, 0, 0);
+    },
+    updateHueBar() {
+      const canvas = this.$refs.hueBar;
+      canvas.width = 256;
+      canvas.height = 1;
+      var ctx = canvas.getContext("2d");
+
+      let idata = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      for (let y = 0; y < canvas.height; y++) {
+        for (let x = 0; x < canvas.width; x++) {
+          var i = x + y * canvas.width;
+          var I = i * 4;
+
+          var c = Color.fromHSV(x / 255, 1, 1);
 
           idata.data[I + 0] = c.r;
           idata.data[I + 1] = c.g;
@@ -62,6 +92,7 @@ export default {
 
   mounted() {
     this.updateCanvas();
+    this.updateHueBar();
   }
 };
 </script>
@@ -79,7 +110,12 @@ export default {
   width: 100%;
   height: 32px;
   display: inline-block;
-  vertical-align:top;
+  vertical-align: top;
   margin: 4px 0 0 0;
+}
+
+.hue-bar {
+  height: 16px;
+  width: 256px;
 }
 </style>
