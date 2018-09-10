@@ -1,5 +1,6 @@
-import {Color} from './Color';
-import {Doc} from './Doc';
+import { Color } from './Color';
+import { Doc } from './Doc';
+import { newDocFromImage } from './ImageImporter';
 
 export class App {
   //pencilTool = new Pencil();
@@ -12,7 +13,11 @@ export class App {
   colorBg = Color.fromHex("#f9938a");
 
   constructor() {
-    this.docs.push(new Doc("Test 1",32,32));
-    this.docs.push(new Doc("Test 2",32,32));
+    this.docs.push(newDocFromImage("lunaAvatar_neutral_0.png", () => { }));
+    this.docs.push(newDocFromImage("peepAvatar_neutral_0.png", () => { }));
+  }
+
+  get activeDoc() {
+    return this.docs[this.activeDocIndex];
   }
 }

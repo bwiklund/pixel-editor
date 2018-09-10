@@ -7,6 +7,7 @@ export class Doc {
     this.activeLayerIndex = 0;
     this.guid = "" + Math.random();
     this.isReady = true;
+    this.version = 0;
   }
 
   get activeLayer() {

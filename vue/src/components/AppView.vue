@@ -3,13 +3,19 @@
     <ol>
       <li v-for="doc in app.docs" v-bind:key="doc.guid">{{doc.name}}</li>
     </ol>
+    <DocView v-bind:doc="app.activeDoc" />
   </div>
 </template>
 
 <script>
+import DocView from './DocView.vue'
+
 export default {
   name: "AppView",
-  props: ["app"]
+  props: ["app"],
+  components: {
+    DocView
+  }
 };
 </script>
 
