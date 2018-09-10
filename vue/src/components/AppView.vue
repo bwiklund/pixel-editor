@@ -38,6 +38,10 @@ export default {
         // n
         this.app.activeDoc.newLayer();
       }
+      if (e.keyCode == 69) {
+        // e
+        this.app.activeTool = this.app.eraserTool;
+      }
     },
     keyup(e) {
       if (e.repeat) return;

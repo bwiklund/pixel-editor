@@ -1,4 +1,4 @@
-// all tools take mousePos, the document, and then `context`, which is a bucket of cruft that some tools will need access to
+import { Color } from './Color';
 
 export class Tool {
   onMouseDown(context) {
@@ -19,7 +19,8 @@ export class Tool {
 export class Pencil extends Tool {
   mouseIsDown = false;
   lastPos = null;
-  
+  isEraser = false;
+
   interrupt() {
     this.mouseIsDown = false;
     this.lastPos = null;
@@ -27,11 +28,13 @@ export class Pencil extends Tool {
 
   drawPencilStrokes(context) {
     var color = context.app.colorFg;
+    if (this.isEraser) color = new Color(0, 0, 0, 0);
+
     if (this.mouseIsDown) {
       if (!this.lastPos) {
-        context.doc.activeLayer.setPixel(context.pos, color.r, color.g, color.b, 255);
+        context.doc.activeLayer.setPixel(context.pos, color.r, color.g, color.b, color.a);
       } else {
-        context.doc.activeLayer.drawLine(context.pos, this.lastPos, color.r, color.g, color.b, 255);
+        context.doc.activeLayer.drawLine(context.pos, this.lastPos, color.r, color.g, color.b, color.a);
       }
       this.lastPos = context.pos.copy();
       context.doc.touch();
@@ -57,7 +60,7 @@ export class Pencil extends Tool {
 export class Panner {
   mouseIsDown = false;
   lastPos = null;
-  
+
   interrupt() {
     this.mouseIsDown = false;
     this.lastPos = null;
