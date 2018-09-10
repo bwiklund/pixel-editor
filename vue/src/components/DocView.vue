@@ -1,5 +1,5 @@
 <template>
-  <div ref="artboard" class="doc-view" @mousedown="mousedown" @mouseup="mouseup" @mousemove="mousemove">
+  <div ref="artboard" class="doc-view" @mousedown="mousedown" @mouseup="mouseup" @mousemove="mousemove" @mousewheel="mousewheel">
     <canvas ref="canvas" :style="canvasStyle()" />
   </div>
 </template>
@@ -15,7 +15,8 @@ export default {
   props: ["app", "doc"],
   data() {
     return {
-      zoom: 4
+      zoom: 4,
+      offset: new Vec(0,0)
     };
   },
   methods: {
@@ -43,17 +44,20 @@ export default {
       this.app.activeTool.onMouseMove(this.buildMouseEventContext(e));
     },
 
-    onWheel(e) {
+    mousewheel(e) {
       var artboardMousePos = this.mousePositionInScreenSpaceOnArtboard(e);
       var zoomCoef = Math.pow(2, 0.005 * -e.deltaY);
-      var newZoom = this.state.zoom * zoomCoef;
+      var newZoom = this.zoom * zoomCoef;
 
-      var topCornerFromMouseOffset = artboardMousePos.sub(this.state.offset);
+      var topCornerFromMouseOffset = artboardMousePos.sub(this.offset);
       var newOffset = artboardMousePos.sub(
         topCornerFromMouseOffset.scalarMult(zoomCoef)
       );
 
-      this.setState({ zoom: newZoom, offset: newOffset });
+      this.zoom = newZoom;
+      this.offset = newOffset;
+
+      console.log("ASDF");
     },
 
     mousePositionInScreenSpaceOnArtboard(e) {

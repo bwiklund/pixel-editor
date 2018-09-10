@@ -34,8 +34,8 @@ export class Pencil extends Tool {
         context.doc.activeLayer.drawLine(context.pos, this.lastPos, color.r, color.g, color.b, 255);
       }
       this.lastPos = context.pos.copy();
+      context.doc.touch();
     }
-    context.doc.touch();
   }
 
   onMouseDown(context) {
