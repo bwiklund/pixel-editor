@@ -7,22 +7,14 @@
 <script>
 import AppView from './components/AppView.vue'
 
-class App {
-  constructor() {
-    this.a = 0;
-  }
-
-  foo() {
-    this.a++;
-  }
-}
+import { App } from './models/App';
 
 export default {
   name: 'root',
   components: {
     AppView
   },
-  data: function() {
+  data: function(){
     return {
       app: new App()
     }
