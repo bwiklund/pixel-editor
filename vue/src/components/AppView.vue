@@ -6,6 +6,7 @@
     <main>
       <div class="sidebar">
         <ColorPicker :app="app" />
+        <Palette :app="app" :colors="app.palette" />
       </div>
       <DocView :app="app" :doc="app.activeDoc" />
     </main>
@@ -15,13 +16,15 @@
 <script>
 import DocView from "./DocView.vue";
 import ColorPicker from "./ColorPicker.vue";
+import Palette from "./Palette.vue";
 
 export default {
   name: "AppView",
   props: ["app"],
   components: {
     DocView,
-    ColorPicker
+    Palette,
+    ColorPicker,
   }
 };
 </script>
