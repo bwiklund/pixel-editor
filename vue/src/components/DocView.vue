@@ -28,6 +28,7 @@ export default {
       return {
         app: this.app,
         doc: this.doc,
+        docView: this,
         pos: pos,
         posInElement: posInElement,
         event: e
@@ -35,15 +36,28 @@ export default {
     },
 
     mousedown(e) {
+      if (e.which === 2) {
+        this.app.pushTool(this.app.pannerTool);
+        console.log(this.app.activeTool);
+      }
       this.app.activeTool.onMouseDown(this.buildMouseEventContext(e));
+      e.preventDefault();
+      return false;
     },
 
     mouseup(e) {
+      if (e.which === 2) {
+        this.app.popTool();
+      }
       this.app.activeTool.onMouseUp(this.buildMouseEventContext(e));
+      e.preventDefault();
+      return false;
     },
 
     mousemove(e) {
       this.app.activeTool.onMouseMove(this.buildMouseEventContext(e));
+      e.preventDefault();
+      return false;
     },
 
     mousewheel(e) {
@@ -84,7 +98,7 @@ export default {
         height: this.doc.height * this.zoom + "px",
         position: "absolute",
         top: this.offset.y + "px",
-        left: this.offset.x + "px",
+        left: this.offset.x + "px"
       };
     },
     updateCanvas() {
@@ -114,20 +128,17 @@ export default {
           var checkerboardState =
             (x % (checkerboardSize * 2) < checkerboardSize) ^
             (y % (checkerboardSize * 2) < checkerboardSize);
-          var checkerboardForPixel = checkerboardState
+          var bgChecker = checkerboardState
             ? BG_CHECKERBOARD_A
             : BG_CHECKERBOARD_B;
 
           idata.data[I + 0] =
-            blitLayer.pixels[I + 0] * fAlpha +
-            checkerboardForPixel[0] * fAlphaOneMinus;
+            blitLayer.pixels[I + 0] * fAlpha + bgChecker[0] * fAlphaOneMinus;
           idata.data[I + 1] =
-            blitLayer.pixels[I + 1] * fAlpha +
-            checkerboardForPixel[1] * fAlphaOneMinus;
+            blitLayer.pixels[I + 1] * fAlpha + bgChecker[1] * fAlphaOneMinus;
           idata.data[I + 2] =
-            blitLayer.pixels[I + 2] * fAlpha +
-            checkerboardForPixel[2] * fAlphaOneMinus;
-          idata.data[I + 3] = 255; // always falls back to checkerboard, so always actually filled no matter what
+            blitLayer.pixels[I + 2] * fAlpha + bgChecker[2] * fAlphaOneMinus;
+          idata.data[I + 3] = 255;
         }
       }
       ctx.putImageData(idata, 0, 0);

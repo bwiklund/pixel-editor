@@ -24,13 +24,36 @@ export default {
   components: {
     DocView,
     Palette,
-    ColorPicker,
+    ColorPicker
+  },
+  methods: {
+    keydown(e) {
+      if (e.repeat) return;
+      if (e.keyCode == 32) {
+        //space
+        this.app.pushTool(this.app.pannerTool);
+      }
+    },
+    keyup(e) {
+      if (e.repeat) return;
+      if (e.keyCode == 32) {
+        //space
+        this.app.popTool();
+      }
+    }
+  },
+  mounted() {
+    window.addEventListener("keydown", this.keydown);
+    window.addEventListener("keyup", this.keyup);
+  },
+  beforeDestroy() {
+    window.removeEventListener("keydown", this.keydown);
+    window.removeEventListener("keyup", this.keyup);
   }
 };
 </script>
 
 <style scoped>
-
 .app {
   display: flex;
   flex-flow: column;

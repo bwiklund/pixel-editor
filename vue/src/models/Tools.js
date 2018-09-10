@@ -67,7 +67,7 @@ export class Panner {
     if (this.mouseIsDown) {
       if (this.lastPos) {
         var diff = context.posInElement.sub(this.lastPos);
-        context.docView.setState({ offset: context.docView.state.offset.add(diff) });
+        context.docView.offset = context.docView.offset.add(diff);
       }
       this.lastPos = context.posInElement.copy();
     }
