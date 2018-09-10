@@ -1,6 +1,8 @@
 <template>
-  <div ref="artboard" class="doc-view" @mousedown="mousedown" @mouseup="mouseup" @mousemove="mousemove" @mousewheel="mousewheel">
-    <canvas ref="canvas" :style="canvasStyle()" />
+  <div class="doc-view">
+    <div ref="artboard"  class="artboard" @mousedown="mousedown" @mouseup="mouseup" @mousemove="mousemove" @mousewheel="mousewheel">
+      <canvas ref="canvas" :style="canvasStyle()" />
+    </div>
   </div>
 </template>
 
@@ -16,7 +18,7 @@ export default {
   data() {
     return {
       zoom: 4,
-      offset: new Vec(0,0)
+      offset: new Vec(50, 50)
     };
   },
   methods: {
@@ -79,7 +81,10 @@ export default {
     canvasStyle() {
       return {
         width: this.doc.width * this.zoom + "px",
-        height: this.doc.height * this.zoom + "px"
+        height: this.doc.height * this.zoom + "px",
+        position: "absolute",
+        top: this.offset.y + "px",
+        left: this.offset.x + "px",
       };
     },
     updateCanvas() {
@@ -148,5 +153,12 @@ canvas {
   image-rendering: -o-crisp-edges;
   image-rendering: pixelated;
   -ms-interpolation-mode: nearest-neighbor;
+}
+
+.artboard {
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  width: 100%;
 }
 </style>
