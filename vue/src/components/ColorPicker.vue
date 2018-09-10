@@ -1,7 +1,7 @@
 <template>
   <div class="color-picker">
-    <canvas ref="canvas" @mousedown="mousedown"/>
-    <canvas ref="hueBar" class="hue-bar" @mousedown="mousedownHueBar"/>
+    <canvas ref="canvas" @mousedown="mousedown" @mousemove="mousemove" @mouseup="mouseup"/>
+    <canvas ref="hueBar" class="hue-bar" @mousedown="mousedownHueBar" @mousemove="mousemoveHueBar" @mouseup="mouseupHueBar"/>
     <div class="big-color" :style="{background: app.colorFg.toHex()}" />
     <div class="big-color" :style="{background: app.colorBg.toHex()}" />
   </div>
@@ -20,22 +20,44 @@ export default {
         h: 0,
         s: 1,
         v: 0.5
-      }
+      },
+      isMouseDownHSV: false,
+      isMouseDownHue: false
     };
   },
   methods: {
     mousedown(e) {
-      var clientRect = this.$refs.canvas.getBoundingClientRect();
-      var pos = new Vec(e.pageX - clientRect.left, e.pageY - clientRect.top);
-      var c = Color.fromHSV(this.hsv.h, pos.x / 255, pos.y / 255);
-      this.app.colorFg = c;
+      this.isMouseDownHSV = true;
+      this.mousemove(e);
     },
+    mousemove(e) {
+      if (this.isMouseDownHSV) {
+        var clientRect = this.$refs.canvas.getBoundingClientRect();
+        var pos = new Vec(e.pageX - clientRect.left, e.pageY - clientRect.top);
+        var c = Color.fromHSV(this.hsv.h, pos.x / 255, pos.y / 255);
+        this.app.colorFg = c;
+      }
+    },
+    mouseup(e) {
+      this.isMouseDownHSV = false;
+    },
+
     mousedownHueBar(e) {
-      var clientRect = this.$refs.canvas.getBoundingClientRect();
-      var pos = new Vec(e.pageX - clientRect.left, e.pageY - clientRect.top);
-      var c = Color.fromHSV(pos.x / 255, this.hsv.s, this.hsv.v);
-      this.app.colorFg = c;
+      this.isMouseDownHue = true;
+      this.mousemoveHueBar(e);
     },
+    mousemoveHueBar(e) {
+      if (this.isMouseDownHue) {
+        var clientRect = this.$refs.canvas.getBoundingClientRect();
+        var pos = new Vec(e.pageX - clientRect.left, e.pageY - clientRect.top);
+        var c = Color.fromHSV(pos.x / 255, this.hsv.s, this.hsv.v);
+        this.app.colorFg = c;
+      }
+    },
+    mouseupHueBar(e) {
+      this.isMouseDownHue = false;
+    },
+
     updateCanvas() {
       const canvas = this.$refs.canvas;
       canvas.width = 256;
