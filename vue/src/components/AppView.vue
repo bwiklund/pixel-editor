@@ -3,7 +3,7 @@
     <ol>
       <li v-for="(doc, i) in app.docs" v-bind:key="doc.guid" v-on:click="app.activeDocIndex=i">{{doc.name}}</li>
     </ol>
-    <DocView v-bind:doc="app.activeDoc" />
+    <DocView :app="app" :doc="app.activeDoc" />
   </div>
 </template>
 

@@ -1,40 +1,96 @@
 <template>
-  <div class="doc-view">
+  <div ref="artboard" class="doc-view" @mousedown="mousedown" @mouseup="mouseup" @mousemove="mousemove">
     <canvas ref="canvas" :style="canvasStyle()" />
   </div>
 </template>
 
 <script>
-
 const BG_CHECKERBOARD_A = [32, 32, 32, 255];
 const BG_CHECKERBOARD_B = [40, 40, 40, 255];
 
+import { Vec } from "../models/Vec";
+
 export default {
   name: "DocView",
-  props: ["doc"],
+  props: ["app", "doc"],
   data() {
     return {
       zoom: 4
-    }
+    };
   },
   methods: {
+    buildMouseEventContext(e) {
+      let pos = this.mousePositionInCanvasSpace(e);
+      let posInElement = this.mousePositionInScreenSpaceOnArtboard(e);
+      return {
+        app: this.app,
+        doc: this.doc,
+        pos: pos,
+        posInElement: posInElement,
+        event: e
+      };
+    },
+
+    mousedown(e) {
+      this.app.activeTool.onMouseDown(this.buildMouseEventContext(e));
+    },
+
+    mouseup(e) {
+      this.app.activeTool.onMouseUp(this.buildMouseEventContext(e));
+    },
+
+    mousemove(e) {
+      this.app.activeTool.onMouseMove(this.buildMouseEventContext(e));
+    },
+
+    onWheel(e) {
+      var artboardMousePos = this.mousePositionInScreenSpaceOnArtboard(e);
+      var zoomCoef = Math.pow(2, 0.005 * -e.deltaY);
+      var newZoom = this.state.zoom * zoomCoef;
+
+      var topCornerFromMouseOffset = artboardMousePos.sub(this.state.offset);
+      var newOffset = artboardMousePos.sub(
+        topCornerFromMouseOffset.scalarMult(zoomCoef)
+      );
+
+      this.setState({ zoom: newZoom, offset: newOffset });
+    },
+
+    mousePositionInScreenSpaceOnArtboard(e) {
+      var clientRect = this.$refs.artboard.getBoundingClientRect();
+      return new Vec(e.pageX - clientRect.left, e.pageY - clientRect.top);
+    },
+
+    mousePositionInScreenSpaceRelativeToCanvasCorner(e) {
+      var clientRect = this.$refs.canvas.getBoundingClientRect();
+      return new Vec(e.pageX - clientRect.left, e.pageY - clientRect.top);
+    },
+
+    mousePositionInCanvasSpace(e) {
+      return this.mousePositionInScreenSpaceRelativeToCanvasCorner(
+        e
+      ).scalarMult(1 / this.zoom);
+    },
+
     canvasStyle() {
       return {
-        width: (this.doc.width * this.zoom) + "px",
-        height: (this.doc.height * this.zoom) + "px"
-      }
+        width: this.doc.width * this.zoom + "px",
+        height: this.doc.height * this.zoom + "px"
+      };
     },
     updateCanvas() {
       console.log("Updating canvas");
-      
+
       const doc = this.doc;
       var canvas = this.$refs.canvas;
       canvas.width = this.doc.width;
       canvas.height = this.doc.height;
-      const ctx = canvas.getContext("2d")
+      const ctx = canvas.getContext("2d");
       const checkerboardSize = 8;
 
-      if (doc.layers.length === 0) { return; } //TODO: clear screen instead
+      if (doc.layers.length === 0) {
+        return;
+      } //TODO: clear screen instead
 
       let idata = ctx.getImageData(0, 0, doc.width, doc.height);
       for (let y = 0; y < doc.height; y++) {
@@ -46,13 +102,23 @@ export default {
           var fAlpha = blitLayer.pixels[I + 3] / 255;
           var fAlphaOneMinus = 1 - fAlpha;
 
-          var checkerboardState = (x % (checkerboardSize * 2) < checkerboardSize) ^ (y % (checkerboardSize * 2) < checkerboardSize);
-          var checkerboardForPixel = checkerboardState ? BG_CHECKERBOARD_A : BG_CHECKERBOARD_B;
+          var checkerboardState =
+            (x % (checkerboardSize * 2) < checkerboardSize) ^
+            (y % (checkerboardSize * 2) < checkerboardSize);
+          var checkerboardForPixel = checkerboardState
+            ? BG_CHECKERBOARD_A
+            : BG_CHECKERBOARD_B;
 
-          idata.data[I + 0] = blitLayer.pixels[I + 0] * fAlpha + checkerboardForPixel[0] * fAlphaOneMinus;
-          idata.data[I + 1] = blitLayer.pixels[I + 1] * fAlpha + checkerboardForPixel[1] * fAlphaOneMinus;
-          idata.data[I + 2] = blitLayer.pixels[I + 2] * fAlpha + checkerboardForPixel[2] * fAlphaOneMinus;
-          idata.data[I + 3] = 255;// always falls back to checkerboard, so always actually filled no matter what
+          idata.data[I + 0] =
+            blitLayer.pixels[I + 0] * fAlpha +
+            checkerboardForPixel[0] * fAlphaOneMinus;
+          idata.data[I + 1] =
+            blitLayer.pixels[I + 1] * fAlpha +
+            checkerboardForPixel[1] * fAlphaOneMinus;
+          idata.data[I + 2] =
+            blitLayer.pixels[I + 2] * fAlpha +
+            checkerboardForPixel[2] * fAlphaOneMinus;
+          idata.data[I + 3] = 255; // always falls back to checkerboard, so always actually filled no matter what
         }
       }
       ctx.putImageData(idata, 0, 0);
