@@ -20,7 +20,7 @@ export function newDocFromImage(path, done) {
     doc.width = img.width;
     var layer = new Layer("Layer 1", img.width, img.height);
     layer.pixels = loaderData.data;
-    doc.layers[0] = layer;
+    doc.layers.push(layer);
     doc.isReady = true;
     doc.touch();
 

@@ -34,7 +34,7 @@ export default {
       if (this.isMouseDownHSV) {
         var clientRect = this.$refs.canvas.getBoundingClientRect();
         var pos = new Vec(e.pageX - clientRect.left, e.pageY - clientRect.top);
-        var c = Color.fromHSV(this.hsv.h, pos.x / 255, pos.y / 255);
+        var c = Color.fromHSV(this.hsv.h, pos.x / 255, 1 - pos.y / 255);
         this.app.colorFg = c;
       }
     },
@@ -72,7 +72,7 @@ export default {
           var i = x + y * canvas.width;
           var I = i * 4;
 
-          var c = Color.fromHSV(this.hsv.h, x / 255, y / 255);
+          var c = Color.fromHSV(this.hsv.h, x / 255, 1 - y / 255);
 
           idata.data[I + 0] = c.r;
           idata.data[I + 1] = c.g;

@@ -8,7 +8,7 @@
         <ColorPicker :app="app" />
         <Palette :app="app" :colors="app.palette" />
       </div>
-      <DocView :app="app" :doc="app.activeDoc" />
+      <DocView :app="app" :doc="app.activeDoc" v-if="app.activeDoc" />
     </main>
   </div>
 </template>
@@ -17,6 +17,7 @@
 import DocView from "./DocView.vue";
 import ColorPicker from "./ColorPicker.vue";
 import Palette from "./Palette.vue";
+import { newDocFromImage } from '../models/ImageImporter';
 
 export default {
   name: "AppView",
@@ -33,6 +34,10 @@ export default {
         //space
         this.app.pushTool(this.app.pannerTool);
       }
+      if (e.keyCode == 78) {
+        // n
+        this.app.activeDoc.newLayer();
+      }
     },
     keyup(e) {
       if (e.repeat) return;
@@ -45,6 +50,9 @@ export default {
   mounted() {
     window.addEventListener("keydown", this.keydown);
     window.addEventListener("keyup", this.keyup);
+
+    this.app.docs.push(newDocFromImage("lunaAvatar_neutral_0.png", () => {}));
+    this.app.docs.push(newDocFromImage("peepAvatar_neutral_0.png", () => {}));
   },
   beforeDestroy() {
     window.removeEventListener("keydown", this.keydown);

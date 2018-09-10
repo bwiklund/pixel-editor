@@ -13,6 +13,7 @@
 import { Color } from '../models/Color';
 
 export default {
+  name: "Palette",
   props: ['app', 'colors']
 }
 

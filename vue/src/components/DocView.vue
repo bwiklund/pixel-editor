@@ -3,6 +3,7 @@
     <div ref="artboard"  class="artboard" @mousedown="mousedown" @mouseup="mouseup" @mousemove="mousemove" @mousewheel="mousewheel">
       <canvas ref="canvas" :style="canvasStyle()" />
     </div>
+    <Timeline :app="app" :doc="doc" />
   </div>
 </template>
 
@@ -11,10 +12,12 @@ const BG_CHECKERBOARD_A = [32, 32, 32, 255];
 const BG_CHECKERBOARD_B = [40, 40, 40, 255];
 
 import { Vec } from "../models/Vec";
+import Timeline from "./Timeline";
 
 export default {
   name: "DocView",
   props: ["app", "doc"],
+  components: { Timeline },
   data() {
     return {
       zoom: 4,
@@ -93,6 +96,7 @@ export default {
     },
 
     canvasStyle() {
+      if (!this.doc) return;
       return {
         width: this.doc.width * this.zoom + "px",
         height: this.doc.height * this.zoom + "px",
@@ -103,6 +107,8 @@ export default {
     },
     updateCanvas() {
       console.log("Updating canvas");
+
+      if (!this.doc) return;
 
       const doc = this.doc;
       var canvas = this.$refs.canvas;
@@ -166,11 +172,15 @@ canvas {
   -ms-interpolation-mode: nearest-neighbor;
 }
 
-.artboard {
-  position: absolute;
-  top: 50px; /* TODO this should be flex */
-  bottom: 0px;
+.doc-view {
+  display: flex;
+  flex-direction: column;
   width: 100%;
+}
+
+.artboard {
+  flex-grow: 1;
+  position: relative;
   overflow: hidden;
 }
 </style>
