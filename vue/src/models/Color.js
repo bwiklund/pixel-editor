@@ -1,5 +1,7 @@
+import { hsvToRgb, rgbToHsv } from '../util/hsv';
 
 
+// color class, colors are 0-255
 export class Color {
   constructor(r, g, b, a) {
     this.r = r;
@@ -16,6 +18,21 @@ export class Color {
       parseInt(result[3], 16),
       255 // ;)
     ) : null;
+  }
+
+  // expects 0-1 for hsv, returns 0-255 for rgb
+  static fromHSV(h, s, v) {
+    var rgbArray = hsvToRgb(h, s, v);
+    return new Color(rgbArray[0], rgbArray[1], rgbArray[2], 255);
+  }
+
+  toHSV() {
+    var hsvArray = rgbToHsv(this.r, this.g, this.b);
+    return {
+      h: hsvArray[0],
+      s: hsvArray[1],
+      v: hsvArray[2],
+    };
   }
 
   toHex() {
