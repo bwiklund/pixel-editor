@@ -160,5 +160,6 @@ canvas {
   top: 50px; /* TODO this should be flex */
   bottom: 0px;
   width: 100%;
+  overflow: hidden;
 }
 </style>
