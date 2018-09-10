@@ -1,15 +1,15 @@
 // all tools take mousePos, the document, and then `context`, which is a bucket of cruft that some tools will need access to
 
 export class Tool {
-  onMouseDown(pos, doc, context) {
+  onMouseDown(context) {
 
   }
 
-  onMouseMove(pos, doc, context) {
+  onMouseMove(context) {
 
   }
 
-  onMouseUp(pos, doc, context) {
+  onMouseUp(context) {
 
   }
 
@@ -25,30 +25,30 @@ export class Pencil extends Tool {
     this.lastPos = null;
   }
 
-  drawPencilStrokes(pos, doc, context) {
+  drawPencilStrokes(context) {
     var color = context.appView.state.colorFg;
     if (this.mouseIsDown) {
       if (!this.lastPos) {
-        doc.activeLayer.setPixel(pos, color.r, color.g, color.b, 255);
+        context.doc.activeLayer.setPixel(context.pos, color.r, color.g, color.b, 255);
       } else {
-        doc.activeLayer.drawLine(pos, this.lastPos, color.r, color.g, color.b, 255);
+        context.doc.activeLayer.drawLine(context.pos, this.lastPos, color.r, color.g, color.b, 255);
       }
-      this.lastPos = pos.copy();
+      this.lastPos = context.pos.copy();
     }
   }
 
-  onMouseDown(pos, doc, context) {
+  onMouseDown(context) {
     this.mouseIsDown = true;
-    this.drawPencilStrokes(pos, doc, context);
+    this.drawPencilStrokes(context);
   }
 
-  onMouseMove(pos, doc, context) {
-    this.drawPencilStrokes(pos, doc, context);
+  onMouseMove(context) {
+    this.drawPencilStrokes(context);
   }
 
-  onMouseUp(pos, doc, context) {
+  onMouseUp(context) {
     this.mouseIsDown = false;
-    this.drawPencilStrokes(pos, doc, context);
+    this.drawPencilStrokes(context);
     this.lastPos = null;
   }
 }
@@ -62,7 +62,7 @@ export class Panner {
     this.lastPos = null;
   }
 
-  doPanning(pos, doc, context) {
+  doPanning(context) {
     if (this.mouseIsDown) {
       if (this.lastPos) {
         var diff = context.posInElement.sub(this.lastPos);
@@ -72,18 +72,18 @@ export class Panner {
     }
   }
 
-  onMouseDown(pos, doc, context) {
+  onMouseDown(context) {
     this.mouseIsDown = true;
-    this.doPanning(pos, doc, context);
+    this.doPanning(context);
   }
 
-  onMouseMove(pos, doc, context) {
-    this.doPanning(pos, doc, context);
+  onMouseMove(context) {
+    this.doPanning(context);
   }
 
-  onMouseUp(pos, doc, context) {
+  onMouseUp(context) {
     this.mouseIsDown = false;
-    this.doPanning(pos, doc, context);
+    this.doPanning(context);
     this.lastPos = null;
   }
 }

@@ -2,11 +2,14 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-import { Doc, Layer, DocHeader, DocView } from './Doc';
+import { Doc } from './Doc';
+import { Layer } from './Layer';
+import { DocHeader, DocView } from './DocView';
 import { Tool, Pencil, Panner } from './Tools';
 import { ColorPicker } from './ColorPicker';
 import { Palette, PaletteCell } from './Palette';
 import { Color } from './Color';
+import { newDocFromImage } from './ImageImporter';
 
 export default class AppView extends React.Component {
   pencilTool = new Pencil();
@@ -24,33 +27,6 @@ export default class AppView extends React.Component {
     };
   }
 
-  newDocFromImage(path) {
-    let doc = new Doc(path, 1, 1);
-    this.setState((state, props) => {
-      return { docs: state.docs.concat(doc) }
-    });
-
-    const img = new Image();
-    img.src = path; // TODO pull this out when i have more coherent plan for loading images
-    img.onload = () => {
-      // make a headless canvas to parse the png into pixels for us. this is not the canvas we draw the editor image to!
-      let imageLoaderCanvas = document.createElement("canvas");
-      imageLoaderCanvas.width = img.width;
-      imageLoaderCanvas.height = img.height;
-      let loaderCtx = imageLoaderCanvas.getContext('2d');
-      loaderCtx.drawImage(img, 0, 0);
-      let loaderData = loaderCtx.getImageData(0, 0, img.width, img.height);
-
-      doc.height = img.height;
-      doc.width = img.width;
-      var layer = new Layer("Layer 1", img.width, img.height);
-      layer.pixels = loaderData.data;
-      doc.layers[0] = layer;
-
-      this.forceUpdate(); // is there a better way to force a redraw here?
-    }
-  }
-
   setActiveDoc(doc) {
     this.setState((st, pr) => {
       return {
@@ -61,48 +37,47 @@ export default class AppView extends React.Component {
 
 
   ////////////////////////////////////// start mouse boilerplate ///////////////////////////////////////////////
-  onMouseDown(e) {
+  // each mouse handler needs a bunch of information passed to the tool, here's where we build that.
+  // if this wasn't all gathered here then a bunch of other methods would be terrible
+  buildMouseEventContext(e) {
     var docView = this.refs.activeDocView;
     var doc = this.state.docs[this.state.activeDocIndex];
     let pos = docView.mousePositionInCanvasSpace(e);
     let posInElement = docView.mousePositionInScreenSpaceOnArtboard(e);
-    this.state.activeTool.onMouseDown(pos, doc, { appView: this, docView: docView, posInElement: posInElement });
+    return {
+      doc: doc,
+      appView: this,
+      docView: docView,
+      pos: pos,
+      posInElement: posInElement,
+      event: e,
+    }
+  }
 
-    this.lastPosInElement = posInElement;
-    docView.redraw();
+  onMouseDown(e) {
+    this.state.activeTool.onMouseDown(this.buildMouseEventContext(e));
+    this.refs.activeDocView.redraw();
   }
 
   onMouseMove(e) {
-    var docView = this.refs.activeDocView;
-    var doc = this.state.docs[this.state.activeDocIndex];
-    let pos = docView.mousePositionInCanvasSpace(e);
-    let posInElement = docView.mousePositionInScreenSpaceOnArtboard(e);
-    this.state.activeTool.onMouseMove(pos, doc, { appView: this, docView: docView, posInElement: posInElement });
-
-    this.lastPosInElement = posInElement;
-    docView.redraw();
+    this.state.activeTool.onMouseMove(this.buildMouseEventContext(e));
+    this.refs.activeDocView.redraw();
   }
 
   onMouseUp(e) {
-    var docView = this.refs.activeDocView;
-    var doc = this.state.docs[this.state.activeDocIndex];
-    let pos = docView.mousePositionInCanvasSpace(e);
-    let posInElement = docView.mousePositionInScreenSpaceOnArtboard(e);
-    this.state.activeTool.onMouseUp(pos, doc, { appView: this, docView: docView, posInElement: posInElement });
-
-    this.lastPosInElement = posInElement;
-    docView.redraw();
+    this.state.activeTool.onMouseUp(this.buildMouseEventContext(e));
+    this.refs.activeDocView.redraw();
   }
   ////////////////////////////////////// end mouse boilerplate ///////////////////////////////////////////////
 
   onKeyDown(e) {
     if (e.repeat) { return; }
-    if (e.keyCode == 32) { //space
+    if (e.keyCode === 32) { //space
       this.overriddenTool = this.state.activeTool;
       this.state.activeTool.interrupt();
       this.setState({ activeTool: this.pannerTool });
     }
-    if (e.keyCode == 78) {// N
+    if (e.keyCode === 78) {// N
       this.state.docs[this.state.activeDocIndex].newLayer();
       this.forceUpdate();
     }
@@ -110,11 +85,11 @@ export default class AppView extends React.Component {
 
   onKeyUp(e) {
     if (e.repeat) { return; }
-    if (e.keyCode == 32) { //space
+    if (e.keyCode === 32) { //space
       this.state.activeTool.interrupt();
       this.setState({ activeTool: this.overriddenTool });
     }
-    if (e.keyCode == 88) { // X
+    if (e.keyCode === 88) { // X
       let fg = this.state.colorFg;
       let bg = this.state.colorBg;
       this.setState({ colorFg: bg, colorBg: fg });
@@ -130,6 +105,11 @@ export default class AppView extends React.Component {
 
     this.newDocFromImage("peepAvatar_neutral_0.png");
     this.newDocFromImage("lunaAvatar_neutral_0.png");
+  }
+
+  newDocFromImage(path) {
+    this.state.docs.push(newDocFromImage(path, () => this.forceUpdate()));
+    this.forceUpdate();
   }
 
   componentWillUnmount() {

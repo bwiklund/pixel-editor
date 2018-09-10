@@ -1,23 +1,3 @@
-export class Doc {
-  constructor(name, width, height) {
-    this.name = name;
-    this.width = width;
-    this.height = height;
-    this.layers = [];
-    this.activeLayerIndex = 0;
-    this.guid = "" + Math.random();
-    this.isReady = true;
-  }
-
-  get activeLayer() {
-    return this.layers[this.activeLayerIndex];
-  }
-
-  newLayer() {
-    this.layers.push(new Layer("Layer " + (this.layers.length + 1), this.width, this.height));
-  }
-}
-
 export class Layer {
   constructor(name, width, height) {
     this.name = name;
