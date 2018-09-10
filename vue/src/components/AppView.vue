@@ -1,8 +1,8 @@
 <template>
   <div class="hello">
-    <ol>
-      <li v-for="(doc, i) in app.docs" v-bind:key="doc.guid" v-on:click="app.activeDocIndex=i">{{doc.name}}</li>
-    </ol>
+    <header>
+      <a v-for="(doc, i) in app.docs" v-bind:key="doc.guid" v-on:click="app.activeDocIndex = i" :class="{active: app.activeDocIndex === i}">{{doc.name}}</a>
+    </header>
     <DocView :app="app" :doc="app.activeDoc" />
   </div>
 </template>
@@ -20,18 +20,21 @@ export default {
 </script>
 
 <style scoped>
-h3 {
-  margin: 40px 0 0;
+
+header {
+  background: hsl(245, 10%, 30%);
+  color: hsl(245, 10%, 60%);
+  border-bottom: 4px solid hsl(245, 10%, 45%);
 }
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
+
+header a {
   display: inline-block;
-  margin: 0 10px;
+  padding: 10px 15px;
 }
-a {
-  color: #42b983;
+
+header a.active {
+  color: white;
+  background: hsl(245, 10%, 45%);
+  text-decoration: underline;
 }
 </style>
