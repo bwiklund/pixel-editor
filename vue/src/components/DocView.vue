@@ -121,13 +121,14 @@ export default {
         return;
       } //TODO: clear screen instead
 
+      var blitLayer = doc.createFinalBlit(); // todo actually composite here
+
       let idata = ctx.getImageData(0, 0, doc.width, doc.height);
       for (let y = 0; y < doc.height; y++) {
         for (let x = 0; x < doc.width; x++) {
           var i = x + y * doc.width;
           var I = i * 4;
 
-          var blitLayer = doc.layers[0]; // todo actually composite here
           var fAlpha = blitLayer.pixels[I + 3] / 255;
           var fAlphaOneMinus = 1 - fAlpha;
 
