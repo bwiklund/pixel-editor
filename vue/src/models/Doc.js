@@ -29,6 +29,7 @@ export class Layer {
     this.width = width;
     this.height = height;
     this.pixels = new Array(this.width * this.height * 4).fill(0);
+    this.isVisible = true;
   }
 
   setPixel(v, r, g, b, a) {

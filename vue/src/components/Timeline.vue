@@ -1,6 +1,9 @@
 <template>
   <div class="timeline">
-    <div class="layer" v-for="(layer, i) in doc.layers" v-bind:key="i">{{layer.name}}</div>
+    <div class="layer" v-for="(layer, i) in doc.layers" v-bind:key="i">
+      <a @mousedown="() => layer.isVisible = !layer.isVisible">{{ layer.isVisible ? "[O]" : "[ ]" }} </a>
+      {{layer.name}}
+    </div>
   </div>
 </template>
 
