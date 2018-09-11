@@ -3,11 +3,11 @@ import { Doc } from './Doc';
 import { Tool, Pencil, Panner } from './Tools';
 
 export class App {
-  pencilTool: Tool = new Pencil();
-  eraserTool: Tool = new Pencil();
+  pencilTool: Pencil = new Pencil();
+  eraserTool: Pencil = new Pencil();
   pannerTool: Tool = new Panner();
   overriddenTool: Tool = null;
-  docs: Doc[];
+  docs: Doc[] = [];
   activeDocIndex: number = 0;
   activeTool: Tool = this.pencilTool;
   colorFg: Color = Color.fromHex("#e75952");
