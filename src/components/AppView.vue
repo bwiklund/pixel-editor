@@ -21,6 +21,7 @@ import Palette from "./Palette.vue";
 
 import { Doc } from "../models/Doc";
 import { newDocFromImage } from "../models/ImageImporter";
+import { loadFile } from "../util/loadFile";
 
 export default {
   name: "AppView",
@@ -54,9 +55,10 @@ export default {
       }
     },
     openFile() {
-      var doc = Doc.load();
-      this.app.docs.push(doc);
-      this.app.activeDocIndex = this.app.docs.length - 1;
+      loadFile();
+      // var doc = Doc.load();
+      // this.app.docs.push(doc);
+      // this.app.activeDocIndex = this.app.docs.length - 1;
     }
   },
   mounted() {
