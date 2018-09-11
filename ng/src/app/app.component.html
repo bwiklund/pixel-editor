@@ -1,0 +1,6 @@
+<div>
+  <a *ngFor="let doc of app.docs; let i = index" (click)="app.activeDocIndex = i">{{doc.name}}</a>
+  <app-palette [colors]="app.palette"></app-palette>
+  <app-doc-view [doc]="app.activeDoc"></app-doc-view>
+</div>
+
