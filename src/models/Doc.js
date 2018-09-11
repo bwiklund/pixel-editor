@@ -34,4 +34,15 @@ export class Doc {
     });
     return finalLayer;
   }
+
+  save() {
+    localStorage.setItem('testSave', JSON.stringify(this));
+  }
+
+  static load() {
+    var doc = JSON.parse(localStorage.getItem('testSave'));
+    Object.setPrototypeOf(doc, Doc.prototype);
+    doc.layers.forEach(layer => Object.setPrototypeOf(layer, Layer.prototype));
+    return doc;
+  }
 }

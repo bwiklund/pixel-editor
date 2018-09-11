@@ -37,6 +37,10 @@ export default {
   display: block;
 }
 
+.layer {
+  padding: 10px;
+}
+
 .layer.active {
   background: hsl(245, 10%, 55%);
 }

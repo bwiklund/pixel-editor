@@ -1,14 +1,15 @@
 <template>
   <div class="app">
     <header>
-      <a v-for="(doc, i) in app.docs" v-bind:key="doc.guid" v-on:click="app.activeDocIndex = i" :class="{active: app.activeDocIndex === i}">{{doc.name}}</a>
+      <a v-for="(doc, i) in app.docs" :key="doc.guid" :class="{active: app.activeDocIndex === i}" @click="app.activeDocIndex = i">{{doc.name}}</a>
+      <a v-on:click="openFile">LOADTEST</a>
     </header>
     <main>
       <div class="sidebar">
         <ColorPicker :app="app" />
         <Palette :app="app" :colors="app.palette" />
       </div>
-      <DocView :app="app" :doc="app.activeDoc" v-if="app.activeDoc" />
+      <DocView v-for="doc in app.docs" :key="doc.guid" :app="app" :doc="app.activeDoc" v-show="app.activeDoc === doc" />
     </main>
   </div>
 </template>
@@ -17,7 +18,9 @@
 import DocView from "./DocView.vue";
 import ColorPicker from "./ColorPicker.vue";
 import Palette from "./Palette.vue";
-import { newDocFromImage } from '../models/ImageImporter';
+
+import { Doc } from "../models/Doc";
+import { newDocFromImage } from "../models/ImageImporter";
 
 export default {
   name: "AppView",
@@ -49,6 +52,11 @@ export default {
         //space
         this.app.popTool();
       }
+    },
+    openFile() {
+      var doc = Doc.load();
+      this.app.docs.push(doc);
+      this.app.activeDocIndex = this.app.docs.length - 1;
     }
   },
   mounted() {

@@ -1,9 +1,10 @@
 <template>
   <div class="doc-view">
-    <div ref="artboard"  class="artboard" @mousedown="mousedown" @mouseup="mouseup" @mousemove="mousemove" @mousewheel="mousewheel">
+    <div ref="artboard" class="artboard" @mousedown="mousedown" @mouseup="mouseup" @mousemove="mousemove" @mousewheel="mousewheel">
       <canvas ref="canvas" :style="canvasStyle()" />
     </div>
     <Timeline :app="app" :doc="doc" />
+      <a @click="doc.save()">Save</a>
   </div>
 </template>
 
@@ -41,7 +42,6 @@ export default {
     mousedown(e) {
       if (e.which === 2) {
         this.app.pushTool(this.app.pannerTool);
-        console.log(this.app.activeTool);
       }
       this.app.activeTool.onMouseDown(this.buildMouseEventContext(e));
       e.preventDefault();
@@ -75,8 +75,6 @@ export default {
 
       this.zoom = newZoom;
       this.offset = newOffset;
-
-      console.log("ASDF");
     },
 
     mousePositionInScreenSpaceOnArtboard(e) {
@@ -106,8 +104,6 @@ export default {
       };
     },
     updateCanvas() {
-      console.log("Updating canvas");
-
       if (!this.doc) return;
 
       const doc = this.doc;
@@ -157,8 +153,7 @@ export default {
     }
   },
   mounted() {
-    var canvas = this.$refs.canvas;
-    console.log(canvas);
+    this.updateCanvas();
   }
 };
 </script>
