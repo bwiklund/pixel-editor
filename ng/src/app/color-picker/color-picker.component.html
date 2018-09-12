@@ -1,2 +1,2 @@
-<canvas #canvas></canvas>
-<canvas class="hue-bar" #hueBarCanvas></canvas>
+<canvas #canvas (mousedown)="mousedown($event)" (mouseup)="mouseup($event)" (mousemove)="mousemove($event)"></canvas>
+<canvas #hueBarCanvas class="hue-bar" (mousedown)="mousedownHueBar($event)" (mouseup)="mouseupHueBar($event)" (mousemove)="mousemoveHueBar($event)"></canvas>

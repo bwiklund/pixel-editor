@@ -1,6 +1,7 @@
-import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Input, DoCheck } from '@angular/core';
 
 import { App } from '../../models/App';
+import { Vec } from '../../models/Vec';
 import { Color } from '../../models/Color';
 
 @Component({
@@ -8,20 +9,25 @@ import { Color } from '../../models/Color';
   templateUrl: './color-picker.component.html',
   styleUrls: ['./color-picker.component.css']
 })
-export class ColorPickerComponent implements OnInit {
+export class ColorPickerComponent implements OnInit, DoCheck {
   @Input() app: App;
   @ViewChild("canvas") canvas: ElementRef;
   @ViewChild("hueBarCanvas") hueBarCanvas: ElementRef;
 
   isMouseDownHSV: boolean = false;
   isMouseDownHue: boolean = false;
-  hsv = {h: 0, s: 1, v: 1}
+  hsv = { h: 0, s: 1, v: 1 }
 
   constructor() { }
 
   ngOnInit() {
     this.updateCanvas();
     this.updateHueBar();
+  }
+  
+  // FIXME: make this only run on changes to the selected color
+  ngDoCheck() {
+    this.updateCanvas();
   }
 
   mousedown(e) {

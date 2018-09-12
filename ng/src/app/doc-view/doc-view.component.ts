@@ -26,7 +26,7 @@ export class DocViewComponent implements OnInit, DoCheck {
   ngOnInit() {
   }
 
-  // todo: i can't get this to run on changes yet? fix this
+  // FIXME: only run this on changes to the doc hash
   ngDoCheck() {
     //console.log("docheck: " + this.doc.hash);
     this.updateCanvas();
