@@ -1,1 +1,6 @@
-<div class="palette-cell" *ngFor="let color of colors" [ngStyle]="{background: color.toHex()}"></div>
+<div
+  class="palette-cell"
+  *ngFor="let color of colors"
+  [ngStyle]="{background: color.toHex()}"
+  (click)="pickColor(color)"
+></div>

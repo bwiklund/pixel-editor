@@ -1,2 +1,15 @@
-<canvas #canvas (mousedown)="mousedown($event)" (mouseup)="mouseup($event)" (mousemove)="mousemove($event)"></canvas>
-<canvas #hueBarCanvas class="hue-bar" (mousedown)="mousedownHueBar($event)" (mouseup)="mouseupHueBar($event)" (mousemove)="mousemoveHueBar($event)"></canvas>
+<canvas
+  #canvas 
+  (mousedown)="mousedown($event)"
+  (mouseup)="mouseup($event)"
+  (mousemove)="mousemove($event)"></canvas>
+
+<canvas
+  #hueBarCanvas
+  class="hue-bar"
+  (mousedown)="mousedownHueBar($event)"
+  (mouseup)="mouseupHueBar($event)"
+  (mousemove)="mousemoveHueBar($event)"></canvas>
+
+<div class="color-big" [ngStyle]="{background: app.colorFg.toHex()}"></div>
+<div class="color-big" [ngStyle]="{background: app.colorBg.toHex()}"></div>

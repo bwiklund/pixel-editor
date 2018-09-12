@@ -9,11 +9,14 @@ import { App } from '../../models/App';
 })
 export class PaletteComponent implements OnInit {
   @Input() colors: Color[];
-  @Input() app: App[];
+  @Input() app: App;
 
   constructor() { }
 
   ngOnInit() {
   }
 
+  pickColor(color: Color) {
+    this.app.colorFg = color;
+  }
 }

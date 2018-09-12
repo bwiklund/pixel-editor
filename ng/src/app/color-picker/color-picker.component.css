@@ -11,3 +11,8 @@ canvas {
   width: 256px;
   height: 16px;
 }
+
+.color-big {
+  height: 32px;
+  margin: 4px 0;
+}
