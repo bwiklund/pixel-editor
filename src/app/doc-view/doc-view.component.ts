@@ -106,10 +106,8 @@ export class DocViewComponent implements OnInit, DoCheck {
     };
   }
 
-  artboardStyle() {
-    return {
-      cursor: this.app.activeTool.getCssCursor()
-    };
+  artboardClasses() {
+    return this.app.activeTool.getCssCursor();
   }
 
   updateCanvas() {

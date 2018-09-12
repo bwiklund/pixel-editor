@@ -31,7 +31,7 @@ export class Tool {
   interrupt() { } // when stuff cuts off the tool mid-action and it needs to reset itself and clean up
 
   getCssCursor(): string {
-    return 'pointer';
+    return 'cursor-default';
   }
 }
 
@@ -44,7 +44,7 @@ export class Pencil extends Tool {
   size: number = 1;
 
   getCssCursor(): string {
-    return 'crosshair';
+    return 'cursor-pencil';
   }
 
   interrupt() {
@@ -135,7 +135,7 @@ export class Panner extends Tool {
   icon = "fas fa-hand-paper";
 
   getCssCursor(): string {
-    return 'grab';
+    return this.mouseIsDown ? 'cursor-panner-closed' : 'cursor-panner-open';
   }
 
   interrupt() {
@@ -176,7 +176,7 @@ export class ColorPicker extends Tool {
   color: Color = new Color(0, 0, 0, 0);
 
   getCssCursor(): string {
-    return 'crosshair';
+    return 'cursor-colorpicker';
   }
 
   onMouseDown(context: ToolContext) {

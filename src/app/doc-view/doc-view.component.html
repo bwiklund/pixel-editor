@@ -4,7 +4,7 @@
   (mouseup)="mouseup($event)"
   (mousemove)="mousemove($event)"
   (mousewheel)="mousewheel($event)"
-  [ngStyle]="artboardStyle()"
+  [ngClass]="artboardClasses()"
 >
   <canvas #canvas [ngStyle]="canvasStyle()"></canvas>
 </div>
