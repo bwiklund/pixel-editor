@@ -1,4 +1,5 @@
 import { Vec } from "./Vec";
+import { Color } from "./Color";
 
 export class Layer {
   name: string;
@@ -26,6 +27,22 @@ export class Layer {
     this.pixels[I + 1] = g;
     this.pixels[I + 2] = b;
     this.pixels[I + 3] = a;
+  }
+
+  getColor(v: Vec) {
+    if (v.x < 0 || v.x >= this.width || v.y < 0 || v.y >= this.height) {
+      return null;
+    }
+
+    var i = ~~(v.x) + ~~(v.y) * this.width;
+    var I = i * 4;
+
+    return new Color(
+      this.pixels[I + 0],
+      this.pixels[I + 1],
+      this.pixels[I + 2],
+      this.pixels[I + 3]
+    );
   }
 
   blitBlended(otherLayer: Layer) {

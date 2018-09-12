@@ -1,6 +1,6 @@
 import { Color } from './Color';
 import { Doc } from './Doc';
-import { Tool, Pencil, Panner } from './Tools';
+import { Tool, Pencil, Panner, ColorPicker } from './Tools';
 import { Preferences } from './Preferences';
 import { loadFile, saveFile } from '../util/io';
 
@@ -8,6 +8,7 @@ export class App {
   pencilTool: Pencil = new Pencil();
   eraserTool: Pencil = new Pencil();
   pannerTool: Tool = new Panner();
+  colorPickerTool: Tool = new ColorPicker();
   overriddenTool: Tool = null;
   docs: Doc[] = [];
   activeDocIndex: number = 0;
@@ -21,7 +22,8 @@ export class App {
   toolbar: Tool[] = [
     this.pencilTool,
     this.eraserTool,
-    this.pannerTool
+    this.pannerTool,
+    this.colorPickerTool,
   ]
 
   constructor() {

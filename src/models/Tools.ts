@@ -1,20 +1,29 @@
 import { Color } from './Color';
 import { Layer } from './Layer';
 import { Vec } from './Vec';
+import { App } from './App';
+import { Doc } from './Doc';
+
+export interface ToolContext {
+  app: App,
+  doc: Doc,
+  pos: Vec,
+  posInElement: Vec
+}
 
 export class Tool {
   name: string;
   icon: string;
 
-  onMouseDown(context) {
+  onMouseDown(context: ToolContext) {
 
   }
 
-  onMouseMove(context) {
+  onMouseMove(context: ToolContext) {
 
   }
 
-  onMouseUp(context) {
+  onMouseUp(context: ToolContext) {
 
   }
 
@@ -36,13 +45,14 @@ export class Pencil extends Tool {
 
   drawCircle(layer: Layer, pos: Vec, diameter: number, r: number, g: number, b: number, a: number) {
     if (diameter % 2 == 0) {
-      pos = pos.add(new Vec(0.5,0.5)); // make even sized diameters fall nicely...
+      pos = pos.add(new Vec(0.5, 0.5)); // make even sized diameters fall nicely...
     }
 
     if (diameter == 1) {
       layer.setPixel(pos, r, g, b, a);
       return;
     }
+
     var radius = diameter / 2;
     var radiusPlusOne = radius + 1;
     var tl = new Vec(~~Math.max(0, pos.x - radiusPlusOne), ~~Math.max(0, pos.y - radiusPlusOne));
@@ -74,7 +84,7 @@ export class Pencil extends Tool {
     }
   }
 
-  drawPencilStrokes(context) {
+  drawPencilStrokes(context: ToolContext) {
     var color = context.app.colorFg;
     if (this.isEraser) color = new Color(0, 0, 0, 0);
 
@@ -90,16 +100,16 @@ export class Pencil extends Tool {
     }
   }
 
-  onMouseDown(context) {
+  onMouseDown(context: ToolContext) {
     this.mouseIsDown = true;
     this.drawPencilStrokes(context);
   }
 
-  onMouseMove(context) {
+  onMouseMove(context: ToolContext) {
     this.drawPencilStrokes(context);
   }
 
-  onMouseUp(context) {
+  onMouseUp(context: ToolContext) {
     this.mouseIsDown = false;
     this.drawPencilStrokes(context);
     this.lastPos = null;
@@ -117,7 +127,7 @@ export class Panner {
     this.lastPos = null;
   }
 
-  doPanning(context) {
+  doPanning(context: ToolContext) {
     if (this.mouseIsDown) {
       if (this.lastPos) {
         var diff = context.posInElement.sub(this.lastPos);
@@ -127,18 +137,55 @@ export class Panner {
     }
   }
 
-  onMouseDown(context) {
+  onMouseDown(context: ToolContext) {
     this.mouseIsDown = true;
     this.doPanning(context);
   }
 
-  onMouseMove(context) {
+  onMouseMove(context: ToolContext) {
     this.doPanning(context);
   }
 
-  onMouseUp(context) {
+  onMouseUp(context: ToolContext) {
     this.mouseIsDown = false;
     this.doPanning(context);
     this.lastPos = null;
+  }
+}
+
+export class ColorPicker extends Tool {
+  mouseIsDown: boolean = false;
+  name = "ColorPicker";
+  icon = "fas fa-eye-dropper";
+  color: Color = new Color(0, 0, 0, 0);
+
+  onMouseDown(context: ToolContext) {
+    this.mouseIsDown = true;
+    this.pickColor(context);
+  }
+
+  onMouseMove(context: ToolContext) {
+    this.pickColor(context);
+  }
+
+  onMouseUp(context: ToolContext) {
+    this.mouseIsDown = false;
+    this.pickColor(context);
+  }
+
+  interrupt() {
+    this.mouseIsDown = false;
+  }
+
+  pickColor(context: ToolContext) {
+    this.color = context.doc.activeLayer.getColor(context.pos);
+
+    if (this.color == null) {
+      this.color = new Color(0, 0, 0, 0);
+    }
+
+    if (this.mouseIsDown) {
+      context.app.colorFg = this.color;
+    }
   }
 }

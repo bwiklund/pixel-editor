@@ -1,4 +1,4 @@
-:host {
+.tool-properties {
   background: hsl(245, 10%, 25%);
   display: block;
   position: absolute;
@@ -33,4 +33,9 @@ textarea
 input[type=number] {
   width: 50px;
   background: hsl(245, 10%, 80%);
+}
+
+.colorpicker-color-preview {
+  width: 100px;
+  height: 32px;
 }

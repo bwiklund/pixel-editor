@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef, Input, ChangeDetectorRef, OnC
 import { App } from '../../models/App';
 import { Doc } from '../../models/Doc';
 import { Vec } from '../../models/Vec';
+import {ToolContext} from '../../models/Tools';
 
 const BG_CHECKERBOARD_A = [32, 32, 32, 255];
 const BG_CHECKERBOARD_B = [40, 40, 40, 255];
@@ -32,16 +33,14 @@ export class DocViewComponent implements OnInit, DoCheck {
     this.updateCanvas();
   }
 
-  buildMouseEventContext(e) {
+  buildMouseEventContext(e): ToolContext {
     let pos = this.mousePositionInCanvasSpace(e);
     let posInElement = this.mousePositionInScreenSpaceOnArtboard(e);
     return {
       app: this.app,
       doc: this.doc,
-      docView: this,
       pos: pos,
-      posInElement: posInElement,
-      event: e
+      posInElement: posInElement
     };
   }
 

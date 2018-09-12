@@ -1,17 +1,14 @@
-<div class="tool-properties">
-
-  <!-- TODO: move these to separate templates, dynamically loaded. -->
-  <div [ngSwitch]="tool.name">
-      <div *ngSwitchCase="'Pencil'">
-        Size: <input type="number" [(ngModel)]="tool.size" />
-      </div>
-    
-      <div *ngSwitchCase="'Eraser'">
-        Hi i'm an eraser.
-      </div>
-    
-      <div *ngSwitchCase="'Panner'">
-      </div>
+<!-- TODO: move these to separate templates, dynamically loaded. -->
+<div [ngSwitch]="tool.name">
+  <div class="tool-properties" *ngSwitchCase="'Pencil'">
+    Size: <input type="number" [(ngModel)]="tool.size" />
   </div>
 
+  <div class="tool-properties" *ngSwitchCase="'Eraser'">
+    Hi i'm an eraser.
+  </div>
+
+  <div class="tool-properties" *ngSwitchCase="'ColorPicker'">
+    <div class="colorpicker-color-preview" [ngStyle]="{background: tool.color.toHex()}"></div>
+  </div>
 </div>
