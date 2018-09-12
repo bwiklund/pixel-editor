@@ -42,4 +42,11 @@ export class App {
     this.activeTool = this.overriddenTool;
     this.overriddenTool = null;
   }
+
+  closeDoc(doc) {
+    // TODO: check if needs saving
+    var index = this.docs.indexOf(doc);
+    this.docs.splice(index, 1);
+    this.activeDocIndex = this.docs.length - 1;
+  }
 }
