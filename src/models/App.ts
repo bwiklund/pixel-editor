@@ -25,8 +25,9 @@ export class App {
   ]
 
   constructor() {
-    // redesign the eraser so these 2 lines aren't necessary
+    // redesign the eraser so these next lines aren't necessary
     this.eraserTool.isEraser = true;
+    this.eraserTool.name = "Eraser";
     this.eraserTool.icon = "fas fa-eraser";
 
     // swiped from https://lospec.com/palette-list/enos16

@@ -34,3 +34,9 @@ app-root {
 .flex-fill {
   flex-grow: 1;
 }
+
+/* prevent font icons from flashing the wrong size while icons are loading */
+.fas, .far {
+  width: 1em;
+  height: 1em;
+}

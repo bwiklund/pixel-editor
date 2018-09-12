@@ -1,0 +1,18 @@
+<div class="tool-properties">
+  {{app.activeTool.name}}
+
+  <!-- TODO: move these to separate templates, dynamically loaded. -->
+  <div [ngSwitch]="tool.name">
+      <div *ngSwitchCase="'Pencil'">
+        Size: <input type="number" [(ngModel)]="tool.size" />
+      </div>
+    
+      <div *ngSwitchCase="'Eraser'">
+        Hi i'm an eraser.
+      </div>
+    
+      <div *ngSwitchCase="'Panner'">
+      </div>
+  </div>
+
+</div>

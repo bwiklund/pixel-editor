@@ -31,4 +31,19 @@ CMD("SwapActiveColors", "x", (app: App) => {
   app.colorBg = tmp;
 });
 
+// do this with actual types instead... check if it implements something in ts
+// NOTE: these unicode chars are what String.charFromKeyCode is giving for left/right brackets...?
+CMD("ShrinkCurrentTool", "û", (app: App) => {
+  if (typeof app.activeTool.size !== "undefined") {
+    app.activeTool.size = Math.max(1, app.activeTool.size - 1);
+  }
+});
+
+// see above
+CMD("GrowCurrentTool", "ý", (app: App) => {
+  if (typeof app.activeTool.size !== "undefined") {
+    app.activeTool.size = Math.max(1, app.activeTool.size + 1);
+  }
+});
+
 export { Commands, Shortcuts } 

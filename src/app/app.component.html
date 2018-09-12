@@ -10,5 +10,6 @@
     <!-- Opened but unshown docs are hidden instead of ngIf'ed, so we don't lose state / have to rebuild them -->
     <app-doc-view class="flex-fill" *ngFor="let doc of app.docs" [app]="app" [doc]="doc" [hidden]="doc !== app.activeDoc"></app-doc-view>
     <app-toolbar [app]="app" [tools]="app.toolbar"></app-toolbar>
+    <app-tool-properties [app]="app" [tool]="app.activeTool"></app-tool-properties>
   </div>
 </div>

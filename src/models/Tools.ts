@@ -26,6 +26,7 @@ export class Pencil extends Tool {
   isEraser: boolean = false;
   name = "Pencil";
   icon = "fas fa-pencil-alt";
+  size: number = 1;
 
   interrupt() {
     this.mouseIsDown = false;

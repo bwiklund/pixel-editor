@@ -11,7 +11,6 @@ export class ToolbarComponent implements OnInit {
   @Input() tools: Tool[];
   @Input() app: App;
 
-
   constructor() { }
 
   ngOnInit() {

@@ -27,6 +27,8 @@ export class AppComponent {
     if (e.ctrlKey) { char = "%" + char; }
     if (e.altKey) { char = "&" + char; }
 
+    console.log("Shortcut code: " + char);
+
     // the commands are an object where command names are keys, so we need to invert it here.
     // TODO: cache this? probably doesn't actually matter for the N we care about
     var flippedShortcuts = {};
