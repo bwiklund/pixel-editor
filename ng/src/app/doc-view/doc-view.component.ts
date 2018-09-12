@@ -28,7 +28,7 @@ export class DocViewComponent implements OnInit, DoCheck {
 
   // todo: i can't get this to run on changes yet? fix this
   ngDoCheck() {
-    console.log("docheck: " + this.doc.hash);
+    //console.log("docheck: " + this.doc.hash);
     this.updateCanvas();
   }
 
@@ -46,8 +46,6 @@ export class DocViewComponent implements OnInit, DoCheck {
   }
 
   mousedown(e) {
-    console.log("ASDF");
-    
     if (e.which === 2) {
       this.app.pushTool(this.app.pannerTool);
     }

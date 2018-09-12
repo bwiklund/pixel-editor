@@ -1,0 +1,29 @@
+.app-wrap {
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  width: 100%;
+}
+
+header {
+  background: hsl(245, 10%, 30%);
+  color: hsl(245, 10%, 60%);
+  border-bottom: 4px solid hsl(245, 10%, 45%);
+}
+
+header a {
+  display: inline-block;
+  padding: 10px 15px;
+  cursor: pointer;
+}
+
+header a.active {
+  color: white;
+  background: hsl(245, 10%, 45%);
+  text-decoration: underline;
+}
+
+.sidebar {
+  width: 264px;
+  background: hsl(245, 10%, 18%);
+}

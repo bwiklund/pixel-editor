@@ -1,1 +1,34 @@
-/* You can add global styles to this file, and also import other style files */
+
+* {
+  margin: 0px;
+  padding: 0px;
+}
+
+body {
+  background: hsl(245, 10%, 21%);
+  color: white;
+  font-family: sans-serif;
+  user-select: none;
+  overflow: hidden;
+}
+
+app-root {
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  width: 100%;
+}
+
+.flex-container-vertical {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-container-horizontal {
+  display: flex;
+  flex-direction: row;
+}
+
+.flex-fill {
+  flex-grow: 1;
+}

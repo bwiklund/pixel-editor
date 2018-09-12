@@ -1,6 +1,11 @@
-<div>
-  <a *ngFor="let doc of app.docs; let i = index" (click)="app.activeDocIndex = i">{{doc.name}}</a>
-  <app-palette [colors]="app.palette"></app-palette>
-  <app-doc-view [app]="app" [doc]="app.activeDoc"></app-doc-view>
+<div class="app-wrap flex-container-vertical">
+  <header>
+    <a *ngFor="let doc of app.docs; let i = index" [ngClass]="{active: app.activeDocIndex === i}" (click)="app.activeDocIndex = i">{{doc.name}}</a>
+  </header>
+  <div class="flex-container-horizontal flex-fill">
+    <div class="sidebar">
+      <app-palette [colors]="app.palette"></app-palette>
+    </div>
+    <app-doc-view class="flex-fill" [app]="app" [doc]="app.activeDoc"></app-doc-view>
+  </div>
 </div>
-
