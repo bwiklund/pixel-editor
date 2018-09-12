@@ -3,6 +3,7 @@ import { Layer } from './Layer';
 import { Vec } from './Vec';
 import { App } from './App';
 import { Doc } from './Doc';
+import { DocViewComponent } from '../app/doc-view/doc-view.component';
 
 export interface ToolContext {
   app: App,
@@ -131,7 +132,7 @@ export class Panner {
     if (this.mouseIsDown) {
       if (this.lastPos) {
         var diff = context.posInElement.sub(this.lastPos);
-        context.docView.offset = context.docView.offset.add(diff);
+        context.doc.offset = context.doc.offset.add(diff);
       }
       this.lastPos = context.posInElement.copy();
     }

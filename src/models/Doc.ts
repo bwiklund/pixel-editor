@@ -1,4 +1,5 @@
 import { Layer } from './Layer';
+import { Vec } from './Vec';
 import { saveFile } from '../util/io';
 
 export class Doc {
@@ -10,6 +11,10 @@ export class Doc {
   guid: string = "" + Math.random();
   isReady: boolean = true;
   hash: number = 0;
+
+  // todo: decide whether to serialize these on save or not.
+  offset: Vec = new Vec(50, 50);
+  zoom: number = 4;
 
   constructor(name, width, height) {
     this.name = name;

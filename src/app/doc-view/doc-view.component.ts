@@ -19,9 +19,6 @@ export class DocViewComponent implements OnInit, DoCheck {
   @ViewChild('canvas') canvas: ElementRef;
   @ViewChild('artboard') artboard: ElementRef;
 
-  offset: Vec = new Vec(50, 50);
-  zoom: number = 4;
-
   constructor() { }
 
   ngOnInit() {
@@ -71,15 +68,15 @@ export class DocViewComponent implements OnInit, DoCheck {
   mousewheel(e) {
     var artboardMousePos = this.mousePositionInScreenSpaceOnArtboard(e);
     var zoomCoef = Math.pow(2, 0.004 * this.app.preferences.scrollZoomSpeed * -e.deltaY);
-    var newZoom = this.zoom * zoomCoef;
+    var newZoom = this.doc.zoom * zoomCoef;
 
-    var topCornerFromMouseOffset = artboardMousePos.sub(this.offset);
+    var topCornerFromMouseOffset = artboardMousePos.sub(this.doc.offset);
     var newOffset = artboardMousePos.sub(
       topCornerFromMouseOffset.scalarMult(zoomCoef)
     );
 
-    this.zoom = newZoom;
-    this.offset = newOffset;
+    this.doc.zoom = newZoom;
+    this.doc.offset = newOffset;
   }
 
   mousePositionInScreenSpaceOnArtboard(e) {
@@ -95,17 +92,17 @@ export class DocViewComponent implements OnInit, DoCheck {
   mousePositionInCanvasSpace(e) {
     return this.mousePositionInScreenSpaceRelativeToCanvasCorner(
       e
-    ).scalarMult(1 / this.zoom);
+    ).scalarMult(1 / this.doc.zoom);
   }
 
   canvasStyle() {
     if (!this.doc) return;
     return {
-      width: this.doc.width * this.zoom + "px",
-      height: this.doc.height * this.zoom + "px",
+      width: this.doc.width * this.doc.zoom + "px",
+      height: this.doc.height * this.doc.zoom + "px",
       position: "absolute",
-      top: this.offset.y + "px",
-      left: this.offset.x + "px"
+      top: this.doc.offset.y + "px",
+      left: this.doc.offset.x + "px"
     };
   }
 
