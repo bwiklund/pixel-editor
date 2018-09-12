@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef, Input, ChangeDetectorRef, OnChanges, DoCheck } from '@angular/core';
+import { App } from '../../models/App';
 import { Doc } from '../../models/Doc';
 import { Vec } from '../../models/Vec';
 
@@ -11,9 +12,11 @@ const BG_CHECKERBOARD_B = [40, 40, 40, 255];
   styleUrls: ['./doc-view.component.css']
 })
 export class DocViewComponent implements OnInit, DoCheck {
+  @Input() app: App;
   @Input() doc: Doc;
 
   @ViewChild('canvas') canvas: ElementRef;
+  @ViewChild('artboard') artboard: ElementRef;
 
   offset: Vec = new Vec(50, 50);
   zoom: number = 4;
@@ -27,6 +30,75 @@ export class DocViewComponent implements OnInit, DoCheck {
   ngDoCheck() {
     console.log("docheck: " + this.doc.hash);
     this.updateCanvas();
+  }
+
+  buildMouseEventContext(e) {
+    let pos = this.mousePositionInCanvasSpace(e);
+    let posInElement = this.mousePositionInScreenSpaceOnArtboard(e);
+    return {
+      app: this.app,
+      doc: this.doc,
+      docView: this,
+      pos: pos,
+      posInElement: posInElement,
+      event: e
+    };
+  }
+
+  mousedown(e) {
+    console.log("ASDF");
+    
+    if (e.which === 2) {
+      this.app.pushTool(this.app.pannerTool);
+    }
+    this.app.activeTool.onMouseDown(this.buildMouseEventContext(e));
+    e.preventDefault();
+    return false;
+  }
+
+  mouseup(e) {
+    if (e.which === 2) {
+      this.app.popTool();
+    }
+    this.app.activeTool.onMouseUp(this.buildMouseEventContext(e));
+    e.preventDefault();
+    return false;
+  }
+
+  mousemove(e) {
+    this.app.activeTool.onMouseMove(this.buildMouseEventContext(e));
+    e.preventDefault();
+    return false;
+  }
+
+  mousewheel(e) {
+    var artboardMousePos = this.mousePositionInScreenSpaceOnArtboard(e);
+    var zoomCoef = Math.pow(2, 0.005 * -e.deltaY);
+    var newZoom = this.zoom * zoomCoef;
+
+    var topCornerFromMouseOffset = artboardMousePos.sub(this.offset);
+    var newOffset = artboardMousePos.sub(
+      topCornerFromMouseOffset.scalarMult(zoomCoef)
+    );
+
+    this.zoom = newZoom;
+    this.offset = newOffset;
+  }
+
+  mousePositionInScreenSpaceOnArtboard(e) {
+    var clientRect = this.artboard.nativeElement.getBoundingClientRect();
+    return new Vec(e.pageX - clientRect.left, e.pageY - clientRect.top);
+  }
+
+  mousePositionInScreenSpaceRelativeToCanvasCorner(e) {
+    var clientRect = this.canvas.nativeElement.getBoundingClientRect();
+    return new Vec(e.pageX - clientRect.left, e.pageY - clientRect.top);
+  }
+
+  mousePositionInCanvasSpace(e) {
+    return this.mousePositionInScreenSpaceRelativeToCanvasCorner(
+      e
+    ).scalarMult(1 / this.zoom);
   }
 
   canvasStyle() {
