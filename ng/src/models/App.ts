@@ -2,6 +2,7 @@ import { Color } from './Color';
 import { Doc } from './Doc';
 import { Tool, Pencil, Panner } from './Tools';
 import { Preferences } from './Preferences';
+import { loadFile, saveFile } from '../util/io';
 
 export class App {
   pencilTool: Pencil = new Pencil();
@@ -50,10 +51,12 @@ export class App {
     this.activeDocIndex = this.docs.length - 1;
   }
 
-  openFileFromText(path: string, str: string) {
-    var doc = Doc.fromString(str);
-    doc.name = path;
-    // TODO: complain if it can't be parsed
-    this.docs.push(doc);
+  openFile() {
+    loadFile((path, str) => {
+      var doc = Doc.fromString(str);
+      doc.name = path;
+      // TODO: complain if it can't be parsed
+      this.docs.push(doc);
+    });
   }
 }

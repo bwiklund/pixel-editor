@@ -9,15 +9,12 @@ function CMD(name: string, defaultShortcut: string, action: Function) {
   Shortcuts[name] = defaultShortcut;
 }
 
-import { loadFile, saveFile } from '../util/io';
 CMD("Save", "%s", (app: App) => {
   app.activeDoc.save();
 });
 
 CMD("Open", "%o", (app: App) => {
-  loadFile((path, text) => {
-    app.openFileFromText(path, text);
-  });
+  app.openFile();
 });
 
 CMD("Close", "#w", (app: App) => { // shift W for now until i put this in an electron container
