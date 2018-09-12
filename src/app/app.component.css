@@ -6,9 +6,9 @@
 }
 
 header {
-  background: hsl(245, 10%, 30%);
-  color: hsl(245, 10%, 60%);
-  border-bottom: 4px solid hsl(245, 10%, 45%);
+  background: hsl(205, 15%, 30%);
+  color: hsl(205, 15%, 60%);
+  border-bottom: 4px solid hsl(205, 15%, 45%);
 }
 
 header a {
@@ -19,13 +19,13 @@ header a {
 
 header a.active {
   color: white;
-  background: hsl(245, 10%, 45%);
+  background: hsl(205, 15%, 45%);
   text-decoration: underline;
 }
 
 .sidebar {
-  width: 264px;
-  background: hsl(245, 10%, 18%);
+  width: 268px;
+  background: hsl(205, 15%, 18%);
 }
 
 .everything-under-header {

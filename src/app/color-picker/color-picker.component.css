@@ -10,6 +10,7 @@
 
 canvas {
   display: block;
+  border: 2px solid black;
 }
 
 .hue-bar {
@@ -20,6 +21,7 @@ canvas {
 .color-big {
   height: 32px;
   margin: 4px;
+  border: 2px solid black;
 }
 
 .reticle {

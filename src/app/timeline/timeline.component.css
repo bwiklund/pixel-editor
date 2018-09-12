@@ -1,6 +1,6 @@
 :host {
   display: block;
-  background: hsl(245, 10%, 30%);
+  background: hsl(205, 15%, 30%);
 }
 
 table {
@@ -26,7 +26,7 @@ th, td {
 }
 
 .current {
-  background: hsl(245, 10%, 40%);
+  background: hsl(205, 15%, 40%);
 }
 
 .dim {

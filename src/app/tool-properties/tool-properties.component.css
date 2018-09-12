@@ -1,5 +1,5 @@
 .tool-properties {
-  background: hsl(245, 10%, 25%);
+  background: hsl(205, 15%, 15%);
   display: block;
   position: absolute;
   top: 0px;
@@ -32,7 +32,7 @@ textarea
 
 input[type=number] {
   width: 50px;
-  background: hsl(245, 10%, 80%);
+  background: hsl(205, 15%, 80%);
 }
 
 .colorpicker-color-preview {

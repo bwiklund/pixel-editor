@@ -22,6 +22,7 @@ export class AppComponent {
 
   @HostListener('window:keydown', ['$event'])
   keydown(e: KeyboardEvent) {
+    if (e.repeat) { return; }
     // some stuff we need to intercept first because it's more complicated that firing a command...
     // TOGGLE KEYS, the kind you have to hold to use a tool like colorpicker, then pop back to the previous tool
     if (e.keyCode == 18) { // alt

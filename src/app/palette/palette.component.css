@@ -4,8 +4,22 @@
 }
 
 .palette-cell {
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   display: inline-block;
   vertical-align:top;
+  border: 2px solid black;
+  margin: 0 -2px  -2px 0;
+}
+
+.palette-cell .inner  {
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.palette-cell.active .inner {
+  border: 2px solid white;
+}
+.palette-cell.active .inner .inner {
+  border: 2px solid black;
 }
