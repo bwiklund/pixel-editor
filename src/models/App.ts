@@ -44,6 +44,11 @@ export class App {
     return this.docs[this.activeDocIndex];
   }
 
+  undo() {
+    this.activeTool.interrupt(); // don't let anything keep editing if you still have mousedown and hit ctrlz while painting for example
+    this.activeDoc.historyPop();
+  }
+
   selectTool(tool) {
     this.activeTool.interrupt();
     this.activeTool = tool;

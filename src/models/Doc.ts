@@ -47,6 +47,7 @@ export class Doc {
   }
 
   newLayer() {
+    this.historyPush("New layer");
     this.layers.push(new Layer("Layer " + (this.layers.length + 1), this.width, this.height));
   }
 

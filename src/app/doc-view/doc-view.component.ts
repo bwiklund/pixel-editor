@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef, Input, ChangeDetectorRef, OnC
 import { App } from '../../models/App';
 import { Doc } from '../../models/Doc';
 import { Vec } from '../../models/Vec';
-import {ToolContext} from '../../models/Tools';
+import { ToolContext } from '../../models/Tools';
 
 const BG_CHECKERBOARD_A = [32, 32, 32, 255];
 const BG_CHECKERBOARD_B = [40, 40, 40, 255];
@@ -103,6 +103,12 @@ export class DocViewComponent implements OnInit, DoCheck {
       position: "absolute",
       top: this.doc.offset.y + "px",
       left: this.doc.offset.x + "px"
+    };
+  }
+
+  artboardStyle() {
+    return {
+      cursor: this.app.activeTool.getCssCursor()
     };
   }
 

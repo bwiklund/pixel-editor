@@ -29,6 +29,10 @@ export class Tool {
   }
 
   interrupt() { } // when stuff cuts off the tool mid-action and it needs to reset itself and clean up
+
+  getCssCursor(): string {
+    return 'pointer';
+  }
 }
 
 export class Pencil extends Tool {
@@ -38,6 +42,10 @@ export class Pencil extends Tool {
   name = "Pencil";
   icon = "fas fa-pencil-alt";
   size: number = 1;
+
+  getCssCursor(): string {
+    return 'crosshair';
+  }
 
   interrupt() {
     this.mouseIsDown = false;
@@ -120,11 +128,15 @@ export class Pencil extends Tool {
   }
 }
 
-export class Panner {
+export class Panner extends Tool {
   mouseIsDown = false;
   lastPos = null;
   name = "Panner";
   icon = "fas fa-hand-paper";
+
+  getCssCursor(): string {
+    return 'grab';
+  }
 
   interrupt() {
     this.mouseIsDown = false;
@@ -163,6 +175,10 @@ export class ColorPicker extends Tool {
   icon = "fas fa-eye-dropper";
   color: Color = new Color(0, 0, 0, 0);
 
+  getCssCursor(): string {
+    return 'crosshair';
+  }
+
   onMouseDown(context: ToolContext) {
     this.mouseIsDown = true;
     this.pickColor(context);
@@ -193,12 +209,20 @@ export class ColorPicker extends Tool {
     }
   }
 }
+
 export class Fill extends Tool {
   name = "Fill";
   icon = "fas fa-fill";
   contiguous: boolean = true;
 
+  getCssCursor(): string {
+    return 'copy';
+  }
+
   onMouseDown(context: ToolContext) {
+    context.doc.historyPush("Fill");
+    context.doc.cloneLayer(context.doc.activeLayer);
+
     if (this.contiguous) {
       this.floodFill(context);
     } else {
