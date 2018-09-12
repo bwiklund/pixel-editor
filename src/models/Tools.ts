@@ -190,3 +190,43 @@ export class ColorPicker extends Tool {
     }
   }
 }
+export class Fill extends Tool {
+  name = "Fill";
+  icon = "fas fa-fill";
+
+  onMouseDown(context: ToolContext) {
+    this.floodFill(context);
+  }
+
+  floodFill(context: ToolContext) {
+    var layer = context.doc.activeLayer;
+    var targetColor = layer.getColor(context.pos);;
+    var replacementColor = context.app.colorFg;
+
+    if (targetColor.equalTo(replacementColor)) { return; }
+
+    var queue: Vec[] = [];
+    queue.push(context.pos);
+
+    while (queue.length > 0) {
+      var nodePos = queue.pop();
+      var directions = [
+        nodePos.add(new Vec(0, -1)),
+        nodePos.add(new Vec(1, 0)),
+        nodePos.add(new Vec(0, 1)),
+        nodePos.add(new Vec(-1, 0))
+      ];
+
+      for (var i = 0; i < directions.length; i++) {
+        var newPos = directions[i];
+        if (layer.isInBounds(newPos)) {
+          var newNodeColor = layer.getColor(newPos);
+          if (newNodeColor.equalTo(targetColor)) {
+            layer.setPixel(newPos, replacementColor.r, replacementColor.g, replacementColor.b, replacementColor.a);
+            queue.push(newPos);
+          }
+        }
+      }
+    }
+  }
+}

@@ -16,10 +16,12 @@ export class Layer {
     this.isVisible = true;
   }
 
+  isInBounds(v: Vec) {
+    return !(v.x < 0 || v.x >= this.width || v.y < 0 || v.y >= this.height);
+  }
+
   setPixel(v: Vec, r: number, g: number, b: number, a: number) {
-    if (v.x < 0 || v.x >= this.width || v.y < 0 || v.y >= this.height) {
-      return;
-    }
+    if (!this.isInBounds(v)) { return; }
 
     var i = ~~(v.x) + ~~(v.y) * this.width;
     var I = i * 4;

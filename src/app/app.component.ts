@@ -28,6 +28,19 @@ export class AppComponent {
       e.preventDefault();
       return;
     }
+    if (e.keyCode == 32) { // space
+      this.app.pushTool(this.app.pannerTool);
+      e.preventDefault();
+      return;
+    }
+    if (e.keyCode == 69) { // e
+      this.app.selectTool(this.app.eraserTool);
+      return;
+    }
+    if (e.keyCode == 71) { // g
+      this.app.selectTool(this.app.fillTool);
+      return;
+    }
 
     // if we're still here, fire shortcuts if needed
     this.dispatchCommandShortcut(e);
@@ -40,6 +53,11 @@ export class AppComponent {
       e.preventDefault();
       return;
     }
+    if (e.keyCode == 32) { // space
+      this.app.popTool();
+      e.preventDefault();
+      return;
+    }
   }
 
   dispatchCommandShortcut(e) {
@@ -48,7 +66,7 @@ export class AppComponent {
     if (e.ctrlKey) { char = "%" + char; }
     if (e.altKey) { char = "&" + char; }
 
-    console.log("Shortcut code: " + char);
+    console.log("Shortcut code: " + e.keyCode + ", " + char);
 
     // the commands are an object where command names are keys, so we need to invert it here.
     // TODO: cache this? probably doesn't actually matter for the N we care about

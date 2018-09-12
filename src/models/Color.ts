@@ -15,6 +15,10 @@ export class Color {
     this.a = a;
   }
 
+  equalTo(o) {
+    return this.r == o.r && this.g == o.g && this.b == o.b && this.a == o.a;
+  }
+
   set(o) {
     this.r = o.r;
     this.g = o.g;
