@@ -1,6 +1,11 @@
-:host {
-  margin: 4px;
+.host {
   display: block;
+}
+
+.canvas-wrap {
+  margin: 4px;
+  position: relative;
+  overflow: hidden;
 }
 
 canvas {
@@ -14,5 +19,22 @@ canvas {
 
 .color-big {
   height: 32px;
-  margin: 4px 0;
+  margin: 4px;
+}
+
+.reticle {
+  position: absolute;
+  pointer-events: none;
+}
+
+.reticle-image {
+  background: url('/assets/colorpicker_reticle.png');
+  background-size: 100%;
+  width: 32px;
+  height: 32px;
+  position: relative;
+  top: -16px;
+  left: -16px;
+  user-select: none;
+  pointer-events: none;
 }

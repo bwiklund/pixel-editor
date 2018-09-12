@@ -24,7 +24,7 @@ export class ColorPickerComponent implements OnInit, DoCheck {
     this.updateCanvas();
     this.updateHueBar();
   }
-  
+
   // FIXME: make this only run on changes to the selected color
   ngDoCheck() {
     this.updateCanvas();
@@ -65,6 +65,13 @@ export class ColorPickerComponent implements OnInit, DoCheck {
 
   mouseupHueBar(e) {
     this.isMouseDownHue = false;
+  }
+
+  reticlePostion() {
+    return {
+      left: this.hsv.s * 255 + "px",
+      top: (1 - this.hsv.v) * 255 + "px",
+    }
   }
 
   updateCanvas() {
