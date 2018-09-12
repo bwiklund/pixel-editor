@@ -71,7 +71,7 @@ export class DocViewComponent implements OnInit, DoCheck {
 
   mousewheel(e) {
     var artboardMousePos = this.mousePositionInScreenSpaceOnArtboard(e);
-    var zoomCoef = Math.pow(2, 0.005 * -e.deltaY);
+    var zoomCoef = Math.pow(2, 0.004 * this.app.preferences.scrollZoomSpeed * -e.deltaY);
     var newZoom = this.zoom * zoomCoef;
 
     var topCornerFromMouseOffset = artboardMousePos.sub(this.offset);

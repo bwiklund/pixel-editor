@@ -7,6 +7,7 @@
       <app-color-picker [app]="app"></app-color-picker>
       <app-palette [app]="app" [colors]="app.palette"></app-palette>
     </div>
-    <app-doc-view class="flex-fill" [app]="app" [doc]="app.activeDoc"></app-doc-view>
+    <!-- Opened but unshown docs are hidden instead of ngIf'ed, so we don't lose state / have to rebuild them -->
+    <app-doc-view class="flex-fill"*ngFor="let doc of app.docs" [app]="app" [doc]="doc" [hidden]="doc !== app.activeDoc"></app-doc-view>
   </div>
 </div>

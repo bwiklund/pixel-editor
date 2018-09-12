@@ -1,3 +1,9 @@
-<div #artboard class="artboard" (mousedown)="mousedown($event)" (mouseup)="mouseup($event)" (mousemove)="mousemove($event)">
+<div #artboard
+  class="artboard"
+  (mousedown)="mousedown($event)"
+  (mouseup)="mouseup($event)"
+  (mousemove)="mousemove($event)"
+  (mousewheel)="mousewheel($event)"
+>
   <canvas #canvas [ngStyle]="canvasStyle()"></canvas>
 </div>

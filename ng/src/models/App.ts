@@ -1,6 +1,7 @@
 import { Color } from './Color';
 import { Doc } from './Doc';
 import { Tool, Pencil, Panner } from './Tools';
+import { Preferences } from './Preferences';
 
 export class App {
   pencilTool: Pencil = new Pencil();
@@ -14,6 +15,7 @@ export class App {
   colorBg: Color = Color.fromHex("#f9938a");
   palette: Color[];
   hash: number = 0;
+  preferences: Preferences = new Preferences();
 
   constructor() {
     this.eraserTool.isEraser = true;
