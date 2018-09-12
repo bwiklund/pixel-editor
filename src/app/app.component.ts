@@ -23,6 +23,7 @@ export class AppComponent {
   @HostListener('window:keydown', ['$event'])
   keydown(e: KeyboardEvent) {
     // some stuff we need to intercept first because it's more complicated that firing a command...
+    // TOGGLE KEYS, the kind you have to hold to use a tool like colorpicker, then pop back to the previous tool
     if (e.keyCode == 18) { // alt
       this.app.pushTool(this.app.colorPickerTool);
       e.preventDefault();
@@ -31,6 +32,20 @@ export class AppComponent {
     if (e.keyCode == 32) { // space
       this.app.pushTool(this.app.pannerTool);
       e.preventDefault();
+      return;
+    }
+
+    // ONE WAY shortcuts to tools
+    if (e.keyCode == 66 || e.keyCode == 80) { // b or p
+      this.app.selectTool(this.app.pencilTool);
+      return;
+    }
+    if (e.keyCode == 72) { // h
+      this.app.selectTool(this.app.pannerTool);
+      return;
+    }
+    if (e.keyCode == 73) { // i
+      this.app.selectTool(this.app.colorPickerTool);
       return;
     }
     if (e.keyCode == 69) { // e
@@ -42,7 +57,7 @@ export class AppComponent {
       return;
     }
 
-    // if we're still here, fire shortcuts if needed
+    // if we're still here, fire from shortcuts database
     this.dispatchCommandShortcut(e);
   }
 

@@ -1,4 +1,5 @@
 import { App } from './App';
+import { Fill, Pencil } from './Tools';
 
 // some global commands stubbed out here so they can be bound to user keys in a clean way
 var Commands = {}
@@ -31,18 +32,22 @@ CMD("SwapActiveColors", "x", (app: App) => {
   app.colorBg = tmp;
 });
 
-// do this with actual types instead... check if it implements something in ts
 // NOTE: these unicode chars are what String.charFromKeyCode is giving for left/right brackets...?
 CMD("ShrinkCurrentTool", "û", (app: App) => {
-  if (typeof app.activeTool.size !== "undefined") {
+  if (app.activeTool instanceof Pencil) {
     app.activeTool.size = Math.max(1, app.activeTool.size - 1);
   }
 });
 
-// see above
 CMD("GrowCurrentTool", "ý", (app: App) => {
-  if (typeof app.activeTool.size !== "undefined") {
+  if (app.activeTool instanceof Pencil) {
     app.activeTool.size = Math.max(1, app.activeTool.size + 1);
+  }
+});
+
+CMD("ToggleContiguous", "c", (app: App) => {
+  if (app.activeTool instanceof Fill) {
+    app.activeTool.contiguous = !app.activeTool.contiguous;
   }
 });
 

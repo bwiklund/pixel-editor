@@ -193,9 +193,14 @@ export class ColorPicker extends Tool {
 export class Fill extends Tool {
   name = "Fill";
   icon = "fas fa-fill";
+  contiguous: boolean = true;
 
   onMouseDown(context: ToolContext) {
-    this.floodFill(context);
+    if (this.contiguous) {
+      this.floodFill(context);
+    } else {
+      this.globalReplaceColor(context);
+    }
   }
 
   floodFill(context: ToolContext) {
@@ -225,6 +230,22 @@ export class Fill extends Tool {
             layer.setPixel(newPos, replacementColor.r, replacementColor.g, replacementColor.b, replacementColor.a);
             queue.push(newPos);
           }
+        }
+      }
+    }
+  }
+
+  globalReplaceColor(context: ToolContext) {
+    const layer = context.doc.activeLayer;
+    const color = context.app.colorFg;
+    const targetColor = layer.getColor(context.pos);
+
+    for (let y = 0; y < layer.height; y++) {
+      for (let x = 0; x < layer.width; x++) {
+        const v = new Vec(x, y);
+        const currentColor = layer.getColor(v);
+        if (currentColor.equalTo(targetColor)) {
+          layer.setPixel(v, color.r, color.g, color.b, color.a);
         }
       }
     }
