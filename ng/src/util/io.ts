@@ -2,13 +2,14 @@
 export function loadFile(done: Function) {
   var fileSelector = document.createElement('input');
   fileSelector.setAttribute('type', 'file');
-  fileSelector.addEventListener("change", (e) => {
-    var files = <FileList>e.target.files;
+  fileSelector.addEventListener("change", (e: Event) => {
+    var el = <HTMLInputElement>e.target;
+    var files = el.files;
     var file = files[0]; // for now just handle one
 
     var reader = new FileReader();
-    reader.onload = function (event: ProgressEvent) {
-      done(file.name, event.target.result);
+    reader.onload = function (event: Event) {
+      done(file.name, (<FileReader>event.target).result);
     };
 
     reader.readAsText(file);
