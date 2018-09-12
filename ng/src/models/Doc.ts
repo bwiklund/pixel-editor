@@ -1,4 +1,5 @@
 import { Layer } from './Layer';
+import { saveFile } from '../util/io';
 
 export class Doc {
   name: string;
@@ -40,11 +41,13 @@ export class Doc {
   }
 
   save() {
-    localStorage.setItem('testSave', JSON.stringify(this));
+    saveFile(this.name, JSON.stringify(this), () => {
+      // TODO: mark as saved
+    });
   }
 
-  static load() {
-    var doc = JSON.parse(localStorage.getItem('testSave'));
+  static fromString(text) {
+    var doc = JSON.parse(text);
     Object.setPrototypeOf(doc, Doc.prototype);
     doc.layers.forEach(layer => Object.setPrototypeOf(layer, Layer.prototype));
     return doc;

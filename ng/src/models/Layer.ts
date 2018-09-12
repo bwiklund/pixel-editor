@@ -2,14 +2,14 @@ export class Layer {
   name: string;
   width: number;
   height: number;
-  pixels: number[];
+  pixels: Uint8ClampedArray;
   isVisible: boolean;
 
   constructor(name, width, height) {
     this.name = name;
     this.width = width;
     this.height = height;
-    this.pixels = new Array(this.width * this.height * 4).fill(0);
+    this.pixels = new Uint8ClampedArray(this.width * this.height * 4).fill(0);
     this.isVisible = true;
   }
 

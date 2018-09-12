@@ -2,7 +2,9 @@ import { Doc } from './Doc';
 import { Layer } from './Layer';
 
 export function newDocFromImage(path, done) {
-  let doc = new Doc(path, 1, 1);
+  var newName = path + '.pixel';
+
+  let doc = new Doc(newName, 1, 1);
   doc.isReady = false;
 
   const img = new Image();

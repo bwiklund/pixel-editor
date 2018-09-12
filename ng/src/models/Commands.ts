@@ -9,12 +9,15 @@ function CMD(name: string, defaultShortcut: string, action: Function) {
   Shortcuts[name] = defaultShortcut;
 }
 
+import { loadFile, saveFile } from '../util/io';
 CMD("Save", "%s", (app: App) => {
-  console.error("Saving not implemented yet");
+  app.activeDoc.save();
 });
 
 CMD("Open", "%o", (app: App) => {
-  console.error("Open not implemented yet");
+  loadFile((path, text) => {
+    app.openFileFromText(path, text);
+  });
 });
 
 CMD("Close", "#w", (app: App) => { // shift W for now until i put this in an electron container

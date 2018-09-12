@@ -49,4 +49,11 @@ export class App {
     this.docs.splice(index, 1);
     this.activeDocIndex = this.docs.length - 1;
   }
+
+  openFileFromText(path: string, str: string) {
+    var doc = Doc.fromString(str);
+    doc.name = path;
+    // TODO: complain if it can't be parsed
+    this.docs.push(doc);
+  }
 }
