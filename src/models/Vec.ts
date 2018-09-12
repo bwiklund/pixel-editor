@@ -26,4 +26,8 @@ export class Vec {
   scalarMult(n) {
     return new Vec(this.x * n, this.y * n);
   }
+
+  round() {
+    return new Vec(~~this.x, ~~this.y);
+  }
 }

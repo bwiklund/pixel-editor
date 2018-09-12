@@ -1,3 +1,5 @@
+import { Vec } from "./Vec";
+
 export class Layer {
   name: string;
   width: number;
@@ -5,7 +7,7 @@ export class Layer {
   pixels: Uint8ClampedArray;
   isVisible: boolean;
 
-  constructor(name, width, height) {
+  constructor(name: string, width: number, height: number) {
     this.name = name;
     this.width = width;
     this.height = height;
@@ -13,7 +15,7 @@ export class Layer {
     this.isVisible = true;
   }
 
-  setPixel(v, r, g, b, a) {
+  setPixel(v: Vec, r: number, g: number, b: number, a: number) {
     if (v.x < 0 || v.x >= this.width || v.y < 0 || v.y >= this.height) {
       return;
     }
@@ -26,25 +28,7 @@ export class Layer {
     this.pixels[I + 3] = a;
   }
 
-  drawLine(p1, p2, r, g, b, a) {
-    // TODO: move this to a pencil tool class
-    // first pass, just move <= 1 pixel at a time in the right direction.
-    // this could be more efficient if i cared
-    const offset = p2.sub(p1);
-    const dist = offset.mag();
-    const stepSize = 0.1;
-    if (dist === 0) { // avoid NaN
-      this.setPixel(p1, r, g, b, a);
-    } else {
-      for (let n = 0; n <= dist; n += stepSize) {
-        const p = p1.add(offset.scalarMult(n / dist));
-
-        this.setPixel(p, r, g, b, a);
-      }
-    }
-  }
-
-  blitBlended(otherLayer) {
+  blitBlended(otherLayer: Layer) {
     for (var y = 0; y < this.height; y++) {
       for (var x = 0; x < this.width; x++) {
         var i = x + y * this.width;
