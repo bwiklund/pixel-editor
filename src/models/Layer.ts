@@ -12,11 +12,18 @@ export class Layer {
     this.name = name;
     this.width = width;
     this.height = height;
-    this.pixels = new Uint8ClampedArray(this.width * this.height * 4).fill(0);
     this.isVisible = true;
+    this.pixels = new Uint8ClampedArray(this.width * this.height * 4).fill(0);
   }
 
-  isInBounds(v: Vec) {
+  deepClone(): Layer {
+    var copy = new Layer(this.name, this.width, this.height);
+    copy.pixels = this.pixels.slice();
+    this.isVisible = this.isVisible;
+    return copy;
+  }
+
+  isInBounds(v: Vec): boolean {
     return !(v.x < 0 || v.x >= this.width || v.y < 0 || v.y >= this.height);
   }
 
@@ -31,7 +38,7 @@ export class Layer {
     this.pixels[I + 3] = a;
   }
 
-  getColor(v: Vec) {
+  getColor(v: Vec): Color {
     if (v.x < 0 || v.x >= this.width || v.y < 0 || v.y >= this.height) {
       return null;
     }

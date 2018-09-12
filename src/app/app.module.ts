@@ -9,6 +9,7 @@ import { ColorPickerComponent } from './color-picker/color-picker.component';
 import { TimelineComponent } from './timeline/timeline.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { ToolPropertiesComponent } from './tool-properties/tool-properties.component';
+import { HistoryComponent } from './history/history.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { ToolPropertiesComponent } from './tool-properties/tool-properties.compo
     ColorPickerComponent,
     TimelineComponent,
     ToolbarComponent,
-    ToolPropertiesComponent
+    ToolPropertiesComponent,
+    HistoryComponent
   ],
   imports: [
     BrowserModule,

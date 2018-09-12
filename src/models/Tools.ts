@@ -102,6 +102,9 @@ export class Pencil extends Tool {
   }
 
   onMouseDown(context: ToolContext) {
+    context.doc.historyPush("Pencil stroke");
+    context.doc.cloneLayer(context.doc.activeLayer);
+
     this.mouseIsDown = true;
     this.drawPencilStrokes(context);
   }

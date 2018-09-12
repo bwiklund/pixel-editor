@@ -51,4 +51,8 @@ CMD("ToggleContiguous", "c", (app: App) => {
   }
 });
 
+CMD("Undo", "%z", (app: App) => {
+  app.activeDoc.historyPop();
+});
+
 export { Commands, Shortcuts } 
