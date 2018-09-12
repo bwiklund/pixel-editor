@@ -1,0 +1,13 @@
+:host {
+  margin: 4px;
+  display: block;
+}
+
+canvas {
+  display: block;
+}
+
+.hue-bar {
+  width: 256px;
+  height: 16px;
+}

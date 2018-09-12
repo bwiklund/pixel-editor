@@ -4,7 +4,8 @@
   </header>
   <div class="flex-container-horizontal flex-fill">
     <div class="sidebar">
-      <app-palette [colors]="app.palette"></app-palette>
+      <app-color-picker [app]="app"></app-color-picker>
+      <app-palette [app]="app" [colors]="app.palette"></app-palette>
     </div>
     <app-doc-view class="flex-fill" [app]="app" [doc]="app.activeDoc"></app-doc-view>
   </div>
