@@ -27,3 +27,10 @@ header a.active {
   width: 264px;
   background: hsl(245, 10%, 18%);
 }
+
+.everything-under-header {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: row;
+  position: relative;
+}

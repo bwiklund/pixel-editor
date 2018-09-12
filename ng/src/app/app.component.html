@@ -2,12 +2,13 @@
   <header>
     <a *ngFor="let doc of app.docs; let i = index" [ngClass]="{active: app.activeDocIndex === i}" (click)="app.activeDocIndex = i">{{doc.name}}</a>
   </header>
-  <div class="flex-container-horizontal flex-fill">
+  <div class="everything-under-header">
     <div class="sidebar">
       <app-color-picker [app]="app"></app-color-picker>
       <app-palette [app]="app" [colors]="app.palette"></app-palette>
     </div>
     <!-- Opened but unshown docs are hidden instead of ngIf'ed, so we don't lose state / have to rebuild them -->
-    <app-doc-view class="flex-fill"*ngFor="let doc of app.docs" [app]="app" [doc]="doc" [hidden]="doc !== app.activeDoc"></app-doc-view>
+    <app-doc-view class="flex-fill" *ngFor="let doc of app.docs" [app]="app" [doc]="doc" [hidden]="doc !== app.activeDoc"></app-doc-view>
+    <app-toolbar [app]="app" [tools]="app.toolbar"></app-toolbar>
   </div>
 </div>

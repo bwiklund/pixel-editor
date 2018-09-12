@@ -18,8 +18,17 @@ export class App {
   hash: number = 0;
   preferences: Preferences = new Preferences();
 
+  toolbar: Tool[] = [
+    this.pencilTool,
+    this.eraserTool,
+    this.pannerTool
+  ]
+
   constructor() {
+    // redesign the eraser so these 2 lines aren't necessary
     this.eraserTool.isEraser = true;
+    this.eraserTool.icon = "fas fa-eraser";
+
     // swiped from https://lospec.com/palette-list/enos16
     const txtPaletteTest = ["#fafafa", "#d4d4d4", "#9d9d9d", "#4b4b4b", "#f9d381", "#eaaf4d", "#f9938a", "#e75952", "#9ad1f9", "#58aeee", "#8deda7", "#44c55b", "#c3a7e1", "#9569c8", "#bab5aa", "#948e82"];
     // TODO: actually store these in the document and not just inline here for prototyping
@@ -28,6 +37,11 @@ export class App {
 
   get activeDoc() {
     return this.docs[this.activeDocIndex];
+  }
+
+  selectTool(tool) {
+    this.activeTool.interrupt();
+    this.activeTool = tool;
   }
 
   pushTool(tool) {

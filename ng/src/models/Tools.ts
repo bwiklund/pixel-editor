@@ -2,6 +2,9 @@ import { Color } from './Color';
 import { Vec } from './Vec';
 
 export class Tool {
+  name: string;
+  icon: string;
+
   onMouseDown(context) {
 
   }
@@ -21,6 +24,8 @@ export class Pencil extends Tool {
   mouseIsDown: boolean = false;
   lastPos: Vec = null;
   isEraser: boolean = false;
+  name = "Pencil";
+  icon = "fas fa-pencil-alt";
 
   interrupt() {
     this.mouseIsDown = false;
@@ -61,6 +66,8 @@ export class Pencil extends Tool {
 export class Panner {
   mouseIsDown = false;
   lastPos = null;
+  name = "Panner";
+  icon = "fas fa-hand-paper";
 
   interrupt() {
     this.mouseIsDown = false;

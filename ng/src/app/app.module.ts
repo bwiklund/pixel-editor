@@ -6,6 +6,7 @@ import { DocViewComponent } from './doc-view/doc-view.component';
 import { PaletteComponent } from './palette/palette.component';
 import { ColorPickerComponent } from './color-picker/color-picker.component';
 import { TimelineComponent } from './timeline/timeline.component';
+import { ToolbarComponent } from './toolbar/toolbar.component';
 
 @NgModule({
   declarations: [
@@ -13,7 +14,8 @@ import { TimelineComponent } from './timeline/timeline.component';
     DocViewComponent,
     PaletteComponent,
     ColorPickerComponent,
-    TimelineComponent
+    TimelineComponent,
+    ToolbarComponent
   ],
   imports: [
     BrowserModule
