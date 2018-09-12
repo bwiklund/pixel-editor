@@ -1,0 +1,34 @@
+:host {
+  display: block;
+  background: hsl(245, 10%, 30%);
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th {
+  width: 100px;
+  text-align: left;
+}
+
+th, td {
+  padding: 5px;
+}
+
+.togglers {
+  width: 1px;
+}
+
+.name {
+  width: 100px;
+}
+
+.current {
+  background: hsl(245, 10%, 40%);
+}
+
+.dim {
+  opacity: 0.3;
+}

@@ -21,6 +21,12 @@ export class Doc {
     return this.layers[this.activeLayerIndex];
   }
 
+  set activeLayer(layer) {
+    var index = this.layers.indexOf(layer);
+    if (index == -1) { throw new Error("That layer doesn't belong to this doc"); }
+    this.activeLayerIndex = index;
+  }
+
   touch() {
     this.hash = Math.random();
   }

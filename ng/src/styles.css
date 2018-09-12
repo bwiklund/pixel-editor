@@ -4,6 +4,8 @@
   padding: 0px;
 }
 
+[hidden] { display: none !important;}
+
 body {
   background: hsl(245, 10%, 21%);
   color: white;
