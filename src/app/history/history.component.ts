@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Doc } from '../../models/Doc';
+import { Doc } from '../../core/Doc';
 
 @Component({
   selector: 'app-history',

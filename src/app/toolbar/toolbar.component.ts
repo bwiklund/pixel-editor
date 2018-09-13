@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Tool } from '../../models/Tools';
-import { App } from '../../models/App';
+import { Tool } from '../../core/Tools';
+import { App } from '../../core/App';
 
 @Component({
   selector: 'app-toolbar',

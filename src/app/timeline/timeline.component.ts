@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Doc } from '../../models/Doc';
-import { App } from '../../models/App';
+import { Doc } from '../../core/Doc';
+import { App } from '../../core/App';
 
 
 @Component({

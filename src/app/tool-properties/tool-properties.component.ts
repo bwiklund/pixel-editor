@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { App } from '../../models/App';
-import { Tool } from '../../models/Tools';
+import { App } from '../../core/App';
+import { Tool } from '../../core/Tools';
 
 @Component({
   selector: 'app-tool-properties',

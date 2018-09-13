@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Color } from '../../models/Color';
-import { App } from '../../models/App';
+import { Color } from '../../core/Color';
+import { App } from '../../core/App';
 
 @Component({
   selector: 'app-palette',

@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef, Input, DoCheck } from '@angular/core';
 
-import { App } from '../../models/App';
-import { Vec } from '../../models/Vec';
-import { Color } from '../../models/Color';
+import { App } from '../../core/App';
+import { Vec } from '../../core/Vec';
+import { Color } from '../../core/Color';
 
 @Component({
   selector: 'app-color-picker',

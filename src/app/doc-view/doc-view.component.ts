@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef, Input, ChangeDetectorRef, OnChanges, DoCheck } from '@angular/core';
-import { App } from '../../models/App';
-import { Doc } from '../../models/Doc';
-import { Vec } from '../../models/Vec';
-import { ToolContext } from '../../models/Tools';
+import { App } from '../../core/App';
+import { Doc } from '../../core/Doc';
+import { Vec } from '../../core/Vec';
+import { ToolContext } from '../../core/Tools';
 
 const BG_CHECKERBOARD_A = [32, 32, 32, 255];
 const BG_CHECKERBOARD_B = [40, 40, 40, 255];

@@ -1,8 +1,8 @@
 import { Component, ChangeDetectorRef, HostListener } from '@angular/core';
 
-import { App } from '../models/App';
-import { newDocFromImage } from '../models/ImageImporter';
-import { Commands, Shortcuts } from '../models/Commands';
+import { App } from '../core/App';
+import { newDocFromImage } from '../core/ImageImporter';
+import { Commands, Shortcuts } from '../core/Commands';
 
 @Component({
   selector: 'app-root',
