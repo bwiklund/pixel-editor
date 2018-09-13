@@ -1,5 +1,9 @@
 <table>
-  <tr *ngFor="let layer of doc.layers.slice().reverse()" [ngClass]="{current: layer == doc.activeLayer}">
+  <tr 
+    *ngFor="let layer of doc.layers.slice().reverse()"
+    [ngClass]="{current: layer == doc.activeLayer, selected: selection.includes(layer)}"
+    (mousedown)="mousedown($event, layer)"
+  >
     <th class="togglers">
       <a (click)="layer.isVisible = !layer.isVisible">
         <i class="far fa-eye" *ngIf="layer.isVisible"></i>

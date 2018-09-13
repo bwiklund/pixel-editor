@@ -29,6 +29,10 @@ th, td {
   background: hsl(205, 15%, 40%);
 }
 
+.selected {
+  background: hsl(205, 15%, 60%);
+}
+
 .dim {
   opacity: 0.3;
 }
