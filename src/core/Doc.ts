@@ -6,7 +6,6 @@ export class Doc {
   name: string;
   width: number;
   height: number;
-  layers: Layer[] = [];
   hash: number = 0;
   activeLayerIndex: number = 0;
   historyLabel: string = "";
@@ -20,6 +19,8 @@ export class Doc {
   isReady: boolean = true;
   offset: Vec = new Vec(50, 50);
   zoom: number = 4;
+
+  layers: Layer[] = [];
 
   constructor(name, width, height) {
     this.name = name;
@@ -58,18 +59,28 @@ export class Doc {
     var finalLayer = new Layer("Headless compositing layer", this.width, this.height);
     this.layers.forEach((layer) => {
       if (!layer.isVisible) { return; }
-      if (layer == this.activeLayer && this.activeLayerPreview != null ){
+      if (layer == this.activeLayer && this.activeLayerPreview != null) {
         finalLayer.blitBlended(this.activeLayerPreview);
-      } else { 
+      } else {
         finalLayer.blitBlended(layer);
       }
     });
     return finalLayer;
   }
 
+  // FIXME: the pixels should be saved in as compact a way as possible, which isn't how it is now...
+  // or... just get it compact ([1,2,3,4]) and then zip the whole file. size is comparable to a single layer png that way.
   save() {
-    // blacklist some keys we don't care to save
-    var replacer = (k, v) => k === "history" || k === "activeLayerPreview" ? undefined : v;
+    var replacer = (k, v) => {
+      // blacklist some keys we don't care to save
+      if (k === "history" || k === "activeLayerPreview") {
+        return undefined;
+      } else if (k === "pixels") { // turn it into a plain int array
+        return Array.from(v);
+      } else {
+        return v;
+      }
+    }
 
     saveFile(this.name, JSON.stringify(this, replacer), () => {
       // TODO: mark as saved
@@ -77,8 +88,10 @@ export class Doc {
   }
 
   static fromString(text) {
+    // TODO: make sure the serialized pixels turn back into Uint8Array's.
     var doc = JSON.parse(text);
     Object.setPrototypeOf(doc, Doc.prototype);
+    Object.setPrototypeOf(doc.offset, Vec.prototype);
     doc.layers.forEach(layer => Object.setPrototypeOf(layer, Layer.prototype));
     return doc;
   }

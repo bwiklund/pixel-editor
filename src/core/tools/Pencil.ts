@@ -71,6 +71,9 @@ export class Pencil extends Tool {
   }
 
   drawPencilStrokes(context: ToolContext) {
+    // FIXME should really just prevent any tool from getting events if the current doc isn't `ready`
+    if (!context.doc || !context.doc.activeLayer) { return; }
+
     var color = context.app.colorFg;
     if (this.isEraser) color = new Color(0, 0, 0, 0);
 

@@ -106,6 +106,7 @@ export class App {
       doc.name = path;
       // TODO: complain if it can't be parsed
       this.docs.push(doc);
+      this.activeDocIndex = this.docs.length - 1;
     });
   }
 }
