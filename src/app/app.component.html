@@ -1,4 +1,5 @@
 <div class="app-wrap flex-container-vertical">
+  <app-menu [menu]="app.menu"></app-menu>
   <header>
     <a *ngFor="let doc of app.docs; let i = index" [ngClass]="{active: app.activeDocIndex === i}" (click)="app.activeDocIndex = i">{{doc.name}}</a>
   </header>

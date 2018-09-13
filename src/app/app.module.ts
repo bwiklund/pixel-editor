@@ -10,6 +10,7 @@ import { TimelineComponent } from './timeline/timeline.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { ToolPropertiesComponent } from './tool-properties/tool-properties.component';
 import { HistoryComponent } from './history/history.component';
+import { MenuComponent } from './menu/menu.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { HistoryComponent } from './history/history.component';
     TimelineComponent,
     ToolbarComponent,
     ToolPropertiesComponent,
-    HistoryComponent
+    HistoryComponent,
+    MenuComponent
   ],
   imports: [
     BrowserModule,

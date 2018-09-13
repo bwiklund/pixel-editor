@@ -4,6 +4,7 @@ import { Preferences } from './Preferences';
 import { loadFile, saveFile } from '../util/io';
 
 import {Tool} from './tools/Tools';
+import {Menu, MenuItem} from './Menu';
 import {Pencil} from './tools/Pencil';
 import {Panner} from './tools/Panner';
 import {Fill} from './tools/Fill';
@@ -24,6 +25,7 @@ export class App {
   palette: Color[];
   hash: number = 0;
   preferences: Preferences = new Preferences();
+  menu: Menu;
 
   toolbar: Tool[] = [
     this.pencilTool,
@@ -43,6 +45,17 @@ export class App {
     const txtPaletteTest = ["#fafafa", "#d4d4d4", "#9d9d9d", "#4b4b4b", "#f9d381", "#eaaf4d", "#f9938a", "#e75952", "#9ad1f9", "#58aeee", "#8deda7", "#44c55b", "#c3a7e1", "#9569c8", "#bab5aa", "#948e82"];
     // TODO: actually store these in the document and not just inline here for prototyping
     this.palette = txtPaletteTest.map((h) => Color.fromHex(h));
+
+
+    // TODO: move somewhere else...
+    // build the menu hierarchy
+    this.menu = new Menu("Root", [
+      new Menu("File", [
+        new MenuItem("New", () => console.log("you clicked me"))
+      ]),
+      new Menu("Edit", []),
+      new Menu("Image", []),
+    ]);
   }
 
   get activeDoc() {

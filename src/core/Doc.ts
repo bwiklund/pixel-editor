@@ -63,7 +63,10 @@ export class Doc {
   }
 
   save() {
-    saveFile(this.name, JSON.stringify(this), () => {
+    // blacklist some keys we don't care to save
+    var replacer = (k, v) => k === "history" ? undefined : v;
+
+    saveFile(this.name, JSON.stringify(this, replacer), () => {
       // TODO: mark as saved
     });
   }

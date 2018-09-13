@@ -1,0 +1,4 @@
+<div class="menu" *ngFor="let subMenu of menu.children">
+  <a>{{subMenu.label}}</a>
+  <div *ngIf="subMenu.children"></div>
+</div>
