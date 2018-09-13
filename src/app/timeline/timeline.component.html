@@ -1,8 +1,10 @@
 <table>
   <tr 
-    *ngFor="let layer of doc.layers.slice().reverse()"
-    [ngClass]="{current: layer == doc.activeLayer, selected: selection.includes(layer)}"
+    *ngFor="let layer of doc.layers; let i = index"
+    [ngClass]="{current: layer == doc.activeLayer, selected: selection.includes(layer), 'drag-above': dragDropIndex == i}"
     (mousedown)="mousedown($event, layer)"
+    (mousemove)="mousemove($event, layer)"
+    (mouseup)="mouseup($event, layer)"
   >
     <th class="togglers">
       <a (click)="layer.isVisible = !layer.isVisible">

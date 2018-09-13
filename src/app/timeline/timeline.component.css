@@ -36,3 +36,7 @@ th, td {
 .dim {
   opacity: 0.3;
 }
+
+.drag-above {
+  border-top: 4px solid red;
+}
