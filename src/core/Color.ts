@@ -8,25 +8,18 @@ export class Color {
   b: number;
   a: number;
 
-  constructor(r, g, b, a) {
+  constructor(r: number, g: number, b: number, a: number) {
     this.r = r;
     this.g = g;
     this.b = b;
     this.a = a;
   }
 
-  equalTo(o) {
+  equalTo(o: Color) {
     return this.r == o.r && this.g == o.g && this.b == o.b && this.a == o.a;
   }
 
-  set(o) {
-    this.r = o.r;
-    this.g = o.g;
-    this.b = o.b;
-    this.a = o.a;
-  }
-
-  static fromHex(hex) {
+  static fromHex(hex: string) {
     var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     return result ? new Color(
       parseInt(result[1], 16),
@@ -37,7 +30,7 @@ export class Color {
   }
 
   // expects 0-1 for hsv, returns 0-255 for rgb
-  static fromHSV(h, s, v) {
+  static fromHSV(h: number, s: number, v: number) {
     var rgbArray = hsvToRgb(h, s, v);
     return new Color(rgbArray[0], rgbArray[1], rgbArray[2], 255);
   }
