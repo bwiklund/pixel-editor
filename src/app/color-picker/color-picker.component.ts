@@ -1,8 +1,9 @@
-import { Component, OnInit, ViewChild, ElementRef, Input, DoCheck } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Input, DoCheck, HostListener } from '@angular/core';
 
 import { App } from '../../core/App';
 import { Vec } from '../../core/Vec';
 import { Color } from '../../core/Color';
+import { InputStateService } from '../input-state.service';
 
 @Component({
   selector: 'app-color-picker',
@@ -18,7 +19,7 @@ export class ColorPickerComponent implements OnInit, DoCheck {
   isMouseDownHue: boolean = false;
   hsv = { h: 0, s: 1, v: 1 }
 
-  constructor() { }
+  constructor(public inputState: InputStateService) { }
 
   ngOnInit() {
     this.updateCanvas();
@@ -30,34 +31,59 @@ export class ColorPickerComponent implements OnInit, DoCheck {
     this.updateCanvas();
   }
 
-  mousedown(e) {
+  mousedownSatVal(e) {
+    this.inputState.takeFocus(this);
     this.isMouseDownHSV = true;
     this.mousemove(e);
   }
 
+  @HostListener("window:mousemove", ['$event'])
   mousemove(e) {
-    if (this.isMouseDownHSV) {
-      var clientRect = this.canvas.nativeElement.getBoundingClientRect();
-      var pos = new Vec(e.pageX - clientRect.left, e.pageY - clientRect.top);
-      var c = Color.fromHSV(this.hsv.h, pos.x / 255, 1 - pos.y / 255);
-      this.app.colorFg = c;
+    if (this.inputState.hasFocus(this)) {
+      if (this.isMouseDownHSV) {
+        this.mousemoveSatVal(e);
+      }
+      if (this.isMouseDownHue) {
+        this.mousemoveHueBar(e);
+      }
     }
   }
 
+  @HostListener("window:mouseup", ['$event'])
   mouseup(e) {
-    this.isMouseDownHSV = false;
+    if (this.inputState.hasFocus(this)) {
+      if (this.isMouseDownHSV) {
+        this.isMouseDownHSV = false;
+      }
+      if (this.isMouseDownHue) {
+        this.isMouseDownHue = false;
+      }
+      this.inputState.releaseFocus(this);
+    }
+  }
+
+  mousemoveSatVal(e) {
+    var clientRect = this.canvas.nativeElement.getBoundingClientRect();
+    var pos = new Vec(e.pageX - clientRect.left, e.pageY - clientRect.top);
+    pos.x = Math.max(0, Math.min(255, pos.x));
+    pos.y = Math.max(0, Math.min(255, pos.y));
+    var c = Color.fromHSV(this.hsv.h, pos.x / 255, 1 - pos.y / 255);
+    // TODO: remember saturation when we hit true black so it doesn't snap to bottom left
+    this.app.colorFg = c;
   }
 
 
   mousedownHueBar(e) {
+    this.inputState.takeFocus(this);
     this.isMouseDownHue = true;
     this.mousemoveHueBar(e);
   }
 
   mousemoveHueBar(e) {
-    if (this.isMouseDownHue) {
+    if (this.isMouseDownHue && this.inputState.hasFocus(this)) {
       var clientRect = this.canvas.nativeElement.getBoundingClientRect();
       var pos = new Vec(e.pageX - clientRect.left, e.pageY - clientRect.top);
+      pos.x = Math.max(0, Math.min(255, pos.x));
       var c = Color.fromHSV(pos.x / 255, this.hsv.s, this.hsv.v);
       this.app.colorFg = c;
     }

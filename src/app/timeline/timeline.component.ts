@@ -19,7 +19,6 @@ export class TimelineComponent implements OnInit {
   constructor(public inputState: InputStateService) { }
 
   ngOnInit() {
-
   }
 
   mousedown(e: MouseEvent, layer: Layer){

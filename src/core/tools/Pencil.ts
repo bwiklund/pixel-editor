@@ -27,6 +27,7 @@ export class Pencil extends Tool {
   interrupt() {
     this.mouseIsDown = false;
     this.lastPos = null;
+    if (this.lastMousePositionContext) { this.lastMousePositionContext.doc.activeLayerPreview = null; }
   }
 
   drawCircle(layer: Layer, pos: Vec, diameter: number, r: number, g: number, b: number, a: number) {

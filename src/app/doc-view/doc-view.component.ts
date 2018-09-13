@@ -1,8 +1,9 @@
-import { Component, OnInit, ViewChild, ElementRef, Input, ChangeDetectorRef, OnChanges, DoCheck } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Input, ChangeDetectorRef, OnChanges, DoCheck, HostListener } from '@angular/core';
 import { App } from '../../core/App';
 import { Doc } from '../../core/Doc';
 import { Vec } from '../../core/Vec';
 import { ToolContext } from '../../core/tools/Tools';
+import { InputStateService } from '../input-state.service';
 
 const BG_CHECKERBOARD_A = [32, 32, 32, 255];
 const BG_CHECKERBOARD_B = [40, 40, 40, 255];
@@ -19,7 +20,7 @@ export class DocViewComponent implements OnInit, DoCheck {
   @ViewChild('canvas') canvas: ElementRef;
   @ViewChild('artboard') artboard: ElementRef;
 
-  constructor() { }
+  constructor(public inputState: InputStateService) { }
 
   ngOnInit() {
   }
@@ -42,6 +43,8 @@ export class DocViewComponent implements OnInit, DoCheck {
   }
 
   mousedown(e) {
+    this.inputState.takeFocus(this);
+
     if (e.which === 2) {
       this.app.pushTool(this.app.pannerTool);
     }
@@ -50,19 +53,27 @@ export class DocViewComponent implements OnInit, DoCheck {
     return false;
   }
 
+  @HostListener("window:mouseup", ["$event"])
   mouseup(e) {
-    if (e.which === 2) {
-      this.app.popTool();
+    if (this.inputState.hasFocus(this)) {
+      if (e.which === 2) {
+        this.app.popTool();
+      }
+      this.app.activeTool.onMouseUp(this.buildMouseEventContext(e));
+      e.preventDefault();
+      this.inputState.releaseFocus(this);
+      return false;
     }
-    this.app.activeTool.onMouseUp(this.buildMouseEventContext(e));
-    e.preventDefault();
-    return false;
   }
 
+  @HostListener("window:mousemove", ["$event"])
   mousemove(e) {
-    this.app.activeTool.onMouseMove(this.buildMouseEventContext(e));
-    e.preventDefault();
-    return false;
+    this.inputState.takeIfFree(this);
+    if (this.inputState.hasFocus(this)) {
+      this.app.activeTool.onMouseMove(this.buildMouseEventContext(e));
+      e.preventDefault();
+      return false;
+    }
   }
 
   mousewheel(e) {

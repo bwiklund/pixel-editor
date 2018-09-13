@@ -1,19 +1,10 @@
 <div class="canvas-wrap">
-  <canvas
-    #canvas 
-    (mousedown)="mousedown($event)"
-    (mouseup)="mouseup($event)"
-    (mousemove)="mousemove($event)"></canvas>
+  <canvas #canvas (mousedown)="mousedownSatVal($event)"></canvas>
   <div class="reticle" [ngStyle]="reticlePostion()"><div class="reticle-image"></div></div>
 </div>
 
 <div class="canvas-wrap">
-  <canvas
-    #hueBarCanvas
-    class="hue-bar"
-    (mousedown)="mousedownHueBar($event)"
-    (mouseup)="mouseupHueBar($event)"
-    (mousemove)="mousemoveHueBar($event)"></canvas>
+  <canvas #hueBarCanvas class="hue-bar" (mousedown)="mousedownHueBar($event)"></canvas>
 </div>
 
 <div class="color-big" [ngStyle]="{background: app.colorFg.toHex()}"></div>
