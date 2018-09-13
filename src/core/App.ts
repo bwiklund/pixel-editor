@@ -1,8 +1,13 @@
 import { Color } from './Color';
 import { Doc } from './Doc';
-import { Tool, Pencil, Panner, ColorPicker, Fill } from './Tools';
 import { Preferences } from './Preferences';
 import { loadFile, saveFile } from '../util/io';
+
+import {Tool} from './tools/Tools';
+import {Pencil} from './tools/Pencil';
+import {Panner} from './tools/Panner';
+import {Fill} from './tools/Fill';
+import {ColorPicker} from './tools/ColorPicker';
 
 export class App {
   pencilTool: Pencil = new Pencil();

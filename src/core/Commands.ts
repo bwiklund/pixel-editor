@@ -1,5 +1,6 @@
 import { App } from './App';
-import { Fill, Pencil } from './Tools';
+import { Fill } from './tools/Fill';
+import { Pencil } from './tools/Pencil';
 
 // some global commands stubbed out here so they can be bound to user keys in a clean way
 var Commands = {}

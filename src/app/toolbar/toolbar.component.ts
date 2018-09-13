@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Tool } from '../../core/Tools';
+import { Tool } from '../../core/tools/Tools';
 import { App } from '../../core/App';
 
 @Component({

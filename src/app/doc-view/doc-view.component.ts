@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef, Input, ChangeDetectorRef, OnC
 import { App } from '../../core/App';
 import { Doc } from '../../core/Doc';
 import { Vec } from '../../core/Vec';
-import { ToolContext } from '../../core/Tools';
+import { ToolContext } from '../../core/tools/Tools';
 
 const BG_CHECKERBOARD_A = [32, 32, 32, 255];
 const BG_CHECKERBOARD_B = [40, 40, 40, 255];
