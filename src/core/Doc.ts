@@ -10,6 +10,7 @@ export class Doc {
   hash: number = 0;
   activeLayerIndex: number = 0;
   historyLabel: string = "";
+  activeLayerPreview: Layer = null;
 
   // a stack of copies of this document going back in time
   // we push and pop to this, but keep the reference to the original doc the same
@@ -57,14 +58,18 @@ export class Doc {
     var finalLayer = new Layer("Headless compositing layer", this.width, this.height);
     this.layers.forEach((layer) => {
       if (!layer.isVisible) { return; }
-      finalLayer.blitBlended(layer);
+      if (layer == this.activeLayer && this.activeLayerPreview != null ){
+        finalLayer.blitBlended(this.activeLayerPreview);
+      } else { 
+        finalLayer.blitBlended(layer);
+      }
     });
     return finalLayer;
   }
 
   save() {
     // blacklist some keys we don't care to save
-    var replacer = (k, v) => k === "history" ? undefined : v;
+    var replacer = (k, v) => k === "history" || k === "activeLayerPreview" ? undefined : v;
 
     saveFile(this.name, JSON.stringify(this, replacer), () => {
       // TODO: mark as saved

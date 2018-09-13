@@ -41,12 +41,14 @@ CMD("SwapActiveColors", "x", (app: App) => {
 CMD("ShrinkCurrentTool", "û", (app: App) => {
   if (app.activeTool instanceof Pencil) {
     app.activeTool.size = Math.max(1, app.activeTool.size - 1);
+    app.activeTool.redrawBrushPreview();
   }
 });
 
 CMD("GrowCurrentTool", "ý", (app: App) => {
   if (app.activeTool instanceof Pencil) {
     app.activeTool.size = Math.max(1, app.activeTool.size + 1);
+    app.activeTool.redrawBrushPreview();
   }
 });
 

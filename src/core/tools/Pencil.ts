@@ -11,8 +11,17 @@ export class Pencil extends Tool {
   icon = "fas fa-pencil-alt";
   size: number = 1;
 
+  // hold onto this so we can change the brush size and update the canvas even if the mouse is idle (triggered from keypress)
+  lastMousePositionContext: ToolContext;
+
   getCssCursor(): string {
     return 'cursor-pencil';
+  }
+
+  redrawBrushPreview() {
+    if (this.lastMousePositionContext) {
+      this.drawPencilStrokes(this.lastMousePositionContext);
+    }
   }
 
   interrupt() {
@@ -33,7 +42,7 @@ export class Pencil extends Tool {
     var radius = diameter / 2;
     var radiusPlusOne = radius + 1;
     var tl = new Vec(~~Math.max(0, pos.x - radiusPlusOne), ~~Math.max(0, pos.y - radiusPlusOne));
-    var br = new Vec(~~Math.min(layer.width - 1, pos.x + radiusPlusOne), ~~Math.min(layer.height - 1, pos.y + radiusPlusOne));
+    var br = new Vec(~~Math.min(layer.width, pos.x + radiusPlusOne), ~~Math.min(layer.height, pos.y + radiusPlusOne));
     for (var y = tl.y; y < br.y; y++) {
       for (var x = tl.x; x < br.x; x++) {
         var p = new Vec(x, y);
@@ -65,7 +74,10 @@ export class Pencil extends Tool {
     var color = context.app.colorFg;
     if (this.isEraser) color = new Color(0, 0, 0, 0);
 
+    // TODO be able to lock a doc so you can't fumble and change layers midstroke, or trigger undo, etc
+
     if (this.mouseIsDown) {
+      context.doc.activeLayerPreview = null; // make sure this is clear
       if (!this.lastPos) {
         //context.doc.activeLayer.setPixel(context.pos, color.r, color.g, color.b, color.a);
         this.drawCircle(context.doc.activeLayer, context.pos.copy().round(), this.size, color.r, color.g, color.b, color.a);
@@ -74,6 +86,11 @@ export class Pencil extends Tool {
       }
       this.lastPos = context.pos.copy();
       context.doc.touch();
+    } else {
+      // just preview the brush
+      var preview = context.doc.activeLayer.deepClone();
+      this.drawCircle(preview, context.pos.copy().round(), this.size, color.r, color.g, color.b, color.a);
+      context.doc.activeLayerPreview = preview;
     }
   }
 
@@ -87,6 +104,7 @@ export class Pencil extends Tool {
 
   onMouseMove(context: ToolContext) {
     this.drawPencilStrokes(context);
+    this.lastMousePositionContext = context;
   }
 
   onMouseUp(context: ToolContext) {
