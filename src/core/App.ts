@@ -73,6 +73,13 @@ export class App {
     this.overriddenTool = null;
   }
 
+  newDoc() {
+    var doc = new Doc("New", 64, 64);
+    doc.newLayer();
+    this.docs.push(doc);
+    this.activeDocIndex = this.docs.length - 1;
+  }
+
   closeDoc(doc) {
     // TODO: check if needs saving
     var index = this.docs.indexOf(doc);

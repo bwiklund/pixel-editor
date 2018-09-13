@@ -11,6 +11,10 @@ function CMD(name: string, defaultShortcut: string, action: Function) {
   Shortcuts[name] = defaultShortcut;
 }
 
+CMD("New", "&n", (app: App) => {
+  app.newDoc();
+});
+
 CMD("Save", "%s", (app: App) => {
   app.activeDoc.save();
 });
