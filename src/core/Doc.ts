@@ -55,11 +55,11 @@ export class Doc {
 
   // make a new headless layer of everything and return it.
   // TODO: cache this to save memory i guess
-  createFinalBlit() {
+  createFinalBlit(ignoreTempLayers: boolean = false) {
     var finalLayer = new Layer("Headless compositing layer", this.width, this.height);
     this.layers.forEach((layer) => {
       if (!layer.isVisible) { return; }
-      if (layer == this.activeLayer && this.activeLayerPreview != null) {
+      if (layer == this.activeLayer && this.activeLayerPreview != null && !ignoreTempLayers) {
         finalLayer.blitBlended(this.activeLayerPreview);
       } else {
         finalLayer.blitBlended(layer);
@@ -82,7 +82,7 @@ export class Doc {
       }
     }
 
-    saveFile(this.name, JSON.stringify(this, replacer), () => {
+    saveFile(this.name, 'data:text/plain;charset=utf-8', JSON.stringify(this, replacer), () => {
       // TODO: mark as saved
     });
   }

@@ -127,10 +127,10 @@ export class DocViewComponent implements OnInit, DoCheck {
 
     var blitLayer = doc.createFinalBlit(); // todo actually composite here
 
-    let idata = ctx.getImageData(0, 0, doc.width, doc.height);
-    for (let y = 0; y < doc.height; y++) {
-      for (let x = 0; x < doc.width; x++) {
-        var i = x + y * doc.width;
+    let idata = ctx.getImageData(0, 0, blitLayer.width, blitLayer.height);
+    for (let y = 0; y < blitLayer.height; y++) {
+      for (let x = 0; x < blitLayer.width; x++) {
+        var i = x + y * blitLayer.width;
         var I = i * 4;
 
         var fAlpha = blitLayer.pixels[I + 3] / 255;

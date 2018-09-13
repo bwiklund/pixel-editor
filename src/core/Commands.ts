@@ -1,6 +1,8 @@
 import { App } from './App';
 import { Fill } from './tools/Fill';
 import { Pencil } from './tools/Pencil';
+import { toPng } from './exporters/Png';
+import { saveFile, saveBlobFile } from '../util/io';
 
 // some global commands stubbed out here so they can be bound to user keys in a clean way
 var Commands = {}
@@ -60,6 +62,14 @@ CMD("ToggleContiguous", "c", (app: App) => {
 
 CMD("Undo", "%z", (app: App) => {
   app.undo();
+});
+
+CMD("QuickExport", "&%#s", (app: App) => {
+  // TODO: dispatch this to some exporter service
+  var doc = app.activeDoc;
+  toPng(doc, (blob) => {
+    saveBlobFile(doc.name + '.png', blob, () => { });
+  });
 });
 
 export { Commands, Shortcuts } 
