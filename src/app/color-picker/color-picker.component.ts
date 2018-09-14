@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Input, DoCheck, HostListener } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Input, DoCheck, HostListener, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 
 import { App } from '../../core/App';
 import { Vec } from '../../core/Vec';
@@ -10,14 +10,22 @@ import { InputStateService } from '../input-state.service';
   templateUrl: './color-picker.component.html',
   styleUrls: ['./color-picker.component.css']
 })
-export class ColorPickerComponent implements OnInit, DoCheck {
-  @Input() app: App;
+export class ColorPickerComponent implements OnInit, OnChanges {
+  colorValue: Color;
+
+  @Output()
+  colorChange = new EventEmitter<Color>();
+
+  @Input()
+  get color() { return this.colorValue; }
+  set color(val) { this.colorValue = val; this.colorChange.emit(this.colorValue) }
+
   @ViewChild("canvas") canvas: ElementRef;
   @ViewChild("hueBarCanvas") hueBarCanvas: ElementRef;
 
   isMouseDownHSV: boolean = false;
   isMouseDownHue: boolean = false;
-  hsv = { h: 0, s: 1, v: 1 }
+  private hsv = null;
 
   constructor(public inputState: InputStateService) { }
 
@@ -26,8 +34,7 @@ export class ColorPickerComponent implements OnInit, DoCheck {
     this.updateHueBar();
   }
 
-  // FIXME: make this only run on changes to the selected color
-  ngDoCheck() {
+  ngOnChanges(change: SimpleChanges) {
     this.updateCanvas();
   }
 
@@ -69,9 +76,8 @@ export class ColorPickerComponent implements OnInit, DoCheck {
     pos.y = Math.max(0, Math.min(255, pos.y));
     var c = Color.fromHSV(this.hsv.h, pos.x / 255, 1 - pos.y / 255);
     // TODO: remember saturation when we hit true black so it doesn't snap to bottom left
-    this.app.colorFg = c;
+    this.color = c;
   }
-
 
   mousedownHueBar(e) {
     this.inputState.takeFocus(this);
@@ -85,7 +91,7 @@ export class ColorPickerComponent implements OnInit, DoCheck {
       var pos = new Vec(e.pageX - clientRect.left, e.pageY - clientRect.top);
       pos.x = Math.max(0, Math.min(255, pos.x));
       var c = Color.fromHSV(pos.x / 255, this.hsv.s, this.hsv.v);
-      this.app.colorFg = c;
+      this.color = c;
     }
   }
 
@@ -101,12 +107,23 @@ export class ColorPickerComponent implements OnInit, DoCheck {
   }
 
   updateCanvas() {
+    var lastHsv = this.hsv;
+    this.hsv = this.color.toHSV();
+    if (lastHsv && this.hsv.h == lastHsv.h) {
+      return; // don't bother redrawing, hue is the same
+      // FIXME: since we're quantizing to the hex code every time, 
+      // the hue isn't always stable when changing sat/val.
+      // maybe the parent component needs to SET a color and then
+      // we keep the HSV constant and just output the new hex until we
+      // get a hard set to a new color like when the user selects
+      // one from the palette?
+    }
+
     const canvas = this.canvas.nativeElement;
     canvas.width = 256;
     canvas.height = 256;
     var ctx = canvas.getContext("2d");
 
-    this.hsv = this.app.colorFg.toHSV();
 
     let idata = ctx.getImageData(0, 0, canvas.width, canvas.height);
     for (let y = 0; y < canvas.height; y++) {

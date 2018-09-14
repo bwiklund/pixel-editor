@@ -5,7 +5,7 @@
   </header>
   <div class="everything-under-header">
     <div class="sidebar">
-      <app-color-picker [app]="app"></app-color-picker>
+      <app-color-picker [(color)]="app.colorFg"></app-color-picker>
       <div class="color-big" [ngStyle]="{background: app.colorFg.toHex()}"></div>
       <div class="color-big" [ngStyle]="{background: app.colorBg.toHex()}"></div>
       <app-palette [app]="app" [colors]="app.palette"></app-palette>
