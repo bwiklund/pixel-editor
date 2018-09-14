@@ -18,12 +18,6 @@ canvas {
   height: 16px;
 }
 
-.color-big {
-  height: 32px;
-  margin: 4px;
-  border: 2px solid black;
-}
-
 .reticle {
   position: absolute;
   pointer-events: none;

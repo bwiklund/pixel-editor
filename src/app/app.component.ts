@@ -37,25 +37,18 @@ export class AppComponent {
       return;
     }
 
-    // ONE WAY shortcuts to tools
-    if (e.keyCode == 66 || e.keyCode == 80) { // b or p
-      this.app.selectTool(this.app.pencilTool);
-      return;
-    }
-    if (e.keyCode == 72) { // h
-      this.app.selectTool(this.app.pannerTool);
-      return;
-    }
-    if (e.keyCode == 73) { // i
-      this.app.selectTool(this.app.colorPickerTool);
-      return;
-    }
-    if (e.keyCode == 69) { // e
-      this.app.selectTool(this.app.eraserTool);
-      return;
-    }
-    if (e.keyCode == 71) { // g
-      this.app.selectTool(this.app.fillTool);
+    // simple fire and forget shortcuts to tools
+    var simpleToolShortcuts = {
+      66: () => this.app.selectTool(this.app.pencilTool), // b
+      80: () => this.app.selectTool(this.app.pencilTool), // p
+      72: () => this.app.selectTool(this.app.pannerTool), // p
+      73: () => this.app.selectTool(this.app.colorPickerTool), // p
+      69: () => this.app.selectTool(this.app.eraserTool), // p
+      71: () => this.app.selectTool(this.app.fillTool), // p
+    };
+
+    if (simpleToolShortcuts[e.keyCode]) {
+      simpleToolShortcuts[e.keyCode]();
       return;
     }
 

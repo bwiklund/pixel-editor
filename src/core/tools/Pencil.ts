@@ -81,7 +81,7 @@ export class Pencil extends Tool {
     // TODO be able to lock a doc so you can't fumble and change layers midstroke, or trigger undo, etc
 
     if (this.mouseIsDown) {
-      //NNcontext.doc.activeLayerPreview = null; // make sure this is clear
+      context.doc.activeLayerPreview = null; // immediately clear the preview layer because we're drawing for real now
       if (!this.lastPos) {
         //context.doc.activeLayer.setPixel(context.pos, color.r, color.g, color.b, color.a);
         this.drawCircle(context.doc.activeLayer, context.pos.copy().round(), this.size, color.r, color.g, color.b, color.a);

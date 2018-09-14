@@ -34,3 +34,9 @@ header a.active {
   flex-direction: row;
   position: relative;
 }
+
+.color-big {
+  height: 32px;
+  margin: 4px;
+  border: 2px solid black;
+}

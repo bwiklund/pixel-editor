@@ -36,7 +36,7 @@ describe('DocViewComponent', () => {
     var c = new Color(100,101,102,255);
     component.doc.activeLayer.setPixel(new Vec(0,0), c.r, c.g, c.b, c.a);
     component.updateCanvas();
-    var idata = component.canvas.nativeElement.getContext('2d').getImageData(0, 0, 16, 16);
+    var idata = component.canvas.nativeElement.getContext('2d').getImageData(0, 0, 1, 1);
     expect(idata.data[0]).toBe(c.r);
     expect(idata.data[1]).toBe(c.g);
     expect(idata.data[2]).toBe(c.b);

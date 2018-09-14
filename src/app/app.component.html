@@ -6,6 +6,8 @@
   <div class="everything-under-header">
     <div class="sidebar">
       <app-color-picker [app]="app"></app-color-picker>
+      <div class="color-big" [ngStyle]="{background: app.colorFg.toHex()}"></div>
+      <div class="color-big" [ngStyle]="{background: app.colorBg.toHex()}"></div>
       <app-palette [app]="app" [colors]="app.palette"></app-palette>
     </div>
     <!-- Opened but unshown docs are hidden instead of ngIf'ed, so we don't lose state / have to rebuild them -->
