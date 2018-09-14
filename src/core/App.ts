@@ -3,12 +3,12 @@ import { Doc } from './Doc';
 import { Preferences } from './Preferences';
 import { loadFile, saveFile } from '../util/io';
 
-import {Tool} from './tools/Tools';
-import {Menu, MenuItem} from './Menu';
-import {Pencil} from './tools/Pencil';
-import {Panner} from './tools/Panner';
-import {Fill} from './tools/Fill';
-import {Eyedropper} from './tools/Eyedropper';
+import { Tool } from './tools/Tools';
+import { Menu, MenuItem } from './Menu';
+import { Pencil } from './tools/Pencil';
+import { Panner } from './tools/Panner';
+import { Fill } from './tools/Fill';
+import { Eyedropper } from './tools/Eyedropper';
 
 export class App {
   pencilTool: Pencil = new Pencil();
@@ -68,22 +68,27 @@ export class App {
   }
 
   selectTool(tool) {
-    this.activeTool.interrupt();
+    this.interruptActiveTool();
     this.activeTool = tool;
   }
 
   pushTool(tool) {
-    if (this.overriddenTool) return; // for now don't let this happen twice......
-    this.activeTool.interrupt();
+    if (this.overriddenTool) { return; }
+    this.interruptActiveTool();
     this.overriddenTool = this.activeTool;
     this.activeTool = tool;
   }
 
   popTool() {
-    if (!this.overriddenTool) return;
-    this.activeTool.interrupt();
+    if (!this.overriddenTool) { return; }
+    this.interruptActiveTool();
     this.activeTool = this.overriddenTool;
     this.overriddenTool = null;
+  }
+
+  interruptActiveTool() {
+    this.activeTool.interrupt();
+    this.activeDoc.activeLayerPreview = null;
   }
 
   newDoc() {

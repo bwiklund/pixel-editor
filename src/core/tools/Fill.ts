@@ -8,7 +8,14 @@ export class Fill extends Tool {
   contiguous: boolean = true;
 
   getCssCursor(): string {
-    return 'copy';
+    return 'cursor-pencil';
+  }
+
+  onMouseMove(context: ToolContext) {
+    var preview = context.doc.activeLayer.deepClone();
+    var color = context.app.colorFg;
+    preview.setPixel(context.pos, color.r, color.g, color.b, color.a);
+    context.doc.activeLayerPreview = preview;
   }
 
   onMouseDown(context: ToolContext) {
