@@ -1,14 +1,14 @@
 import { Tool, ToolContext } from "./Tools";
 import { Color } from "../Color";
 
-export class ColorPicker implements Tool {
+export class Eyedropper implements Tool {
   mouseIsDown: boolean = false;
-  name = "ColorPicker";
+  name = "Eyedropper";
   icon = "fas fa-eye-dropper";
   color: Color = new Color(0, 0, 0, 0);
 
   getCssCursor(): string {
-    return 'cursor-colorpicker';
+    return 'cursor-eyedropper';
   }
 
   onMouseDown(context: ToolContext) {

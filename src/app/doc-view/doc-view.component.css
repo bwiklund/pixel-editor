@@ -20,7 +20,7 @@ canvas {
   -ms-interpolation-mode: nearest-neighbor;
 }
 
-.cursor-colorpicker {
+.cursor-eyedropper {
   cursor: url('/assets/cursor_eyedropper.png') 0 22, pointer;
 }
 .cursor-pencil {

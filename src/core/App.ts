@@ -8,14 +8,14 @@ import {Menu, MenuItem} from './Menu';
 import {Pencil} from './tools/Pencil';
 import {Panner} from './tools/Panner';
 import {Fill} from './tools/Fill';
-import {ColorPicker} from './tools/ColorPicker';
+import {Eyedropper} from './tools/Eyedropper';
 
 export class App {
   pencilTool: Pencil = new Pencil();
   eraserTool: Pencil = new Pencil();
   pannerTool: Tool = new Panner();
   fillTool: Tool = new Fill();
-  colorPickerTool: Tool = new ColorPicker();
+  colorPickerTool: Tool = new Eyedropper();
   overriddenTool: Tool = null;
   docs: Doc[] = [];
   activeDocIndex: number = 0;
