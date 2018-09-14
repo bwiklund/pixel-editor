@@ -1,8 +1,9 @@
-import { Component, ChangeDetectorRef, HostListener } from '@angular/core';
+import { Component, ChangeDetectorRef, HostListener, Input } from '@angular/core';
 
 import { App } from '../core/App';
 import { newDocFromImage } from '../core/ImageImporter';
 import { Commands, Shortcuts } from '../core/Commands';
+import { AppService } from './app.service';
 
 @Component({
   selector: 'app-root',
@@ -13,8 +14,8 @@ export class AppComponent {
   title = 'ng';
   app: App;
 
-  constructor(private cd: ChangeDetectorRef) {
-    this.app = new App();
+  constructor(private cd: ChangeDetectorRef, public appService: AppService) {
+    this.app = appService.app;
     this.app.docs.push(newDocFromImage("assets/lunaAvatar_neutral_0.png", () => { }));
     this.app.docs.push(newDocFromImage("assets/peepAvatar_neutral_0.png", () => { }));
   }
