@@ -56,6 +56,25 @@ export class TimelineComponent implements OnInit {
     }
   }
 
+  handleShiftSelect(e: MouseEvent, layer: Layer) {
+    if (e.shiftKey) {
+      if (!this.selection.includes(layer)) {
+        this.selection.push(layer);
+      } else {
+        this.selection.splice(this.selection.indexOf(layer), 1);
+      }
+    } else {
+      this.selection = [layer];
+    }
+    this.doc.activeLayer = layer;
+  }
+
+  resetDragDrop() {
+    this.dragDropIndex = -1;
+    this.isDragging = false;
+    this.dragStartedOnLayer = null;
+  }
+
   @HostListener('window:mouseup', ['$event'])
   mouseup(e: MouseEvent, layer: Layer) {
     this.isMouseDown = false;
@@ -64,33 +83,19 @@ export class TimelineComponent implements OnInit {
       this.inputState.releaseFocus(this);
 
       if (!this.isDragging) {
-        if (e.shiftKey) {
-          if (!this.selection.includes(layer)) {
-            this.selection.push(layer);
-          } else {
-            this.selection.splice(this.selection.indexOf(layer), 1);
-          }
-        } else {
-          this.selection = [layer];
-        }
+        this.handleShiftSelect(e, layer);
       } else if (this.isDragging) {
-        this.isDragging = false;
 
         if (layer) {
-
-
           if (this.dragStartedOnLayer == layer) {
-            if (!this.selection.includes(layer)) {
-              this.selection.push(layer);
-            }
-            this.dragDropIndex = -1;
+            this.handleShiftSelect(e, layer);
           } else {
-
             this.doc.historyPush("Rearrange Layers");
 
-            // if you click dragged from a non-selected layer, we move that instead
-            var layersToMove = this.selection.includes(this.dragStartedOnLayer) ? this.selection : [this.dragStartedOnLayer];
-            // TODO: once this is over, do we select the layer just moved, like photoshop does?
+            // if you click dragged from a non-selected layer, we select that and move that instead
+            if (!this.selection.includes(this.dragStartedOnLayer)) {
+              this.selection = [this.dragStartedOnLayer];
+            }
 
             var targetIndexInNewLayers = this.doc.layers.indexOf(layer);
             if (this.mouseEventPositionInElementNormalized(e, <Element>e.target).y > 0.5) {
@@ -101,25 +106,22 @@ export class TimelineComponent implements OnInit {
             // that way we can still insert in the right place without creating a
             // surprisingly complicated problem
             // (what if you drag a mixed selection onto one of them? the end? the start? etc)
-            var reorderedLayers = this.doc.layers.map(l => layersToMove.includes(l) ? null : l);
+            var reorderedLayers = this.doc.layers.map(l => this.selection.includes(l) ? null : l);
 
             // insert the new layers
-            reorderedLayers.splice(targetIndexInNewLayers, 0, ...layersToMove);
+            reorderedLayers.splice(targetIndexInNewLayers, 0, ...this.selection);
 
             // only NOW can we remove the null placeholders that made our indexes consistent
             reorderedLayers = reorderedLayers.filter(l => l != null);
 
             // and we're done
             this.doc.layers = reorderedLayers;
-
-            // reset dragdrop
-            this.dragDropIndex = -1;
           }
         }
       }
 
-      this.dragStartedOnLayer = null;
-
+      // and no matter what we end here
+      this.resetDragDrop();
     }
   }
 
