@@ -38,5 +38,8 @@ th, td {
 }
 
 .drag-above {
-  border-top: 2px solid black;
+  border-top: 4px solid black;
+}
+.drag-below {
+  border-bottom: 4px solid black;
 }

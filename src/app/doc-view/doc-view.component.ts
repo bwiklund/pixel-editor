@@ -43,14 +43,16 @@ export class DocViewComponent implements OnInit, DoCheck {
   }
 
   mousedown(e) {
-    this.inputState.takeFocus(this);
+    this.inputState.takeIfFree(this);
 
-    if (e.which === 2) {
-      this.app.pushTool(this.app.pannerTool);
+    if (this.inputState.hasFocus(this)) {
+      if (e.which === 2) {
+        this.app.pushTool(this.app.pannerTool);
+      }
+      this.app.activeTool.onMouseDown(this.buildMouseEventContext(e));
+      e.preventDefault();
+      return false;
     }
-    this.app.activeTool.onMouseDown(this.buildMouseEventContext(e));
-    e.preventDefault();
-    return false;
   }
 
   @HostListener("window:mouseup", ["$event"])

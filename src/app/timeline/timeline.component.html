@@ -1,7 +1,12 @@
 <table>
   <tr 
     *ngFor="let layer of doc.layers; let i = index"
-    [ngClass]="{current: layer == doc.activeLayer, selected: selection.includes(layer), 'drag-above': dragDropIndex == i}"
+    [ngClass]="{
+      current: layer == doc.activeLayer,
+      selected: selection.includes(layer),
+      'drag-above': dragDropIndex == i,
+      'drag-below': dragDropIndex == i + 1
+    }"
     (mousedown)="mousedown($event, layer)"
     (mousemove)="mousemove($event, layer)"
     (mouseup)="mouseup($event, layer)"

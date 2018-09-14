@@ -35,6 +35,7 @@ export class Doc {
   set activeLayer(layer: Layer) {
     var index = this.layers.indexOf(layer);
     if (index == -1) { throw new Error("That layer doesn't belong to this doc"); }
+    this.activeLayerPreview = null; // throw away whatever tool preview we had
     this.activeLayerIndex = index;
   }
 
