@@ -52,6 +52,7 @@ export class Doc {
   newLayer() {
     this.historyPush("New layer");
     this.layers.push(new Layer("Layer " + (this.layers.length + 1), this.width, this.height));
+    this.activeLayerIndex = this.layers.length - 1;
   }
 
   // make a new headless layer of everything and return it.

@@ -3,7 +3,17 @@ import { hsvToRgb, rgbToHsv } from '../util/hsv.js';
 
 // color class, colors are 0-255
 export class Color {
-  constructor(public r: number, public g: number, public b: number, public a: number) {}
+  public r: number;
+  public g: number;
+  public b: number;
+  public a: number;
+
+  constructor(r: number, g: number, b: number, a: number) {
+    this.r = ~~r;
+    this.g = ~~g;
+    this.b = ~~b;
+    this.a = ~~a;
+  }
 
   equalTo(o: Color) {
     return this.r == o.r && this.g == o.g && this.b == o.b && this.a == o.a;

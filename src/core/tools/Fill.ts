@@ -40,7 +40,13 @@ export class Fill extends Tool {
     var queue: Vec[] = [];
     queue.push(context.pos);
 
+    var iterations = 0;
     while (queue.length > 0) {
+
+      // if (iterations++ > layer.width * layer.height * 2) {
+      //   debugger
+      // }
+
       var nodePos = queue.pop();
       var directions = [
         nodePos.add(new Vec(0, -1)),
