@@ -6,21 +6,20 @@ export class Doc {
   name: string;
   width: number;
   height: number;
-  hash: number = 0;
+  needsUpdate: boolean = false;
   activeLayerIndex: number = 0;
   historyLabel: string = "";
   activeLayerPreview: Layer = null;
+  layers: Layer[] = [];
 
   // a stack of copies of this document going back in time
   // we push and pop to this, but keep the reference to the original doc the same
   history: Doc[] = [];
 
-  // todo: decide whether to serialize these on save or not.
+  // volatile unsaved stuff
   isReady: boolean = true;
   offset: Vec = new Vec(50, 50);
   zoom: number = 4;
-
-  layers: Layer[] = [];
 
   constructor(name, width, height) {
     this.name = name;
@@ -103,6 +102,7 @@ export class Doc {
     this.historyLabel = label;
     var historyClone = this.shallowCloneForHistory();
     this.history.push(historyClone);
+    this.touch();
 
     // TODO: enforce a max history size or do we care?
   }

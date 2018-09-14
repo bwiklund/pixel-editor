@@ -25,10 +25,12 @@ export class DocViewComponent implements OnInit, DoCheck {
   ngOnInit() {
   }
 
-  // FIXME: only run this on changes to the doc hash
+  oldHash: number;
   ngDoCheck() {
-    //console.log("docheck: " + this.doc.hash);
-    this.updateCanvas();
+    if (this.doc.hash != this.oldHash) {
+      this.updateCanvas();
+    }
+    this.oldHash = this.doc.hash;
   }
 
   buildMouseEventContext(e): ToolContext {

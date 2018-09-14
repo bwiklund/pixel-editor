@@ -95,6 +95,7 @@ export class Pencil extends Tool {
       var preview = context.doc.activeLayer.deepClone();
       this.drawCircle(preview, context.pos.copy().round(), this.size, color.r, color.g, color.b, color.a);
       context.doc.activeLayerPreview = preview;
+      context.doc.touch();
     }
   }
 
