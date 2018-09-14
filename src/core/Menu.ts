@@ -1,9 +1,11 @@
-export interface IMenu {}
-
 export class Menu {
-  constructor(public label: string, public children: IMenu[]) { }
+  isOpen: boolean = false;
 }
 
-export class MenuItem  {
-  constructor(public label: string, public action: Function) { }
+export class MenuList extends Menu {
+  constructor(public label: string, public children: Menu[]) { super() }
+}
+
+export class MenuItem extends Menu  {
+  constructor(public label: string, public action: Function) { super() }
 }

@@ -4,7 +4,7 @@ import { Preferences } from './Preferences';
 import { loadFile, saveFile } from '../util/io';
 
 import { Tool } from './tools/Tools';
-import { Menu, MenuItem } from './Menu';
+import { MenuList, MenuItem } from './Menu';
 import { Pencil } from './tools/Pencil';
 import { Panner } from './tools/Panner';
 import { Fill } from './tools/Fill';
@@ -25,7 +25,7 @@ export class App {
   palette: Color[];
   hash: number = 0;
   preferences: Preferences = new Preferences();
-  menu: Menu;
+  menu: MenuList;
 
   toolbar: Tool[] = [
     this.pencilTool,
@@ -49,12 +49,12 @@ export class App {
 
     // TODO: move somewhere else...
     // build the menu hierarchy
-    this.menu = new Menu("Root", [
-      new Menu("File", [
+    this.menu = new MenuList("Root", [
+      new MenuList("File", [
         new MenuItem("New", () => console.log("you clicked me"))
       ]),
-      new Menu("Edit", []),
-      new Menu("Image", []),
+      new MenuList("Edit", []),
+      new MenuList("Image", []),
     ]);
   }
 
@@ -89,6 +89,7 @@ export class App {
   interruptActiveTool() {
     this.activeTool.interrupt();
     this.activeDoc.activeLayerPreview = null;
+    this.activeDoc.touch();
   }
 
   newDoc() {

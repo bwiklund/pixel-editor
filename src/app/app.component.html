@@ -1,5 +1,5 @@
 <div class="app-wrap flex-container-vertical">
-  <app-menu [menu]="app.menu"></app-menu>
+  <app-menu class="menu-root" [menu]="app.menu"></app-menu>
   <header>
     <a *ngFor="let doc of app.docs; let i = index" [ngClass]="{active: app.activeDocIndex === i}" (click)="app.activeDocIndex = i">{{doc.name}}</a>
   </header>
@@ -10,8 +10,8 @@
       <div class="color-big" [ngStyle]="{background: app.colorBg.toHex()}"></div>
       <app-palette [app]="app" [colors]="app.palette"></app-palette>
     </div>
-    <!-- Opened but unshown docs are hidden instead of ngIf'ed, so we don't lose state / have to rebuild them -->
-    <app-doc-view class="flex-fill" *ngFor="let doc of app.docs" [app]="app" [doc]="doc" [hidden]="doc !== app.activeDoc"></app-doc-view>
+
+    <app-doc-view class="flex-fill" [app]="app" [doc]="app.activeDoc" ></app-doc-view>
     <app-toolbar [app]="app" [tools]="app.toolbar"></app-toolbar>
     <app-tool-properties [app]="app" [tool]="app.activeTool"></app-tool-properties>
   </div>

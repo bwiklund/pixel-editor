@@ -8,6 +8,7 @@ export class Doc {
   height: number;
   needsUpdate: boolean = false;
   activeLayerIndex: number = 0;
+  hash: number = 0;
   historyLabel: string = "";
   activeLayerPreview: Layer = null;
   layers: Layer[] = [];

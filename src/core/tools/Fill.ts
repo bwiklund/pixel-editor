@@ -33,7 +33,7 @@ export class Fill extends Tool {
   floodFill(context: ToolContext) {
     var layer = context.doc.activeLayer;
     var targetColor = layer.getColor(context.pos);;
-    var replacementColor = context.app.colorFg
+    var replacementColor = context.app.colorFg;
 
     if (targetColor.equalTo(replacementColor)) { return; }
 

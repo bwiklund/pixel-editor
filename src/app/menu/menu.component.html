@@ -1,6 +1,6 @@
-<div hidden class="menu" *ngFor="let subMenu of menu.children">
-  <a>{{subMenu.label}}</a>
-  <div *ngIf="subMenu.children">
-    <app-menu [menu]="subMenu"></app-menu>
+<div class="menu" [ngClass]="{open: subMenu.isOpen}" *ngFor="let subMenu of menu.children">
+  <a (click)="toggle(subMenu)">{{subMenu.label}}</a>
+  <div class="sub-menu" *ngIf="subMenu.children">
+    <app-menu [hidden]="!subMenu.isOpen" [menu]="subMenu" [parent]="this"></app-menu>
   </div>
 </div>
