@@ -4,7 +4,7 @@ import { Preferences } from './Preferences';
 import { loadFile, saveFile } from '../util/io';
 
 import { Tool } from './tools/Tools';
-import { MenuList, MenuItem } from './Menu';
+import { Menu } from './Menu';
 import { Pencil } from './tools/Pencil';
 import { Panner } from './tools/Panner';
 import { Fill } from './tools/Fill';
@@ -25,7 +25,7 @@ export class App {
   palette: Color[];
   hash: number = 0;
   preferences: Preferences = new Preferences();
-  menu: MenuList;
+  menu: Menu;
 
   toolbar: Tool[] = [
     this.pencilTool,
@@ -49,22 +49,22 @@ export class App {
 
     // TODO: move somewhere else...
     // build the menu hierarchy
-    this.menu = new MenuList("Root", [
-      new MenuList("File", [
-        new MenuItem("New", () => console.log("you clicked me")),
-        new MenuItem("Open", () => console.log("you clicked me")),
+    this.menu = new Menu("Root", [
+      new Menu("File", [
+        new Menu("New", () => console.log("you clicked me")),
+        new Menu("Open", () => console.log("you clicked me")),
       ]),
-      new MenuList("Edit", [
-        new MenuItem("Not implemented yet", () => console.log("you clicked me")),
-        new MenuItem("Sorry!", () => console.log("you clicked me")),
-        new MenuList("Here's", [
-          new MenuItem("A nested", () => console.log("you clicked me")),
-          new MenuItem("Menu", () => console.log("you clicked me")),
-        ]
+      new Menu("Edit", [
+        new Menu("Not implemented yet", () => console.log("you clicked me")),
+        new Menu("Sorry!", () => console.log("you clicked me")),
+        new Menu("Here's", [
+          new Menu("A nested", () => console.log("you clicked me")),
+          new Menu("Menu", () => console.log("you clicked me")),
+        ])
       ]),
-      new MenuList("Image", [
-        new MenuItem("Not implemented yet", () => console.log("you clicked me")),
-        new MenuItem("Sorry!", () => console.log("you clicked me")),
+      new Menu("Image", [
+        new Menu("Not implemented yet", () => console.log("you clicked me")),
+        new Menu("Sorry!", () => console.log("you clicked me")),
       ]),
     ]);
   }

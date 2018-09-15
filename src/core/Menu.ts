@@ -1,15 +1,16 @@
 export class Menu {
   isOpen: boolean = false;
-}
+  children: Menu[];
+  action: Function;
 
-export class MenuList extends Menu {
-  constructor(public label: string, public children: Menu[]) { super() }
+  constructor(public label: string, contents: Menu[] | Function) {
+    if (contents instanceof Array) { this.children = contents; }
+    if (contents instanceof Function) { this.action = contents; }
+  }
 
   closeChildrenRecursive() {
-    this.children.forEach(c => { c.isOpen = false; if (c instanceof MenuList) {c.closeChildrenRecursive();} });
+    if (this.children) {
+      this.children.forEach(c => { c.isOpen = false; c.closeChildrenRecursive(); });
+    }
   }
-}
-
-export class MenuItem extends Menu {
-  constructor(public label: string, public action: Function) { super() }
 }

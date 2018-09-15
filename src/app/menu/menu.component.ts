@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, HostListener } from '@angular/core';
-import { Menu, MenuList, MenuItem } from '../../core/Menu';
+import { Menu } from '../../core/Menu';
 
 @Component({
   selector: 'app-menu',
@@ -7,42 +7,38 @@ import { Menu, MenuList, MenuItem } from '../../core/Menu';
   styleUrls: ['./menu.component.css']
 })
 export class MenuComponent {
-  @Input() menu: MenuList;
+  @Input() menu: Menu;
   @Input() parent: MenuComponent;
+
 
   get isRoot() {
     return parent != null;
   }
 
   mousedown(e, m: Menu) {
-    if (this.menu.isOpen && this.isRoot) { // you can click again to close a top levelmenu if you didn't click drag
     console.log(this.menu.label);
-      this.menu.isOpen = false;
-      this.closeMenusRecursive();
-      return;
+    if (this.isRoot) {
+      if (this.menu.isOpen) { // clicking anything in the top level menu again closes everything
+        this.closeMenusRecursive();
+        return;
+      } else { // mouse down on top level menu opens the whole menu and shows the one you clicked
+        this.menu.isOpen = true;
+        m.isOpen = true;
+        this.closeOtherMenusRecursive(m);
+      }
     }
-
-    if (m instanceof MenuList) {
-      this.menu.isOpen = true;
-      this.closeOtherMenusRecursive(m);
-      m.isOpen = !m.isOpen;
-    }
-
   }
 
   mousemove(e, m: Menu) {
-    if (this.menu.isOpen) {
+    var willRespondToMouseMove = (this.isRoot && this.menu.isOpen) || !this.isRoot;
+    if (willRespondToMouseMove && this.menu.children) {
       m.isOpen = true;
       this.closeOtherMenusRecursive(m);
     }
   }
 
   mouseup(e, m: Menu) {
-    // if (this.isRoot) {
-    //   this.menuIsBeingInteractedWith = false;
-    // }
-
-    if (m instanceof MenuItem) {
+    if (m.action) {
       m.action();
       this.closeMenusRecursive();
     }
@@ -56,9 +52,7 @@ export class MenuComponent {
   closeOtherMenusRecursive(exceptThisMenu: Menu = null) {
     this.menu.children.filter(x => (x != exceptThisMenu)).forEach(x => {
       x.isOpen = false;
-      if (x instanceof MenuList) {
-        x.closeChildrenRecursive();
-      }
+      x.closeChildrenRecursive();
     });
     if (this.parent) { this.parent.closeOtherMenusRecursive(this.menu); }
   }
