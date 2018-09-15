@@ -1,4 +1,29 @@
-.menu {
+:host {
+  background: hsl(205, 15%, 80%);
+  color: black;
+  cursor: pointer;
+  z-index: 100; /* establish a stacking context above the normal app here so menus can use an input blocker to keep the js simpler */
+  position: relative;
+}
+
+:host > .menu-children {
+
+}
+
+.menu-children .menu-children {
+  position: absolute;
+  top: 100%;
+  display: block;
+  background: hsl(205, 15%, 80%);
+}
+
+.menu-children .menu-children a {
+  display: flex;
+  justify-content: space-between;
+  white-space: nowrap;
+}
+
+/*app-menu {
   display: inline-block;
   position: relative;
   z-index: 100;
@@ -10,20 +35,18 @@
   bottom: 0px;
   width: 100%;
   z-index: -1;
-  /*background: red;*/ /*to debug the event catcher*/
 }
 
-.menu a {
+app-menu a {
   padding: 5px 10px;
   display: inline-block;
 }
 
-/* for all deeper menus */
-.sub-menu .menu  {
+app-menu .menu-children a {
   display: block;
 }
 
-.sub-menu .menu a {
+.menu .menu a {
   display: flex;
   justify-content: space-between;
   white-space: nowrap;
@@ -37,16 +60,14 @@
   background: hsl(205, 15%, 90%);
 }
 
-/* 1st level submenus go down from menu bar */
-.sub-menu {
+.menu .menu {
   position: absolute;
   top: 100%;
   display: block;
   background: hsl(205, 15%, 80%);
 }
 
-/* 2nd level submenus go to the right */
-.sub-menu .sub-menu {
+.menu .menu .menu {
   position: absolute;
   top: 0%;
   left: 100%;
@@ -54,12 +75,12 @@
 }
 
 .shortcut-hint {
-  display: none; /* hide this for root menu items */
+  display: none;
 }
 
-.sub-menu .shortcut-hint {
+.menu .menu .shortcut-hint {
   display: inline-block;
   padding-left: 30px;
   text-align: right;
   color: hsl(205, 15%, 50%);
-}
+}*/

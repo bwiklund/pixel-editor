@@ -40,11 +40,3 @@ header a.active {
   margin: 4px;
   border: 2px solid black;
 }
-
-.menu-root {
-  background: hsl(205, 15%, 80%);
-  color: black;
-  cursor: pointer;
-
-  z-index: 100; /* establish a stacking context above the normal app here so menus can use an input blocker to keep the js simpler */
-}

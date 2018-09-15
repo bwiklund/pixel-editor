@@ -10,56 +10,50 @@ export class MenuComponent {
   @Input() menu: Menu;
   @Input() parent: MenuComponent;
 
-
-  get isRoot() {
-    return parent != null;
+  get root() {
+    var p: MenuComponent = this;
+    while(p.parent) { p = p.parent; }
+    return p;
   }
 
-  mousedown(e, m: Menu) {
-    console.log(this.menu.label);
-    if (this.isRoot) {
-      if (this.menu.isOpen) { // clicking anything in the top level menu again closes everything
-        this.closeMenusRecursive();
-        return;
-      } else { // mouse down on top level menu opens the whole menu and shows the one you clicked
-        this.menu.isOpen = true;
-        m.isOpen = true;
-        this.closeOtherMenusRecursive(m);
+  get isRoot() {
+    return this.parent == null;
+  }
+
+  mousedown(e) {
+    if (this.parent.isRoot) {
+      if (!this.menu.isOpen) {
+        this.openThisMenuAndCloseOthersUpTheTree(this.menu);
+      } else {
+        this.root.menu.closeRecursive();
       }
     }
   }
 
-  mousemove(e, m: Menu) {
-    var willRespondToMouseMove = (this.isRoot && this.menu.isOpen) || !this.isRoot;
-    if (willRespondToMouseMove && this.menu.children) {
-      m.isOpen = true;
-      this.closeOtherMenusRecursive(m);
+  mousemove(e) {
+    var willRespondToMouseMove = (this.parent.isRoot && this.parent.menu.isOpen) || !this.parent.isRoot;
+    if (willRespondToMouseMove && this.menu.children != null) {
+      this.parent.openThisMenuAndCloseOthersUpTheTree(this.menu);
     }
   }
 
-  mouseup(e, m: Menu) {
-    if (m.action) {
-      m.action();
-      this.closeMenusRecursive();
+  mouseup(e) {
+    if (this.menu.action) {
+      this.menu.action();
+      this.root.menu.closeRecursive();
     }
   }
 
   clickedUnderlay() {
-    this.closeMenusRecursive();
+    this.root.menu.closeRecursive();
   }
 
-  // go up the chain of parents, closing everything that isn't direct ancestors of a particular menu item
-  closeOtherMenusRecursive(exceptThisMenu: Menu = null) {
-    this.menu.children.filter(x => (x != exceptThisMenu)).forEach(x => {
-      x.isOpen = false;
-      x.closeChildrenRecursive();
+  openThisMenuAndCloseOthersUpTheTree(m: Menu) {
+    m.isOpen = true;
+    this.menu.isOpen = true;
+    this.menu.children.filter(x => (x != m)).forEach(x => {
+      x.closeRecursive();
     });
-    if (this.parent) { this.parent.closeOtherMenusRecursive(this.menu); }
-  }
-
-  closeMenusRecursive() {
-    this.menu.isOpen = false;
-    this.menu.children.forEach(x => x.isOpen = false);
-    if (this.parent) { this.parent.closeMenusRecursive(); }
+    if (this.parent) { this.parent.openThisMenuAndCloseOthersUpTheTree(this.menu); }
   }
 }

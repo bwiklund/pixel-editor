@@ -8,9 +8,10 @@ export class Menu {
     if (contents instanceof Function) { this.action = contents; }
   }
 
-  closeChildrenRecursive() {
+  closeRecursive() {
+    this.isOpen = false;
     if (this.children) {
-      this.children.forEach(c => { c.isOpen = false; c.closeChildrenRecursive(); });
+      this.children.forEach(c => { c.closeRecursive(); });
     }
   }
 }
