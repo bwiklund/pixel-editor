@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, HostListener } from '@angular/core';
+import { Component, Input, HostBinding } from '@angular/core';
 import { Menu } from '../../core/Menu';
 
 @Component({
@@ -9,6 +9,8 @@ import { Menu } from '../../core/Menu';
 export class MenuComponent {
   @Input() menu: Menu;
   @Input() parent: MenuComponent;
+
+  @HostBinding('class.open') get isOpen() { return this.menu.isOpen; }
 
   get root() {
     var p: MenuComponent = this;

@@ -6,13 +6,41 @@
   position: relative;
 }
 
+app-menu {
+  display: inline-block;
+}
+
+app-menu a {
+  padding: 5px 10px;
+  display: inline-block;
+}
+
+app-menu app-menu {
+  display: block;
+}
+
+app-menu app-menu a {
+  display: block;
+}
+
 :host > .menu-children {
 
 }
 
+
+a:hover {
+  background: hsl(205, 15%, 90%);
+}
+
+.open > a {
+  background: hsl(205, 15%, 90%);
+}
+
+/* 2nd level menus go to the right */
 .menu-children .menu-children {
   position: absolute;
   top: 100%;
+  left: 0%;
   display: block;
   background: hsl(205, 15%, 80%);
 }
@@ -23,64 +51,23 @@
   white-space: nowrap;
 }
 
-/*app-menu {
+/* finally, 3rd level menus go to the right */
+.menu-children .menu-children .menu-children {
+  top: 0%;
+  left: 100%;
+}
+
+.shortcut-hint {
   display: inline-block;
-  position: relative;
-  z-index: 100;
+  padding-left: 30px;
+  text-align: right;
+  color: hsl(205, 15%, 50%);
 }
 
 .menu-underlay-event-catcher {
-  position: absolute;
+  position: fixed;
   top: 0px;
   bottom: 0px;
   width: 100%;
   z-index: -1;
 }
-
-app-menu a {
-  padding: 5px 10px;
-  display: inline-block;
-}
-
-app-menu .menu-children a {
-  display: block;
-}
-
-.menu .menu a {
-  display: flex;
-  justify-content: space-between;
-  white-space: nowrap;
-}
-
-.menu a:hover {
-  background: hsl(205, 15%, 90%);
-}
-
-.menu.open > a {
-  background: hsl(205, 15%, 90%);
-}
-
-.menu .menu {
-  position: absolute;
-  top: 100%;
-  display: block;
-  background: hsl(205, 15%, 80%);
-}
-
-.menu .menu .menu {
-  position: absolute;
-  top: 0%;
-  left: 100%;
-  display: block;
-}
-
-.shortcut-hint {
-  display: none;
-}
-
-.menu .menu .shortcut-hint {
-  display: inline-block;
-  padding-left: 30px;
-  text-align: right;
-  color: hsl(205, 15%, 50%);
-}*/
