@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Doc } from '../../core/Doc';
 
 @Component({
@@ -6,12 +6,6 @@ import { Doc } from '../../core/Doc';
   templateUrl: './history.component.html',
   styleUrls: ['./history.component.css']
 })
-export class HistoryComponent implements OnInit {
+export class HistoryComponent {
   @Input() doc: Doc;
-
-  constructor() { }
-
-  ngOnInit() {
-  }
-
 }

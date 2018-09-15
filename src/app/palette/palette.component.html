@@ -2,8 +2,8 @@
   class="palette-cell"
   *ngFor="let color of colors"
   [ngStyle]="{background: color.toHex()}"
-  [ngClass]="{active: color.equalTo(app.colorFg)}"
-  (mousedown)="pickColor(color)"
+  [ngClass]="{active: color.equalTo(currentColor)}"
+  (mousedown)="pickColor.emit(color)"
 >
   <div class="inner"><div class="inner"></div></div>
 </div>

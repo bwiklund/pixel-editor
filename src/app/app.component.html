@@ -8,12 +8,12 @@
       <app-color-picker [(color)]="app.colorFg"></app-color-picker>
       <div class="color-big" [ngStyle]="{background: app.colorFg.toHex()}"></div>
       <div class="color-big" [ngStyle]="{background: app.colorBg.toHex()}"></div>
-      <app-palette [app]="app" [colors]="app.palette"></app-palette>
+      <app-palette [currentColor]="app.colorFg" [colors]="app.palette" (pickColor)="app.colorFg = $event"></app-palette>
     </div>
 
     <app-doc-view class="flex-fill" [app]="app" [doc]="app.activeDoc" *ngIf="app.activeDoc.isReady"></app-doc-view>
     <!-- TODO: show 'loading...' message if doc isn't `isReady` yet? -->
-    <app-toolbar [app]="app" [tools]="app.toolbar"></app-toolbar>
-    <app-tool-properties [app]="app" [tool]="app.activeTool"></app-tool-properties>
+    <app-toolbar [tools]="app.toolbar" [activeTool]="app.activeTool" (selectTool)="app.activeTool = $event"></app-toolbar>
+    <app-tool-properties [tool]="app.activeTool"></app-tool-properties>
   </div>
 </div>

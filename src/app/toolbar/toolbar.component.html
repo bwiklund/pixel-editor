@@ -2,8 +2,8 @@
   class="tool"
   *ngFor="let tool of tools"
   [title]="tool.name"
-  [ngClass]="{active: tool == app.activeTool}"
-  (mousedown)="app.selectTool(tool)"
+  [ngClass]="{active: tool == activeTool}"
+  (mousedown)="selectTool.emit(tool)"
 >
   <i [ngClass]="tool.icon"></i>
 </div>

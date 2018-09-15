@@ -1,8 +1,7 @@
-import { Component, OnInit, Input, HostListener } from '@angular/core';
+import { Component, Input, HostListener } from '@angular/core';
 import { InputStateService } from '../input-state.service';
 import { Doc } from '../../core/Doc';
 import { Vec } from '../../core/Vec';
-import { App } from '../../core/App';
 import { Layer } from '../../core/Layer';
 
 
@@ -11,9 +10,8 @@ import { Layer } from '../../core/Layer';
   templateUrl: './timeline.component.html',
   styleUrls: ['./timeline.component.css']
 })
-export class TimelineComponent implements OnInit {
+export class TimelineComponent {
   @Input() doc: Doc;
-  @Input() app: App;
 
   selection: Layer[] = [];
   dragDropIndex: number = -1;
@@ -22,9 +20,6 @@ export class TimelineComponent implements OnInit {
   dragStartedOnLayer: Layer = null;
 
   constructor(public inputState: InputStateService) { }
-
-  ngOnInit() {
-  }
 
   mousedown(e: MouseEvent, layer: Layer) {
     this.inputState.takeFocus(this);

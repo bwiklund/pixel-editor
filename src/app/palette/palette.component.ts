@@ -1,22 +1,13 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Color } from '../../core/Color';
-import { App } from '../../core/App';
 
 @Component({
   selector: 'app-palette',
   templateUrl: './palette.component.html',
   styleUrls: ['./palette.component.css']
 })
-export class PaletteComponent implements OnInit {
+export class PaletteComponent {
   @Input() colors: Color[];
-  @Input() app: App;
-
-  constructor() { }
-
-  ngOnInit() {
-  }
-
-  pickColor(color: Color) {
-    this.app.colorFg = color;
-  }
+  @Input() currentColor: Color[];
+  @Output() pickColor: EventEmitter<Color> = new EventEmitter();
 }

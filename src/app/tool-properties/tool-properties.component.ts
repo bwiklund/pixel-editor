@@ -1,5 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { App } from '../../core/App';
+import { Component, Input } from '@angular/core';
 import { Tool } from '../../core/tools/Tools';
 
 @Component({
@@ -7,13 +6,6 @@ import { Tool } from '../../core/tools/Tools';
   templateUrl: './tool-properties.component.html',
   styleUrls: ['./tool-properties.component.css']
 })
-export class ToolPropertiesComponent implements OnInit {
-  @Input() app: App;
+export class ToolPropertiesComponent {
   @Input() tool: Tool;
-
-  constructor() { }
-
-  ngOnInit() {
-  }
-
 }
