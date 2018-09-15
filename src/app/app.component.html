@@ -11,7 +11,7 @@
       <app-palette [currentColor]="app.colorFg" [colors]="app.palette" (pickColor)="app.colorFg = $event"></app-palette>
     </div>
 
-    <app-doc-view class="flex-fill" [app]="app" [doc]="app.activeDoc" *ngIf="app.activeDoc.isReady"></app-doc-view>
+    <app-doc-view class="flex-fill" [app]="app" [doc]="app.activeDoc" *ngIf="app.activeDoc && app.activeDoc.isReady"></app-doc-view>
     <!-- TODO: show 'loading...' message if doc isn't `isReady` yet? -->
     <app-toolbar [tools]="app.toolbar" [activeTool]="app.activeTool" (selectTool)="app.activeTool = $event"></app-toolbar>
     <app-tool-properties [tool]="app.activeTool"></app-tool-properties>

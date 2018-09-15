@@ -4,11 +4,13 @@ import { Preferences } from './Preferences';
 import { loadFile, saveFile } from '../util/io';
 
 import { Tool } from './tools/Tools';
-import { Menu } from './Menu';
+import { Menu, MenuItemFunction, MenuItemCommand } from './Menu';
 import { Pencil } from './tools/Pencil';
 import { Panner } from './tools/Panner';
 import { Fill } from './tools/Fill';
 import { Eyedropper } from './tools/Eyedropper';
+import { Command } from './Command';
+import * as Commands from './Commands';
 
 export class App {
   pencilTool: Pencil = new Pencil();
@@ -51,21 +53,22 @@ export class App {
     // build the menu hierarchy
     this.menu = new Menu("Root", [
       new Menu("File", [
-        new Menu("New", () => console.log("you clicked me")),
-        new Menu("Open", () => console.log("you clicked me")),
+        new MenuItemCommand("New...", Commands.NewFile, this),
+        new MenuItemCommand("Open...", Commands.OpenFile, this),
+        new MenuItemCommand("Close", Commands.CloseFile, this),
+        new MenuItemCommand("Close all", Commands.CloseAllFiles, this),
       ]),
-      new Menu("Edit", [
-        new Menu("Not implemented yet", () => console.log("you clicked me")),
-        new Menu("Sorry!", () => console.log("you clicked me")),
-        new Menu("Here's", [
-          new Menu("A nested", () => console.log("you clicked me")),
-          new Menu("Menu", () => console.log("you clicked me")),
-        ])
-      ]),
-      new Menu("Image", [
-        new Menu("Not implemented yet", () => console.log("you clicked me")),
-        new Menu("Sorry!", () => console.log("you clicked me")),
-      ]),
+      // new Menu("Edit", [
+      //   new Menu("New Layer", Commands.NewLayer),
+      //   new Menu("Here's", [
+      //     new Menu("A nested", () => console.log("you clicked me")),
+      //     new Menu("Menu", () => console.log("you clicked me")),
+      //   ])
+      // ]),
+      // new Menu("Image", [
+      //   new Menu("Not implemented yet", () => console.log("you clicked me")),
+      //   new Menu("Sorry!", () => console.log("you clicked me")),
+      // ]),
     ]);
   }
 
@@ -104,7 +107,7 @@ export class App {
   }
 
   newDoc() {
-    var doc = new Doc("New", 64, 64);
+    var doc = new Doc("New.pixel", 64, 64);
     doc.newLayer();
     this.docs.push(doc);
     this.activeDocIndex = this.docs.length - 1;
@@ -115,6 +118,12 @@ export class App {
     var index = this.docs.indexOf(doc);
     this.docs.splice(index, 1);
     this.activeDocIndex = this.docs.length - 1;
+  }
+
+  closeAllDocs() {
+    while (this.docs.length > 0) {
+      this.closeDoc(this.docs[this.docs.length - 1]); // close from right to left
+    }
   }
 
   openFile() {

@@ -1,3 +1,4 @@
+import { MenuItemCommand } from './../../core/Menu';
 import { Component, Input, HostBinding } from '@angular/core';
 import { Menu } from '../../core/core';
 
@@ -40,8 +41,8 @@ export class MenuComponent {
   }
 
   mouseup(e) {
-    if (this.menu.action) {
-      this.menu.action();
+    if (!this.menu.children) { // if it has no children it's by definition an item that can be invoked, but maybe this should be enforced with types
+      this.menu.invoke();
       this.root.menu.closeRecursive();
     }
   }
