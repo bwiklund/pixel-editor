@@ -45,4 +45,6 @@ header a.active {
   background: hsl(205, 15%, 80%);
   color: black;
   cursor: pointer;
+
+  z-index: 100; /* establish a stacking context above the normal app here so menus can use an input blocker to keep the js simpler */
 }

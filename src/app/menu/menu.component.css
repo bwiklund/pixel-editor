@@ -1,6 +1,16 @@
 .menu {
   display: inline-block;
   position: relative;
+  z-index: 100;
+}
+
+.menu-underlay-event-catcher {
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  width: 100%;
+  z-index: -1;
+  background: red;
 }
 
 .menu a {
@@ -8,12 +18,37 @@
   display: inline-block;
 }
 
-.menu a:hover, .menu.open a {
+/* for all deeper menus */
+.sub-menu .menu  {
+  display: block;
+}
+
+.sub-menu .menu a {
+  display: flex;
+  justify-content: space-between;
+  white-space: nowrap;
+}
+
+.menu a:hover {
   background: hsl(205, 15%, 90%);
 }
+
+/* , .menu.open a */
 
 .sub-menu {
   position: absolute;
   top: 100%;
+  display: block;
   background: hsl(205, 15%, 80%);
+}
+
+.shortcut-hint {
+  display: none; /* hide this for root menu items */
+}
+
+.sub-menu .shortcut-hint {
+  display: inline-block;
+  padding-left: 30px;
+  text-align: right;
+  color: hsl(205, 15%, 50%);
 }

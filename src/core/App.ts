@@ -51,10 +51,17 @@ export class App {
     // build the menu hierarchy
     this.menu = new MenuList("Root", [
       new MenuList("File", [
-        new MenuItem("New", () => console.log("you clicked me"))
+        new MenuItem("New", () => console.log("you clicked me")),
+        new MenuItem("Open", () => console.log("you clicked me")),
       ]),
-      new MenuList("Edit", []),
-      new MenuList("Image", []),
+      new MenuList("Edit", [
+        new MenuItem("Not implemented yet", () => console.log("you clicked me")),
+        new MenuItem("Sorry!", () => console.log("you clicked me")),
+      ]),
+      new MenuList("Image", [
+        new MenuItem("Not implemented yet", () => console.log("you clicked me")),
+        new MenuItem("Sorry!", () => console.log("you clicked me")),
+      ]),
     ]);
   }
 

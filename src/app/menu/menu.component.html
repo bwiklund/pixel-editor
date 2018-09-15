@@ -1,6 +1,14 @@
 <div class="menu" [ngClass]="{open: subMenu.isOpen}" *ngFor="let subMenu of menu.children">
-  <a (click)="toggle(subMenu)">{{subMenu.label}}</a>
-  <div class="sub-menu" *ngIf="subMenu.children">
-    <app-menu [hidden]="!subMenu.isOpen" [menu]="subMenu" [parent]="this"></app-menu>
+  <a (mousedown)="mousedown($event, subMenu)" (mousemove)="mousemove($event, subMenu)" (mouseup)="mouseup($event, subMenu)">
+    <span class="label">{{subMenu.label}}</span>
+    <span class="shortcut-hint">^F</span>
+  </a>
+  <!-- using `ngIf` below to not even have menus on the DOM if they're
+    not active, since it would be a lot of menus sitting around doing
+    nothing and creating them is cheap-->
+  <div class="sub-menu" *ngIf="subMenu.children && subMenu.isOpen">
+    <app-menu [menu]="subMenu" [parent]="this"></app-menu>
   </div>
 </div>
+
+<div class="menu-underlay-event-catcher" (mousedown)="clickedUnderlay()" *ngIf="isRoot && menu.isOpen"></div>
