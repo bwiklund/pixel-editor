@@ -9,13 +9,14 @@ import { Menu, MenuList, MenuItem } from '../../core/Menu';
 export class MenuComponent {
   @Input() menu: MenuList;
   @Input() parent: MenuComponent;
-  
+
   get isRoot() {
     return parent != null;
   }
 
   mousedown(e, m: Menu) {
     if (this.menu.isOpen && this.isRoot) { // you can click again to close a top levelmenu if you didn't click drag
+    console.log(this.menu.label);
       this.menu.isOpen = false;
       this.closeMenusRecursive();
       return;
@@ -53,7 +54,12 @@ export class MenuComponent {
 
   // go up the chain of parents, closing everything that isn't direct ancestors of a particular menu item
   closeOtherMenusRecursive(exceptThisMenu: Menu = null) {
-    this.menu.children.filter(x => (x != exceptThisMenu)).forEach(x => x.isOpen = false);
+    this.menu.children.filter(x => (x != exceptThisMenu)).forEach(x => {
+      x.isOpen = false;
+      if (x instanceof MenuList) {
+        x.closeChildrenRecursive();
+      }
+    });
     if (this.parent) { this.parent.closeOtherMenusRecursive(this.menu); }
   }
 

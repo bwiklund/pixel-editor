@@ -57,6 +57,10 @@ export class App {
       new MenuList("Edit", [
         new MenuItem("Not implemented yet", () => console.log("you clicked me")),
         new MenuItem("Sorry!", () => console.log("you clicked me")),
+        new MenuList("Here's", [
+          new MenuItem("A nested", () => console.log("you clicked me")),
+          new MenuItem("Menu", () => console.log("you clicked me")),
+        ]
       ]),
       new MenuList("Image", [
         new MenuItem("Not implemented yet", () => console.log("you clicked me")),

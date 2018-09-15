@@ -33,13 +33,24 @@
   background: hsl(205, 15%, 90%);
 }
 
-/* , .menu.open a */
+.menu.open > a {
+  background: hsl(205, 15%, 90%);
+}
 
+/* 1st level submenus go down from menu bar */
 .sub-menu {
   position: absolute;
   top: 100%;
   display: block;
   background: hsl(205, 15%, 80%);
+}
+
+/* 2nd level submenus go to the right */
+.sub-menu .sub-menu {
+  position: absolute;
+  top: 0%;
+  left: 100%;
+  display: block;
 }
 
 .shortcut-hint {
