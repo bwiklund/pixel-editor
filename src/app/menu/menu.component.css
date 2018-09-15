@@ -23,11 +23,6 @@ app-menu app-menu a {
   display: block;
 }
 
-:host > .menu-children {
-
-}
-
-
 a:hover {
   background: hsl(205, 15%, 90%);
 }

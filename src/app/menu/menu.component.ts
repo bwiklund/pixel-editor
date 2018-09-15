@@ -1,5 +1,5 @@
 import { Component, Input, HostBinding } from '@angular/core';
-import { Menu } from '../../core/Menu';
+import { Menu } from '../../core/core';
 
 @Component({
   selector: 'app-menu',

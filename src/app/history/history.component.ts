@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Doc } from '../../core/Doc';
+import { Doc } from '../../core/core';
 
 @Component({
   selector: 'app-history',

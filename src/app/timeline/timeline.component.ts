@@ -1,8 +1,6 @@
 import { Component, Input, HostListener } from '@angular/core';
 import { InputStateService } from '../input-state.service';
-import { Doc } from '../../core/Doc';
-import { Vec } from '../../core/Vec';
-import { Layer } from '../../core/Layer';
+import { Doc, Vec, Layer } from '../../core/core';
 
 
 @Component({

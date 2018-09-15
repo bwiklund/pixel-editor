@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { Color } from '../../core/Color';
+import { Color } from '../../core/core';
 
 @Component({
   selector: 'app-palette',

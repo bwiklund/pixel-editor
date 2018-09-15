@@ -1,7 +1,5 @@
-import { Component, OnInit, ViewChild, ElementRef, Input, ChangeDetectorRef, OnChanges, DoCheck, HostListener } from '@angular/core';
-import { App } from '../../core/App';
-import { Doc } from '../../core/Doc';
-import { Vec } from '../../core/Vec';
+import { Component, ViewChild, ElementRef, Input, DoCheck, HostListener } from '@angular/core';
+import { App, Doc, Vec } from '../../core/core';
 import { ToolContext } from '../../core/tools/Tools';
 import { InputStateService } from '../input-state.service';
 
@@ -13,7 +11,7 @@ const BG_CHECKERBOARD_B = [40, 40, 40, 255];
   templateUrl: './doc-view.component.html',
   styleUrls: ['./doc-view.component.css']
 })
-export class DocViewComponent implements OnInit, DoCheck {
+export class DocViewComponent implements DoCheck {
   @Input() app: App;
   @Input() doc: Doc;
 
@@ -21,9 +19,6 @@ export class DocViewComponent implements OnInit, DoCheck {
   @ViewChild('artboard') artboard: ElementRef;
 
   constructor(public inputState: InputStateService) { }
-
-  ngOnInit() {
-  }
 
   oldHash: number;
   ngDoCheck() {
