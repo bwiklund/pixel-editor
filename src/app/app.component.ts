@@ -80,16 +80,18 @@ export class AppComponent {
 
     // the commands are an object where command names are keys, so we need to invert it here.
     // TODO: cache this? probably doesn't actually matter for the N we care about
-    // var flippedShortcuts = {};
-    // for (var k in Shortcuts) { flippedShortcuts[Shortcuts[k]] = k; }
+    var Shortcuts = Command.Shortcuts;
+  
+    var flippedShortcuts = {};
+    for (var k in Shortcuts) { flippedShortcuts[Shortcuts[k]] = k; }
 
-    // var commandName = flippedShortcuts[char];
-    // if (commandName == null) return;
+    var commandName = flippedShortcuts[char];
+    if (commandName == null) return;
 
-    // var commandFunc = Commands[commandName];
-    // if (commandFunc != null) {
-    //   e.preventDefault(); // TODO: blacklist some key combos maybe? or does the browser do this anyways
-    //   commandFunc(this.app);
-    // }
+    var commandFunc = <Command>Commands[commandName];
+    if (commandFunc != null) {
+      e.preventDefault(); // TODO: blacklist some key combos maybe? or does the browser do this anyways
+      commandFunc.invoke(this.app);
+    }
   }
 }

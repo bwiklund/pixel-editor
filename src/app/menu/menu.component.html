@@ -1,6 +1,6 @@
 <a (mousedown)="mousedown($event)" (mousemove)="mousemove($event)" (mouseup)="mouseup($event)" *ngIf="!isRoot">
   <span class="label">{{menu.label}}</span>
-  <span class="shortcut-hint" *ngIf="!parent.isRoot">^F</span>
+  <span class="shortcut-hint" *ngIf="!parent.isRoot && menu.command">{{menu.command.shortcut}}</span>
 </a>
 
 <!-- using `ngIf` below to not even have menus on the DOM if they're

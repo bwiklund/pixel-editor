@@ -1,6 +1,9 @@
 import { Doc } from './Doc';
 import { Layer } from './Layer';
 
+// this is an old function that i was using to load server side images into docs
+// and it's redundant now.
+// FIXME: delete this
 export function newDocFromImage(path, done) {
   var newName = path + '.pixel';
 
