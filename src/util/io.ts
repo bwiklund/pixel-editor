@@ -12,7 +12,8 @@ export function loadFile(done: Function) {
       done(file.name, (<FileReader>event.target).result);
     };
 
-    reader.readAsText(file);
+    //reader.readAsText(file);
+    reader.readAsDataURL(file);
   });
 
   fileSelector.click();

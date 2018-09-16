@@ -136,7 +136,6 @@ export class DocViewComponent implements DoCheck {
     } //TODO: clear screen instead
 
     var blitLayer = doc.createFinalBlit(); // todo actually composite here
-
     let idata = ctx.getImageData(0, 0, blitLayer.width, blitLayer.height);
     for (let y = 0; y < blitLayer.height; y++) {
       for (let x = 0; x < blitLayer.width; x++) {

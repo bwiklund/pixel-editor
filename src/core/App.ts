@@ -11,6 +11,7 @@ import { Fill } from './tools/Fill';
 import { Eyedropper } from './tools/Eyedropper';
 import { Command } from './Command';
 import * as Commands from './Commands';
+import { imgToLayer } from './ImageImporter';
 
 export class App {
   pencilTool: Pencil = new Pencil();
@@ -128,6 +129,21 @@ export class App {
 
   openFile() {
     loadFile((path, str) => {
+      // load png test
+      var img = new Image();
+      img.src = str;
+      img.onload = () => {
+        var layer = imgToLayer(img);
+        var doc = new Doc("New.pixel", layer.width, layer.height);
+        doc.layers.push(layer);
+
+
+        this.docs.push(doc);
+        this.activeDocIndex = this.docs.length - 1;
+      }
+      return;
+
+
       var doc = Doc.fromString(str);
       doc.name = path;
       // TODO: complain if it can't be parsed
