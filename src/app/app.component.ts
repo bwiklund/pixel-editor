@@ -1,4 +1,5 @@
-import { Component, ChangeDetectorRef, HostListener, Input } from '@angular/core';
+import { ColorPickerComponent } from './color-picker/color-picker.component';
+import { Component, ChangeDetectorRef, HostListener, Input, ViewChild } from '@angular/core';
 
 import { App, Command } from '../core/core';
 import { newDocFromImage } from '../core/ImageImporter';
