@@ -20,12 +20,11 @@ export class DocViewComponent implements DoCheck {
 
   constructor(public inputState: InputStateService) { }
 
-  oldHash: number;
   ngDoCheck() {
-    if (this.doc.hash != this.oldHash) {
+    if (this.doc.needsUpdate) {
       this.updateCanvas();
+      this.doc.needsUpdate = false;
     }
-    this.oldHash = this.doc.hash;
   }
 
   buildMouseEventContext(e): ToolContext {

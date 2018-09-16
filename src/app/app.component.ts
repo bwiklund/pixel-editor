@@ -20,7 +20,6 @@ export class AppComponent {
     this.app.docs.push(newDocFromImage("assets/peepAvatar_neutral_0.png", () => { }));
   }
 
-
   @HostListener('window:keydown', ['$event'])
   keydown(e: KeyboardEvent) {
     if (e.repeat) { return; }

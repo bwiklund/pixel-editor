@@ -8,7 +8,6 @@ export class Doc {
   height: number;
   needsUpdate: boolean = false;
   activeLayerIndex: number = 0;
-  hash: number = 0;
   historyLabel: string = "";
   activeLayerPreview: Layer = null;
   layers: Layer[] = [];
@@ -46,13 +45,23 @@ export class Doc {
   }
 
   touch() {
-    this.hash = Math.random();
+    this.needsUpdate = true;
   }
 
   newLayer() {
     this.historyPush("New layer");
     this.layers.push(new Layer("Layer " + (this.layers.length + 1), this.width, this.height));
     this.activeLayerIndex = this.layers.length - 1;
+  }
+
+  deleteLayers(layersToDelete: Layer[]) {
+    this.historyPush("Delete layer(s)");
+    var newLayers = this.layers.filter(l => !layersToDelete.includes(l));
+    if (newLayers.length > 0) {
+      this.layers = newLayers;
+    } else {
+      throw new Error("You can't delete all layers!");
+    }
   }
 
   // make a new headless layer of everything and return it.
@@ -103,6 +112,8 @@ export class Doc {
 
   // history magic /////////////////////////////////////////////////////////////////
   historyPush(label: string) {
+    this.activeLayerPreview = null;
+
     this.historyLabel = label;
     var historyClone = this.shallowCloneForHistory();
     this.history.push(historyClone);
@@ -112,21 +123,23 @@ export class Doc {
   }
 
   historyPop() {
+    this.activeLayerPreview = null;
+
     if (this.history.length == 0) { return; }
     var prevState = this.history.pop();
     this.name = prevState.name;
     this.width = prevState.width;
     this.height = prevState.height;
     this.layers = prevState.layers;
-    this.hash = prevState.hash;
     this.activeLayerIndex = prevState.activeLayerIndex;
     this.historyLabel = prevState.historyLabel;
+    this.touch();
   }
 
   shallowCloneForHistory(): Doc {
     var doc = new Doc(this.name, this.width, this.height);
     doc.layers = this.layers.slice();
-    doc.hash = this.hash;
+    doc.needsUpdate = this.needsUpdate;
     doc.activeLayerIndex = this.activeLayerIndex;
     doc.historyLabel = this.historyLabel;
     return doc;

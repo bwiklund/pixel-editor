@@ -31,6 +31,10 @@ export const NewLayer = new Command("NewLayer", "#n", (app: App) => {
   app.activeDoc.newLayer();
 });
 
+export const DeleteLayer = new Command("DeleteLayer", null, (app: App) => {
+  app.activeDoc.deleteLayers([app.activeDoc.activeLayer]);
+});
+
 export const SwapActiveColors = new Command("SwapActiveColors", "x", (app: App) => {
   var tmp = app.colorFg;
   app.colorFg = app.colorBg;

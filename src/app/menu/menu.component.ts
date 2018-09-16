@@ -42,8 +42,8 @@ export class MenuComponent {
 
   mouseup(e) {
     if (!this.menu.children) { // if it has no children it's by definition an item that can be invoked, but maybe this should be enforced with types
+      this.root.menu.closeRecursive(); // close first in case the `invoke()` throws
       this.menu.invoke();
-      this.root.menu.closeRecursive();
     }
   }
 

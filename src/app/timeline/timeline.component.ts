@@ -11,6 +11,7 @@ import { Doc, Vec, Layer } from '../../core/core';
 export class TimelineComponent {
   @Input() doc: Doc;
 
+  // TODO: should selection be kept track of by Doc itself? since things deleting layers elsewhere could get this out of sync!!!
   selection: Layer[] = [];
   dragDropIndex: number = -1;
   isMouseDown: boolean = false;
@@ -125,17 +126,12 @@ export class TimelineComponent {
     this.doc.activeLayer = nextActiveLayer;
   }
 
-  deleteSelectedLayers() {
-    this.doc.historyPush("Delete Layers");
-    this.doc.layers = this.doc.layers.filter(l => !this.selection.includes(l));
-    this.selection = [];
-  }
-
   @HostListener('window:keydown', ['$event'])
   keydown(e: KeyboardEvent) {
     //if (this.inputState.hasFocus(this)){
     if (e.keyCode == 8 || e.keyCode == 46) { // delete or backspace
-      this.deleteSelectedLayers();
+      this.doc.deleteLayers(this.selection);
+      this.selection = [];
     }
     //}
   }

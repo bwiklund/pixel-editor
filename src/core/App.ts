@@ -65,13 +65,10 @@ export class App {
         new MenuItemCommand("Close", Commands.CloseFile, this),
         new MenuItemCommand("Close all", Commands.CloseAllFiles, this),
       ]),
-      // new Menu("Edit", [
-      //   new Menu("New Layer", Commands.NewLayer),
-      //   new Menu("Here's", [
-      //     new Menu("A nested", () => console.log("you clicked me")),
-      //     new Menu("Menu", () => console.log("you clicked me")),
-      //   ])
-      // ]),
+      new Menu("Edit", [
+        new MenuItemCommand("New Layer", Commands.NewLayer, this),
+        new MenuItemCommand("Delete Layer", Commands.DeleteLayer, this),
+      ]),
       // new Menu("Image", [
       //   new Menu("Not implemented yet", () => console.log("you clicked me")),
       //   new Menu("Sorry!", () => console.log("you clicked me")),
@@ -84,6 +81,7 @@ export class App {
   }
 
   undo() {
+    this.activeDoc.activeLayerPreview = null;
     this.activeTool.interrupt(); // don't let anything keep editing if you still have mousedown and hit ctrlz while painting for example
     this.activeDoc.historyPop();
   }
