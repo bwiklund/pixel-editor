@@ -1,7 +1,7 @@
 import { App } from './App';
 import { Fill } from './tools/Fill';
 import { Pencil } from './tools/Pencil';
-import { toPng } from './exporters/Png';
+import { toPng } from './formats/Handlers';
 import { saveBlobFile } from '../util/io';
 
 import {Command} from './Command';

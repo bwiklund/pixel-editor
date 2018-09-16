@@ -11,7 +11,7 @@ import { Fill } from './tools/Fill';
 import { Eyedropper } from './tools/Eyedropper';
 import { Command } from './Command';
 import * as Commands from './Commands';
-import { imgToLayer } from './ImageImporter';
+import * as Handlers from './formats/Handlers';
 
 export class App {
   pencilTool: Pencil = new Pencil();
@@ -29,6 +29,10 @@ export class App {
   hash: number = 0;
   preferences: Preferences = new Preferences();
   menu: Menu;
+  importHandlers: Handlers.Handler[] = [
+    new Handlers.PngHandler(this),
+    new Handlers.PixelHandler(this)
+  ];
 
   toolbar: Tool[] = [
     this.pencilTool,
@@ -134,39 +138,29 @@ export class App {
   }
 
   openFile() {
-
     loadFilesAsBlobs((blobs: Blob[]) => {
       blobs.forEach((blob) => {
-
-        console.log(blob.type);
-
-        if (new RegExp('^image/*').test(blob.type)) {
-          var reader = new FileReader();
-          reader.onload = (event: Event) => {
-            var img = new Image();
-            img.src = <string>(<FileReader>event.target).result;
-            img.onload = () => {
-              var layer = imgToLayer(img);
-              var doc = new Doc("New.pixel", layer.width, layer.height);
-              doc.layers.push(layer);
-              this.addDoc(doc);
-            }
-          };
-          reader.readAsDataURL(blob);
-        }
-
-
-        if (new RegExp('^application/json$').test(blob.type)) {
-          var reader = new FileReader();
-          reader.onload = (event: Event) => {
-            var doc = Doc.fromString(<string>(<FileReader>event.target).result);
-            this.addDoc(doc);
-          };
-          reader.readAsDataURL(blob);
-        }
-
+        this.handleBlob(blob);
       });
-
     });
+  }
+
+  /**
+   * Since many things can come back from an open file dialogue, app should just know what to do here.
+   * @param blob 
+   */
+  handleBlob(blob: Blob) {
+    var foundHandler = false;
+    for (let handler of this.importHandlers) {
+      if (handler.test(blob)) {
+        foundHandler = true;
+        handler.action(blob);
+        break;
+      }
+    }
+
+    if (!foundHandler) {
+      console.error("Couldn't handle file of type: " + blob.type);
+    }
   }
 }

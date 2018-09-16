@@ -91,10 +91,12 @@ export class Doc {
 
   static fromString(text: string) {
     // TODO: make sure the serialized pixels turn back into Uint8Array's.
+    // TODO: should i just make a new doc and then copy the params over??
     var doc = JSON.parse(text);
     Object.setPrototypeOf(doc, Doc.prototype);
     Object.setPrototypeOf(doc.offset, Vec.prototype);
     doc.layers.forEach(layer => Object.setPrototypeOf(layer, Layer.prototype));
+    doc.history = []; // start a new history
     return doc;
   }
 
