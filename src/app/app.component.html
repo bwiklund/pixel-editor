@@ -9,6 +9,7 @@
       <div class="color-big" [ngStyle]="{background: app.colorFg.toHex()}"></div>
       <div class="color-big" [ngStyle]="{background: app.colorBg.toHex()}"></div>
       <app-palette [currentColor]="app.colorFg" [colors]="app.palette" (pickColor)="app.colorFg = $event"></app-palette>
+      <!-- <app-history [doc]="app.activeDoc"></app-history> -->
     </div>
 
     <app-doc-view class="flex-fill" [app]="app" [doc]="app.activeDoc" *ngIf="app.activeDoc && app.activeDoc.isReady"></app-doc-view>

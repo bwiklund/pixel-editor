@@ -16,6 +16,7 @@ export class Fill extends Tool {
     var color = context.app.colorFg;
     preview.setPixel(context.pos, color.r, color.g, color.b, color.a);
     context.doc.activeLayerPreview = preview;
+    context.doc.touch();
   }
 
   onMouseDown(context: ToolContext) {
@@ -36,6 +37,8 @@ export class Fill extends Tool {
     var replacementColor = context.app.colorFg;
 
     if (targetColor.equalTo(replacementColor)) { return; }
+    
+    layer.setPixel(context.pos, replacementColor.r, replacementColor.g, replacementColor.b, replacementColor.a);
 
     var queue: Vec[] = [];
     queue.push(context.pos);
