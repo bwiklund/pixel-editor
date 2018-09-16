@@ -6,11 +6,11 @@
   margin: 4px;
   position: relative;
   overflow: hidden;
+  border: 2px solid black;
 }
 
 canvas {
   display: block;
-  border: 2px solid black;
 }
 
 .hue-bar {
@@ -45,8 +45,11 @@ canvas {
 }
 
 .hue-reticle-image {
-  border: white 2px solid;
-  width: 4px;
+  border-left: white 2px solid;
+  border-right: white 2px solid;
+  background: black;
+  box-sizing: border-box;
+  width: 6px;
   height: 16px;
   position: absolute;
   top: 0px;

@@ -10,20 +10,20 @@ import { InputStateService } from '../input-state.service';
 })
 export class ColorPickerComponent implements OnInit, OnChanges {
   colorValue: Color;
-
   @Output()
   colorChange = new EventEmitter<Color>();
-
   @Input()
   get color() { return this.colorValue; }
   set color(val) { this.colorValue = val; this.colorChange.emit(this.colorValue) }
+  
+  // out internal HSV representation that we track to avoid issues described below
+  private hsv: HSV = null;
 
   @ViewChild("canvas") canvas: ElementRef;
   @ViewChild("hueBarCanvas") hueBarCanvas: ElementRef;
 
   isMouseDownHSV: boolean = false;
   isMouseDownHue: boolean = false;
-  private hsv: HSV = null;
 
   constructor(public inputState: InputStateService) { }
 
@@ -37,6 +37,10 @@ export class ColorPickerComponent implements OnInit, OnChanges {
 
     this.hsv = this.hsv || this.color.toHSV(); // first time
 
+    // only change our internal HSV representation if we need to,
+    // otherwise we're feeding rounded RGBA values back into the input
+    // and losing hue position on full black, and getting all
+    // kinds of accumulated errors as you mix colors
     if (!this.hsv.toRGB().equalTo(this.color)) {
       this.hsv = this.color.toHSV();
     }
@@ -83,7 +87,6 @@ export class ColorPickerComponent implements OnInit, OnChanges {
     pos.x = Math.max(0, Math.min(255, pos.x));
     pos.y = Math.max(0, Math.min(255, pos.y));
     this.hsv = new HSV(this.hsv.h, pos.x / 255, 1 - pos.y / 255);
-    // TODO: remember saturation when we hit true black so it doesn't snap to bottom left
     this.color = this.hsv.toRGB();
   }
 
@@ -97,7 +100,7 @@ export class ColorPickerComponent implements OnInit, OnChanges {
     if (this.isMouseDownHue && this.inputState.hasFocus(this)) {
       var clientRect = this.canvas.nativeElement.getBoundingClientRect();
       var pos = new Vec(e.pageX - clientRect.left, e.pageY - clientRect.top);
-      pos.x = Math.max(0, Math.min(255 - 1, pos.x)); // this is clamped to 254 until i make hue stable
+      pos.x = Math.max(0, Math.min(255, pos.x));
       this.hsv = new HSV(pos.x / 255, this.hsv.s, this.hsv.v);
       this.color = this.hsv.toRGB();
     }
@@ -121,12 +124,10 @@ export class ColorPickerComponent implements OnInit, OnChanges {
   }
 
   updateCanvas() {
-
     const canvas = this.canvas.nativeElement;
     canvas.width = 256;
     canvas.height = 256;
     var ctx = canvas.getContext("2d");
-
 
     let idata = ctx.getImageData(0, 0, canvas.width, canvas.height);
     for (let y = 0; y < canvas.height; y++) {
