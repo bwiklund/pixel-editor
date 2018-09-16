@@ -1,10 +1,10 @@
 import { App } from './App';
 import { Fill } from './tools/Fill';
 import { Pencil } from './tools/Pencil';
-import { toPng } from './formats/Handlers';
-import { saveBlobFile } from '../util/io';
 
-import {Command} from './Command';
+import { Command } from './Command';
+import { PngExportHandler } from './formats/Handlers';
+import { saveBlobFile } from '../util/io';
 
 
 export const NewFile = new Command("NewFile", "&n", (app: App) => {
@@ -64,8 +64,9 @@ export const Undo = new Command("Undo", "%z", (app: App) => {
 
 export const QuickExport = new Command("QuickExport", "&%#s", (app: App) => {
   // TODO: dispatch this to some exporter service
+  var handler = new PngExportHandler();
   var doc = app.activeDoc;
-  toPng(doc, (blob) => {
+  handler.action(app.activeDoc, (blob: Blob) => {
     saveBlobFile(doc.name + '.png', blob, () => { });
   });
 });

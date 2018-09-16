@@ -29,7 +29,7 @@ export class App {
   hash: number = 0;
   preferences: Preferences = new Preferences();
   menu: Menu;
-  importHandlers: Handlers.Handler[] = [
+  importHandlers: Handlers.BlobLoaderHandler[] = [
     new Handlers.PngHandler(this),
     new Handlers.PixelHandler(this)
   ];
@@ -61,6 +61,7 @@ export class App {
         new MenuItemCommand("New...", Commands.NewFile, this),
         new MenuItemCommand("Open...", Commands.OpenFile, this),
         new MenuItemCommand("Save...", Commands.SaveFile, this),
+        new MenuItemCommand("Export...", Commands.QuickExport, this),
         new MenuItemCommand("Close", Commands.CloseFile, this),
         new MenuItemCommand("Close all", Commands.CloseAllFiles, this),
       ]),
@@ -140,16 +141,12 @@ export class App {
   openFile() {
     loadFilesAsBlobs((blobs: Blob[]) => {
       blobs.forEach((blob) => {
-        this.handleBlob(blob);
+        this.handleMysteriousIncomingBlob(blob);
       });
     });
   }
 
-  /**
-   * Since many things can come back from an open file dialogue, app should just know what to do here.
-   * @param blob 
-   */
-  handleBlob(blob: Blob) {
+  handleMysteriousIncomingBlob(blob: Blob) {
     var foundHandler = false;
     for (let handler of this.importHandlers) {
       if (handler.test(blob)) {
