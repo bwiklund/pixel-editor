@@ -5,6 +5,10 @@ import { hsvToRgb, rgbToHsv } from '../util/hsv.js';
 export class HSV {
   constructor(public h: number, public s: number, public v: number, public a: number = 1) { }
 
+  copy() {
+    return new HSV(this.h, this.s, this.v, this.a);
+  }
+
   toRGB() {
     var rgbArray = hsvToRgb(this.h, this.s, this.v);
     return new Color(rgbArray[0], rgbArray[1], rgbArray[2], this.a * 255);
@@ -19,10 +23,10 @@ export class Color {
   public a: number;
 
   constructor(r: number, g: number, b: number, a: number) {
-    this.r = ~~r;
-    this.g = ~~g;
-    this.b = ~~b;
-    this.a = ~~a;
+    this.r = Math.round(r);
+    this.g = Math.round(g);
+    this.b = Math.round(b);
+    this.a = Math.round(a);
   }
 
   equalTo(o: Color) {
