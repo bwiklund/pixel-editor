@@ -1,7 +1,7 @@
 import { Color } from './Color';
 import { Doc } from './Doc';
 import { Preferences } from './Preferences';
-import { loadFile, saveFile } from '../util/io';
+import { loadFilesAsBlobs, saveFile } from '../util/io';
 
 import { Tool } from './tools/Tools';
 import { Menu, MenuItemFunction, MenuItemCommand } from './Menu';
@@ -56,6 +56,7 @@ export class App {
       new Menu("File", [
         new MenuItemCommand("New...", Commands.NewFile, this),
         new MenuItemCommand("Open...", Commands.OpenFile, this),
+        new MenuItemCommand("Save...", Commands.SaveFile, this),
         new MenuItemCommand("Close", Commands.CloseFile, this),
         new MenuItemCommand("Close all", Commands.CloseAllFiles, this),
       ]),
@@ -127,28 +128,45 @@ export class App {
     }
   }
 
+  addDoc(doc: Doc) {
+    this.docs.push(doc);
+    this.activeDocIndex = this.docs.length - 1;
+  }
+
   openFile() {
-    loadFile((path, str) => {
-      // load png test
-      var img = new Image();
-      img.src = str;
-      img.onload = () => {
-        var layer = imgToLayer(img);
-        var doc = new Doc("New.pixel", layer.width, layer.height);
-        doc.layers.push(layer);
+
+    loadFilesAsBlobs((blobs: Blob[]) => {
+      blobs.forEach((blob) => {
+
+        console.log(blob.type);
+
+        if (new RegExp('^image/*').test(blob.type)) {
+          var reader = new FileReader();
+          reader.onload = (event: Event) => {
+            var img = new Image();
+            img.src = <string>(<FileReader>event.target).result;
+            img.onload = () => {
+              var layer = imgToLayer(img);
+              var doc = new Doc("New.pixel", layer.width, layer.height);
+              doc.layers.push(layer);
+              this.addDoc(doc);
+            }
+          };
+          reader.readAsDataURL(blob);
+        }
 
 
-        this.docs.push(doc);
-        this.activeDocIndex = this.docs.length - 1;
-      }
-      return;
+        if (new RegExp('^application/json$').test(blob.type)) {
+          var reader = new FileReader();
+          reader.onload = (event: Event) => {
+            var doc = Doc.fromString(<string>(<FileReader>event.target).result);
+            this.addDoc(doc);
+          };
+          reader.readAsDataURL(blob);
+        }
 
+      });
 
-      var doc = Doc.fromString(str);
-      doc.name = path;
-      // TODO: complain if it can't be parsed
-      this.docs.push(doc);
-      this.activeDocIndex = this.docs.length - 1;
     });
   }
 }

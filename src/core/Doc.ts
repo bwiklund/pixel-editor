@@ -89,7 +89,7 @@ export class Doc {
     });
   }
 
-  static fromString(text) {
+  static fromString(text: string) {
     // TODO: make sure the serialized pixels turn back into Uint8Array's.
     var doc = JSON.parse(text);
     Object.setPrototypeOf(doc, Doc.prototype);

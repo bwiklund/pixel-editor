@@ -1,9 +1,9 @@
 import { Component, ChangeDetectorRef, HostListener, Input } from '@angular/core';
 
-import { App } from '../core/App';
+import { App, Command } from '../core/core';
 import { newDocFromImage } from '../core/ImageImporter';
-import { Commands, Shortcuts } from '../core/Commands';
 import { AppService } from './app.service';
+import * as Commands from '../core/Commands';
 
 @Component({
   selector: 'app-root',
@@ -39,12 +39,12 @@ export class AppComponent {
 
     // simple fire and forget shortcuts to tools
     var simpleToolShortcuts = {
-      66: () => this.app.selectTool(this.app.pencilTool), // b
-      80: () => this.app.selectTool(this.app.pencilTool), // p
-      72: () => this.app.selectTool(this.app.pannerTool), // p
-      73: () => this.app.selectTool(this.app.colorPickerTool), // p
-      69: () => this.app.selectTool(this.app.eraserTool), // p
-      71: () => this.app.selectTool(this.app.fillTool), // p
+      66: () => this.app.selectTool(this.app.pencilTool),
+      80: () => this.app.selectTool(this.app.pencilTool),
+      72: () => this.app.selectTool(this.app.pannerTool),
+      73: () => this.app.selectTool(this.app.colorPickerTool),
+      69: () => this.app.selectTool(this.app.eraserTool),
+      71: () => this.app.selectTool(this.app.fillTool),
     };
 
     if (simpleToolShortcuts[e.keyCode]) {
@@ -80,16 +80,16 @@ export class AppComponent {
 
     // the commands are an object where command names are keys, so we need to invert it here.
     // TODO: cache this? probably doesn't actually matter for the N we care about
-    var flippedShortcuts = {};
-    for (var k in Shortcuts) { flippedShortcuts[Shortcuts[k]] = k; }
+    // var flippedShortcuts = {};
+    // for (var k in Shortcuts) { flippedShortcuts[Shortcuts[k]] = k; }
 
-    var commandName = flippedShortcuts[char];
-    if (commandName == null) return;
+    // var commandName = flippedShortcuts[char];
+    // if (commandName == null) return;
 
-    var commandFunc = Commands[commandName];
-    if (commandFunc != null) {
-      e.preventDefault(); // TODO: blacklist some key combos maybe? or does the browser do this anyways
-      commandFunc(this.app);
-    }
+    // var commandFunc = Commands[commandName];
+    // if (commandFunc != null) {
+    //   e.preventDefault(); // TODO: blacklist some key combos maybe? or does the browser do this anyways
+    //   commandFunc(this.app);
+    // }
   }
 }
