@@ -21,6 +21,8 @@ canvas {
 .reticle {
   position: absolute;
   pointer-events: none;
+  top: 0px;
+  left: 0px;
 }
 
 .reticle-image {
@@ -28,9 +30,27 @@ canvas {
   background-size: 100%;
   width: 32px;
   height: 32px;
-  position: relative;
+  position: absolute;
   top: -16px;
   left: -16px;
+  user-select: none;
+  pointer-events: none;
+}
+
+.hue-reticle {
+  position: absolute;
+  pointer-events: none;
+  top: 0px;
+  left: 0px;
+}
+
+.hue-reticle-image {
+  border: white 2px solid;
+  width: 4px;
+  height: 16px;
+  position: absolute;
+  top: 0px;
+  left: -3px;
   user-select: none;
   pointer-events: none;
 }

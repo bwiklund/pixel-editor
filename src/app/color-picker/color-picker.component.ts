@@ -87,7 +87,7 @@ export class ColorPickerComponent implements OnInit, OnChanges {
     if (this.isMouseDownHue && this.inputState.hasFocus(this)) {
       var clientRect = this.canvas.nativeElement.getBoundingClientRect();
       var pos = new Vec(e.pageX - clientRect.left, e.pageY - clientRect.top);
-      pos.x = Math.max(0, Math.min(255, pos.x));
+      pos.x = Math.max(0, Math.min(255 - 1, pos.x)); // this is clamped to 254 until i make hue stable
       var c = Color.fromHSV(pos.x / 255, this.hsv.s, this.hsv.v);
       this.color = c;
     }
@@ -101,6 +101,12 @@ export class ColorPickerComponent implements OnInit, OnChanges {
     return {
       left: this.hsv.s * 255 + "px",
       top: (1 - this.hsv.v) * 255 + "px",
+    }
+  }
+
+  hueReticlePostion() {
+    return {
+      left: this.hsv.h * 255 + "px"
     }
   }
 

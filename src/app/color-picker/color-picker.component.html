@@ -5,4 +5,5 @@
 
 <div class="canvas-wrap">
   <canvas #hueBarCanvas class="hue-bar" (mousedown)="mousedownHueBar($event)"></canvas>
+  <div class="hue-reticle" [ngStyle]="hueReticlePostion()"><div class="hue-reticle-image"></div></div>
 </div>
