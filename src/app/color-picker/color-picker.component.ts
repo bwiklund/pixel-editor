@@ -45,7 +45,7 @@ export class ColorPickerComponent implements OnInit, OnChanges {
       this.hsv = this.color.toHSV();
     }
 
-    if (!lastHsv || this.hsv.h == lastHsv.h) {
+    if (!lastHsv || (this.hsv.h != lastHsv.h)) {
       this.updateCanvas();
     }
   }
@@ -103,6 +103,7 @@ export class ColorPickerComponent implements OnInit, OnChanges {
       pos.x = Math.max(0, Math.min(255, pos.x));
       this.hsv = new HSV(pos.x / 255, this.hsv.s, this.hsv.v);
       this.color = this.hsv.toRGB();
+      this.updateCanvas(); // moving this bar kind of always means we're changing hue by definition, so,
     }
   }
 
