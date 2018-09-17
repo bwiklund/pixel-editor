@@ -9,7 +9,7 @@ export class Doc {
   needsUpdate: boolean = false;
   activeLayerIndex: number = 0;
   historyLabel: string = "";
-  activeLayerPreview: Layer = null;
+  //activeLayerPreview: Layer = null;
   layers: Layer[] = [];
 
   // a stack of copies of this document going back in time
@@ -70,11 +70,11 @@ export class Doc {
     var finalLayer = new Layer("Headless compositing layer", this.width, this.height);
     this.layers.forEach((layer) => {
       if (!layer.isVisible) { return; }
-      if (layer == this.activeLayer && this.activeLayerPreview != null && !ignoreTempLayers) {
-        finalLayer.blitBlended(this.activeLayerPreview);
-      } else {
+      // if (layer == this.activeLayer && this.activeLayerPreview != null && !ignoreTempLayers) {
+      //   finalLayer.blitBlended(this.activeLayerPreview);
+      // } else {
         finalLayer.blitBlended(layer);
-      }
+      // }
     });
     return finalLayer;
   }
@@ -104,7 +104,10 @@ export class Doc {
     var doc = JSON.parse(text);
     Object.setPrototypeOf(doc, Doc.prototype);
     Object.setPrototypeOf(doc.offset, Vec.prototype);
-    doc.layers.forEach(layer => Object.setPrototypeOf(layer, Layer.prototype));
+    doc.layers.forEach((layer: Layer) => {
+      Object.setPrototypeOf(layer, Layer.prototype);
+      Object.setPrototypeOf(layer.offset, Vec.prototype);
+    });
     doc.history = []; // start a new history
     return doc;
   }
@@ -112,7 +115,7 @@ export class Doc {
 
   // history magic /////////////////////////////////////////////////////////////////
   historyPush(label: string) {
-    this.activeLayerPreview = null;
+    //this.activeLayerPreview = null;
 
     this.historyLabel = label;
     var historyClone = this.shallowCloneForHistory();
@@ -123,7 +126,7 @@ export class Doc {
   }
 
   historyPop() {
-    this.activeLayerPreview = null;
+    //this.activeLayerPreview = null;
 
     if (this.history.length == 0) { return; }
     var prevState = this.history.pop();

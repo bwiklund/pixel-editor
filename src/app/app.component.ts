@@ -1,7 +1,7 @@
 import { ColorPickerComponent } from './color-picker/color-picker.component';
 import { Component, ChangeDetectorRef, HostListener, Input, ViewChild } from '@angular/core';
 
-import { App, Command } from '../core/core';
+import { App, Command } from '../core';
 import { newDocFromImage } from '../core/ImageImporter';
 import { AppService } from './app.service';
 import * as Commands from '../core/Commands';
@@ -58,6 +58,7 @@ export class AppComponent {
       73: () => this.app.selectTool(this.app.colorPickerTool),
       69: () => this.app.selectTool(this.app.eraserTool),
       71: () => this.app.selectTool(this.app.fillTool),
+      86: () => this.app.selectTool(this.app.moveTool),
     };
 
     if (simpleToolShortcuts[e.keyCode]) {

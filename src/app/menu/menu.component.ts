@@ -1,6 +1,6 @@
 import { MenuItemCommand } from './../../core/Menu';
 import { Component, Input, HostBinding } from '@angular/core';
-import { Menu } from '../../core/core';
+import { Menu } from '../../core';
 
 @Component({
   selector: 'app-menu',

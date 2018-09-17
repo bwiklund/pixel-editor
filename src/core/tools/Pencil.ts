@@ -12,22 +12,22 @@ export class Pencil extends Tool {
   size: number = 1;
 
   // hold onto this so we can change the brush size and update the canvas even if the mouse is idle (triggered from keypress)
-  lastMousePositionContext: ToolContext;
+  //lastMousePositionContext: ToolContext;
 
   getCssCursor(): string {
     return 'cursor-pencil';
   }
 
-  redrawBrushPreview() {
-    if (this.lastMousePositionContext) {
-      this.drawPencilStrokes(this.lastMousePositionContext);
-    }
-  }
+  // redrawBrushPreview() {
+  //   if (this.lastMousePositionContext) {
+  //     this.drawPencilStrokes(this.lastMousePositionContext);
+  //   }
+  // }
 
   interrupt() {
     this.mouseIsDown = false;
     this.lastPos = null;
-    if (this.lastMousePositionContext) { this.lastMousePositionContext.doc.activeLayerPreview = null; }
+    //if (this.lastMousePositionContext) { this.lastMousePositionContext.doc.activeLayerPreview = null; }
   }
 
   drawCircle(layer: Layer, pos: Vec, diameter: number, r: number, g: number, b: number, a: number) {
@@ -81,7 +81,7 @@ export class Pencil extends Tool {
     // TODO be able to lock a doc so you can't fumble and change layers midstroke, or trigger undo, etc
 
     if (this.mouseIsDown) {
-      context.doc.activeLayerPreview = null; // immediately clear the preview layer because we're drawing for real now
+      //context.doc.activeLayerPreview = null; // immediately clear the preview layer because we're drawing for real now
       if (!this.lastPos) {
         //context.doc.activeLayer.setPixel(context.pos, color.r, color.g, color.b, color.a);
         this.drawCircle(context.doc.activeLayer, context.pos.copy().round(), this.size, color.r, color.g, color.b, color.a);
@@ -90,13 +90,14 @@ export class Pencil extends Tool {
       }
       this.lastPos = context.pos.copy();
       context.doc.touch();
-    } else {
-      // just preview the brush
-      var preview = context.doc.activeLayer.deepClone();
-      this.drawCircle(preview, context.pos.copy().round(), this.size, color.r, color.g, color.b, color.a);
-      context.doc.activeLayerPreview = preview;
-      context.doc.touch();
     }
+    //  else {
+    //   // just preview the brush
+    //   var preview = context.doc.activeLayer.deepClone();
+    //   this.drawCircle(preview, context.pos.copy().round(), this.size, color.r, color.g, color.b, color.a);
+    //   context.doc.activeLayerPreview = preview;
+    //   context.doc.touch();
+    // }
   }
 
   onMouseDown(context: ToolContext) {

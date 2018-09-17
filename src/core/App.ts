@@ -8,6 +8,7 @@ import { Menu, MenuItemFunction, MenuItemCommand } from './Menu';
 import { Pencil } from './tools/Pencil';
 import { Panner } from './tools/Panner';
 import { Fill } from './tools/Fill';
+import { Move } from './tools/Move';
 import { Eyedropper } from './tools/Eyedropper';
 import { Command } from './Command';
 import * as Commands from './Commands';
@@ -18,6 +19,7 @@ export class App {
   eraserTool: Pencil = new Pencil();
   pannerTool: Tool = new Panner();
   fillTool: Tool = new Fill();
+  moveTool: Tool = new Move();
   colorPickerTool: Tool = new Eyedropper();
   overriddenTool: Tool = null;
   docs: Doc[] = [];
@@ -40,6 +42,7 @@ export class App {
     this.pannerTool,
     this.colorPickerTool,
     this.fillTool,
+    this.moveTool,
   ]
 
   constructor() {
@@ -111,7 +114,7 @@ export class App {
 
   interruptActiveTool() {
     this.activeTool.interrupt();
-    this.activeDoc.activeLayerPreview = null;
+    //this.activeDoc.activeLayerPreview = null;
     this.activeDoc.touch();
   }
 

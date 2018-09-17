@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, Input, DoCheck, HostListener, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 
-import { Vec, Color, HSV } from '../../core/core';
+import { Vec, Color, HSV } from '../../core';
 import { InputStateService } from '../input-state.service';
 
 @Component({

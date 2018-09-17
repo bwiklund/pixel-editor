@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef, Input, DoCheck, HostListener } from '@angular/core';
-import { App, Doc, Vec } from '../../core/core';
+import { App, Doc, Vec } from '../../core';
 import { ToolContext } from '../../core/tools/Tools';
 import { InputStateService } from '../input-state.service';
 

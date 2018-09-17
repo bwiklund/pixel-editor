@@ -7,6 +7,7 @@ export class Layer {
   height: number;
   pixels: Uint8ClampedArray;
   isVisible: boolean;
+  offset: Vec = new Vec(0, 0);
 
   constructor(name: string, width: number, height: number) {
     this.name = name;
@@ -19,6 +20,7 @@ export class Layer {
   deepClone(): Layer {
     var copy = new Layer(this.name, this.width, this.height);
     copy.pixels = this.pixels.slice();
+    copy.offset = this.offset.copy();
     this.isVisible = this.isVisible;
     return copy;
   }
@@ -28,6 +30,7 @@ export class Layer {
   }
 
   setPixel(v: Vec, r: number, g: number, b: number, a: number) {
+    v = v.sub(this.offset);
     if (!this.isInBounds(v)) { return; }
 
     var i = ~~(v.x) + ~~(v.y) * this.width;
@@ -55,19 +58,28 @@ export class Layer {
   }
 
   blitBlended(otherLayer: Layer) {
+    var offsetDiff = otherLayer.offset.sub(this.offset).round();
     for (var y = 0; y < this.height; y++) {
       for (var x = 0; x < this.width; x++) {
-        var i = x + y * this.width;
-        var I = i * 4;
 
-        var fAlpha = otherLayer.pixels[I + 3] / 255;
+        var myPos = new Vec(x,y);
+        var theirPos = myPos.sub(offsetDiff);
+
+        if (!otherLayer.isInBounds(theirPos)) {
+          continue; // TODO: actually construct the loop bounds correctly from the start plz
+        }
+
+        var I = (x + y * this.width) * 4;
+        var theirI = (theirPos.x + theirPos.y * otherLayer.width) * 4;
+
+        var fAlpha = otherLayer.pixels[theirI + 3] / 255;
         var fAlphaOneMinus = 1 - fAlpha;
 
         var fAlphaMine = this.pixels[I + 3] / 255;
 
-        this.pixels[I + 0] = ~~(this.pixels[I + 0] * fAlphaOneMinus + otherLayer.pixels[I + 0] * fAlpha);
-        this.pixels[I + 1] = ~~(this.pixels[I + 1] * fAlphaOneMinus + otherLayer.pixels[I + 1] * fAlpha);
-        this.pixels[I + 2] = ~~(this.pixels[I + 2] * fAlphaOneMinus + otherLayer.pixels[I + 2] * fAlpha);
+        this.pixels[I + 0] = ~~(this.pixels[I + 0] * fAlphaOneMinus + otherLayer.pixels[theirI + 0] * fAlpha);
+        this.pixels[I + 1] = ~~(this.pixels[I + 1] * fAlphaOneMinus + otherLayer.pixels[theirI + 1] * fAlpha);
+        this.pixels[I + 2] = ~~(this.pixels[I + 2] * fAlphaOneMinus + otherLayer.pixels[theirI + 2] * fAlpha);
         this.pixels[I + 3] = ~~(255 * (1 - (1 - fAlphaMine) * (1 - fAlpha)));
       }
     }
