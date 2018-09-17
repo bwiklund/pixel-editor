@@ -45,14 +45,14 @@ export const SwapActiveColors = new Command("SwapActiveColors", "x", (app: App) 
 export const ShrinkCurrentTool = new Command("ShrinkCurrentTool", "û", (app: App) => {
   if (app.activeTool instanceof Pencil) {
     app.activeTool.size = Math.max(1, app.activeTool.size - 1);
-    app.activeTool.redrawBrushPreview();
+    //app.activeTool.redrawBrushPreview();
   }
 });
 
 export const GrowCurrentTool = new Command("GrowCurrentTool", "ý", (app: App) => {
   if (app.activeTool instanceof Pencil) {
     app.activeTool.size = Math.max(1, app.activeTool.size + 1);
-    app.activeTool.redrawBrushPreview();
+    //app.activeTool.redrawBrushPreview();
   }
 });
 

@@ -110,7 +110,7 @@ export class Pencil extends Tool {
 
   onMouseMove(context: ToolContext) {
     this.drawPencilStrokes(context);
-    this.lastMousePositionContext = context;
+    //this.lastMousePositionContext = context;
   }
 
   onMouseUp(context: ToolContext) {

@@ -15,14 +15,14 @@ export class Fill extends Tool {
     var preview = context.doc.activeLayer.deepClone();
     var color = context.app.colorFg;
     preview.setPixel(context.pos, color.r, color.g, color.b, color.a);
-    context.doc.activeLayerPreview = preview;
+    //context.doc.activeLayerPreview = preview;
     context.doc.touch();
   }
 
   onMouseDown(context: ToolContext) {
     context.doc.historyPush("Fill");
     context.doc.cloneLayer(context.doc.activeLayer);
-    context.doc.activeLayerPreview = null;
+    //context.doc.activeLayerPreview = null;
 
     if (this.contiguous) {
       this.floodFill(context);
