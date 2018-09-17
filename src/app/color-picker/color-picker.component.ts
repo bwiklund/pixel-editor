@@ -15,7 +15,7 @@ export class ColorPickerComponent implements OnInit, OnChanges {
   @Input()
   get color() { return this.colorValue; }
   set color(val) { this.colorValue = val; this.colorChange.emit(this.colorValue) }
-  
+
   // out internal HSV representation that we track to avoid issues described below
   private hsv: HSV = null;
 
@@ -126,8 +126,11 @@ export class ColorPickerComponent implements OnInit, OnChanges {
 
   updateCanvas() {
     const canvas = this.canvas.nativeElement;
-    canvas.width = 256;
-    canvas.height = 256;
+    // this can be 256 to be perfectionist but we can make it smaller and upscale with no real downside
+    // the colors aren't picked from this and the difference in pixel values is way below human perception at 64x64
+    var size = 64; 
+    canvas.width = size;
+    canvas.height = size;
     var ctx = canvas.getContext("2d");
 
     let idata = ctx.getImageData(0, 0, canvas.width, canvas.height);
@@ -136,7 +139,7 @@ export class ColorPickerComponent implements OnInit, OnChanges {
         var i = x + y * canvas.width;
         var I = i * 4;
 
-        var c = new HSV(this.hsv.h, x / 255, 1 - y / 255).toRGB();
+        var c = new HSV(this.hsv.h, x / (size - 1), 1 - y / (size - 1)).toRGB();
 
         idata.data[I + 0] = c.r;
         idata.data[I + 1] = c.g;
@@ -149,7 +152,8 @@ export class ColorPickerComponent implements OnInit, OnChanges {
 
   updateHueBar() {
     const canvas = this.hueBarCanvas.nativeElement;
-    canvas.width = 256;
+    var size = 256; // this we should keep high because hue changes rapidly and it's extremely tiny anyways
+    canvas.width = size;
     canvas.height = 1;
     var ctx = canvas.getContext("2d");
 
@@ -159,7 +163,7 @@ export class ColorPickerComponent implements OnInit, OnChanges {
         var i = x + y * canvas.width;
         var I = i * 4;
 
-        var c = new HSV(x / 255, 1, 1).toRGB();
+        var c = new HSV(x / size, 1, 1).toRGB();
 
         idata.data[I + 0] = c.r;
         idata.data[I + 1] = c.g;
