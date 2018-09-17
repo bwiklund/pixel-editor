@@ -5,6 +5,7 @@ import { App, Command } from '../core/core';
 import { newDocFromImage } from '../core/ImageImporter';
 import { AppService } from './app.service';
 import * as Commands from '../core/Commands';
+import { ElectronService } from './electron.service';
 
 @Component({
   selector: 'app-root',
@@ -15,10 +16,22 @@ export class AppComponent {
   title = 'ng';
   app: App;
 
-  constructor(private cd: ChangeDetectorRef, public appService: AppService) {
+  constructor(private cd: ChangeDetectorRef, public appService: AppService, public electronService: ElectronService) {
     this.app = appService.app;
     this.app.docs.push(newDocFromImage("assets/lunaAvatar_neutral_0.png", () => { }));
     this.app.docs.push(newDocFromImage("assets/peepAvatar_neutral_0.png", () => { }));
+
+    if (electronService.isElectron()) {
+      this.electronService.ipcRenderer.send('openFile', () => {
+        console.log("Event sent.");
+      })
+    
+      this.electronService.ipcRenderer.on('fileData', (event, data) => {
+        var file = new Blob([data], {type: "image/png"});
+        debugger
+        this.app.handleMysteriousIncomingBlob(file);
+      })
+    }
   }
 
   @HostListener('window:keydown', ['$event'])

@@ -74,3 +74,4 @@ export const QuickExport = new Command("QuickExport", "&%#s", (app: App) => {
     saveBlobFile(doc.name + '.png', blob, () => { });
   });
 });
+

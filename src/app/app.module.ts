@@ -11,6 +11,7 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
 import { ToolPropertiesComponent } from './tool-properties/tool-properties.component';
 import { HistoryComponent } from './history/history.component';
 import { MenuComponent } from './menu/menu.component';
+import { ElectronService } from './electron.service';
 
 @NgModule({
   declarations: [
@@ -22,13 +23,14 @@ import { MenuComponent } from './menu/menu.component';
     ToolbarComponent,
     ToolPropertiesComponent,
     HistoryComponent,
-    MenuComponent
+    MenuComponent,
   ],
   imports: [
     BrowserModule,
-    FormsModule
+    FormsModule,
   ],
-  providers: [],
+  providers: [
+    ElectronService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

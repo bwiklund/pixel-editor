@@ -21,14 +21,14 @@ canvas {
 }
 
 .cursor-eyedropper {
-  cursor: url('/assets/cursor_eyedropper.png') 0 22, pointer;
+  cursor: url('../../assets/cursor_eyedropper.png') 0 22, pointer;
 }
 .cursor-pencil {
-  cursor: url('/assets/cursor_crosshair.png') 9 9, pointer;
+  cursor: url('../../assets/cursor_crosshair.png') 9 9, pointer;
 }
 .cursor-panner-closed {
-  cursor: url('/assets/cursor_hand.png') 9 9, pointer;
+  cursor: url('../../assets/cursor_hand.png') 9 9, pointer;
 }
 .cursor-panner-open {
-  cursor: url('/assets/cursor_hand_open.png') 9 9, pointer;
+  cursor: url('../../assets/cursor_hand_open.png') 9 9, pointer;
 }

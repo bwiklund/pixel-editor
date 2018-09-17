@@ -1,20 +1,21 @@
 // src/electron/electron.js
 
-const {app, BrowserWindow} = require('electron')
+const { app, BrowserWindow, ipcMain } = require('electron')
+const fs = require('fs');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win
 
-function createWindow () {
+function createWindow() {
   // Create the browser window.
-  win = new BrowserWindow({width: 800, height: 600})
+  win = new BrowserWindow({ width: 1024, height: 768 })
 
   // and load the index.html of the app.
   win.loadURL(`file://${__dirname}/ng/index.html`)
 
   // Open the DevTools.
-  // win.webContents.openDevTools()
+  win.webContents.openDevTools()
 
   win.setMenuBarVisibility(false);
 
@@ -26,6 +27,23 @@ function createWindow () {
     win = null
   })
 }
+
+ipcMain.on('openFile', (event, path) => {
+  const { dialog } = require('electron')
+  dialog.showOpenDialog(function (fileNames) {
+    if (fileNames === undefined) {
+      console.log("No file selected");
+    } else {
+      readFile(fileNames[0]);
+    }
+  });
+
+  function readFile(filepath) {
+    fs.readFile(filepath, (err, data) => {
+      event.sender.send('fileData', data);
+    })
+  }
+});
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
