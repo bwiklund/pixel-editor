@@ -1,7 +1,7 @@
 <div class="app-wrap flex-container-vertical">
   <app-menu class="menu-root" [menu]="app.menu"></app-menu>
   <header>
-    <a *ngFor="let doc of app.docs; let i = index" [ngClass]="{active: app.activeDocIndex === i}" (click)="app.activeDocIndex = i">{{doc.name}}</a>
+    <a *ngFor="let doc of app.docs; let i = index" [ngClass]="{active: app.activeDoc == doc}" (click)="app.activeDoc = doc">{{doc.name}}</a>
   </header>
   <div class="everything-under-header">
     <div class="sidebar">

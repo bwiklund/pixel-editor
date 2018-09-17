@@ -80,6 +80,11 @@ export class App {
     return this.docs[this.activeDocIndex];
   }
 
+  set activeDoc(val) {
+    this.activeDocIndex = this.docs.indexOf(val);
+    this.activeDoc.touch();
+  }
+
   undo() {
     this.activeTool.interrupt(); // don't let anything keep editing if you still have mousedown and hit ctrlz while painting for example
     this.activeDoc.historyPop();
@@ -114,14 +119,14 @@ export class App {
     var doc = new Doc("New.pixel", 64, 64);
     doc.newLayer();
     this.docs.push(doc);
-    this.activeDocIndex = this.docs.length - 1;
+    this.activeDoc = doc;
   }
 
   closeDoc(doc) {
     // TODO: check if needs saving
     var index = this.docs.indexOf(doc);
     this.docs.splice(index, 1);
-    this.activeDocIndex = this.docs.length - 1;
+    this.activeDoc = this.docs[this.docs.length - 1];
   }
 
   closeAllDocs() {
@@ -132,7 +137,7 @@ export class App {
 
   addDoc(doc: Doc) {
     this.docs.push(doc);
-    this.activeDocIndex = this.docs.length - 1;
+    this.activeDoc = this.docs[this.docs.length - 1];
   }
 
   openFile() {
