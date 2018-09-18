@@ -1,6 +1,36 @@
 import { Vec } from "./Vec";
 import { Color } from "./Color";
 
+// internal for now
+export class Bounds {
+  constructor(public tl: Vec, public br: Vec) { }
+
+  get width() { return this.br.x - this.tl.x; }
+  get height() { return this.br.y - this.tl.y; }
+
+  contains(v: Vec) {
+    return (
+      v.x >= this.tl.x &&
+      v.x <= this.br.x &&
+      v.y >= this.tl.y &&
+      v.y <= this.br.y
+    );
+  }
+
+  newBoundsIncluding(v: Vec) {
+    return new Bounds(
+      new Vec(
+        Math.min(this.tl.x, v.x),
+        Math.min(this.tl.y, v.y)
+      ),
+      new Vec(
+        Math.max(this.br.x, v.x),
+        Math.max(this.br.y, v.y)
+      )
+    );
+  }
+}
+
 export class Layer {
   name: string;
   width: number;
@@ -14,7 +44,7 @@ export class Layer {
     this.width = width;
     this.height = height;
     this.isVisible = true;
-    this.pixels = new Uint8ClampedArray(this.width * this.height * 4).fill(0);
+    this.pixels = new Uint8ClampedArray(this.width * this.height * 4);
   }
 
   deepClone(): Layer {
@@ -40,7 +70,6 @@ export class Layer {
 
   /** NOTE: Expects position in document space, not internal pixel buffer space */
   getColor(v: Vec): Color {
-    let internalCoord = v.sub(this.offset).round();
     return this.getColorInternal(this.toInternalCoord(v));
   }
 
@@ -66,6 +95,33 @@ export class Layer {
       this.pixels[I + 2],
       this.pixels[I + 3]
     );
+  }
+
+  /** NOTE: Expects position in document space, not internal pixel buffer space */
+  expandToFitOrReturnSelf(v: Vec) {
+    var actualV = this.toInternalCoord(v);
+    var bounds = new Bounds(this.offset, new Vec(this.width, this.height));
+    var newBounds = bounds.newBoundsIncluding(actualV);
+
+    // TODO: only resize if needed
+    var newSelf = new Layer(this.name, newBounds.width, newBounds.height);
+    newSelf.offset = new Vec(
+      Math.min(this.offset.x, newBounds.tl.x),
+      Math.min(this.offset.y, newBounds.tl.y)
+    );
+    newSelf.pixels = new Uint8ClampedArray(newBounds.width * newBounds.height * 4);
+    newSelf.isVisible = this.isVisible;
+
+    for (var y = 0; y < this.height; y++) {
+      for (var x = 0; x < this.width; x++) {
+        var oldPos = new Vec(x, y);
+        var c = this.getColorInternal(oldPos);
+        var newPos = oldPos.add(this.offset.sub(newSelf.offset));
+        newSelf.setPixelInternal(newPos, c.r, c.g, c.b, c.a);
+      }
+    }
+
+    return newSelf;
   }
 
   blitBlended(otherLayer: Layer): void {
