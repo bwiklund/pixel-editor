@@ -25,9 +25,9 @@ export class AppComponent {
       this.electronService.ipcRenderer.send('openFile', () => {
         console.log("Event sent.");
       })
-    
+
       this.electronService.ipcRenderer.on('fileData', (event, data) => {
-        var file = new Blob([data], {type: "image/png"});
+        var file = new Blob([data], { type: "image/png" });
         debugger
         this.app.handleMysteriousIncomingBlob(file);
       })
@@ -59,9 +59,10 @@ export class AppComponent {
       69: () => this.app.selectTool(this.app.eraserTool),
       71: () => this.app.selectTool(this.app.fillTool),
       86: () => this.app.selectTool(this.app.moveTool),
+      90: () => this.app.selectTool(this.app.zoomTool),
     };
 
-    if (simpleToolShortcuts[e.keyCode]) {
+    if (!e.metaKey && !e.ctrlKey && !e.shiftKey && !e.altKey && simpleToolShortcuts[e.keyCode]) {
       simpleToolShortcuts[e.keyCode]();
       return;
     }
@@ -95,7 +96,7 @@ export class AppComponent {
     // the commands are an object where command names are keys, so we need to invert it here.
     // TODO: cache this? probably doesn't actually matter for the N we care about
     var Shortcuts = Command.Shortcuts;
-  
+
     var flippedShortcuts = {};
     for (var k in Shortcuts) { flippedShortcuts[Shortcuts[k]] = k; }
 

@@ -147,4 +147,12 @@ export class Doc {
     doc.historyLabel = this.historyLabel;
     return doc;
   }
+
+  rezoom(artboardMousePos: Vec, newZoom: number) {
+    var zoomCoef = newZoom / this.zoom;
+    var topCornerFromMouseOffset = artboardMousePos.sub(this.offset);
+    var newOffset = artboardMousePos.sub(topCornerFromMouseOffset.scalarMult(zoomCoef));
+    this.zoom = newZoom;
+    this.offset = newOffset;
+  }
 }

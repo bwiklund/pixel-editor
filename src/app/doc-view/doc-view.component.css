@@ -32,3 +32,6 @@ canvas {
 .cursor-panner-open {
   cursor: url('../../assets/cursor_hand_open.png') 9 9, pointer;
 }
+.cursor-zoom {
+  cursor: url('../../assets/cursor_magnify.png') 9 9, pointer;
+}

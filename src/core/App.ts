@@ -10,21 +10,15 @@ import { Panner } from './tools/Panner';
 import { Fill } from './tools/Fill';
 import { Move } from './tools/Move';
 import { Eyedropper } from './tools/Eyedropper';
+import { Zoom } from './tools/Zoom';
 import { Command } from './Command';
 import * as Commands from './Commands';
 import * as Handlers from './formats/Handlers';
 
 export class App {
-  pencilTool: Pencil = new Pencil();
-  eraserTool: Pencil = new Pencil();
-  pannerTool: Tool = new Panner();
-  fillTool: Tool = new Fill();
-  moveTool: Tool = new Move();
-  colorPickerTool: Tool = new Eyedropper();
-  overriddenTool: Tool = null;
+
   docs: Doc[] = [];
   activeDocIndex: number = 0;
-  activeTool: Tool = this.pencilTool;
   colorFg: Color = Color.fromHex("#e75952");
   colorBg: Color = Color.fromHex("#f9938a");
   palette: Color[];
@@ -35,6 +29,17 @@ export class App {
     new Handlers.PngHandler(this),
     new Handlers.PixelHandler(this)
   ];
+  
+  pencilTool: Pencil = new Pencil();
+  eraserTool: Pencil = new Pencil();
+  pannerTool: Tool = new Panner();
+  fillTool: Tool = new Fill();
+  moveTool: Tool = new Move();
+  colorPickerTool: Tool = new Eyedropper();
+  zoomTool: Tool = new Zoom();
+  
+  activeTool: Tool = this.pencilTool;
+  overriddenTool: Tool = null;
 
   toolbar: Tool[] = [
     this.pencilTool,
@@ -43,6 +48,7 @@ export class App {
     this.colorPickerTool,
     this.fillTool,
     this.moveTool,
+    this.zoomTool
   ]
 
   constructor() {

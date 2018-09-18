@@ -76,16 +76,9 @@ export class DocViewComponent implements DoCheck {
 
   mousewheel(e) {
     var artboardMousePos = this.mousePositionInScreenSpaceOnArtboard(e);
-    var zoomCoef = Math.pow(2, 0.004 * this.app.preferences.scrollZoomSpeed * -e.deltaY);
-    var newZoom = this.doc.zoom * zoomCoef;
+    var newZoom = this.doc.zoom * Math.pow(2, 0.004 * this.app.preferences.scrollZoomSpeed * -e.deltaY);
 
-    var topCornerFromMouseOffset = artboardMousePos.sub(this.doc.offset);
-    var newOffset = artboardMousePos.sub(
-      topCornerFromMouseOffset.scalarMult(zoomCoef)
-    );
-
-    this.doc.zoom = newZoom;
-    this.doc.offset = newOffset;
+    this.doc.rezoom(artboardMousePos, newZoom);
   }
 
   mousePositionInScreenSpaceOnArtboard(e) {
