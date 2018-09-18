@@ -29,9 +29,22 @@ export class Layer {
     return !(v.x < 0 || v.x >= this.width || v.y < 0 || v.y >= this.height);
   }
 
-  /** NOTE: This takes care of `offset` internally */
-  setPixel(v: Vec, r: number, g: number, b: number, a: number) {
-    v = v.sub(this.offset).round();
+  toInternalCoord(v: Vec): Vec {
+    return v.sub(this.offset).round();
+  }
+
+  /** NOTE: Expects position in document space, not internal pixel buffer space */
+  setPixel(v: Vec, r: number, g: number, b: number, a: number): void {
+    return this.setPixelInternal(this.toInternalCoord(v), r, g, b, a);
+  }
+
+  /** NOTE: Expects position in document space, not internal pixel buffer space */
+  getColor(v: Vec): Color {
+    let internalCoord = v.sub(this.offset).round();
+    return this.getColorInternal(this.toInternalCoord(v));
+  }
+
+  setPixelInternal(v: Vec, r: number, g: number, b: number, a: number): void {
     if (!this.isInBounds(v)) { return; }
 
     var I = (v.x + v.y * this.width) * 4;
@@ -41,9 +54,7 @@ export class Layer {
     this.pixels[I + 3] = a;
   }
 
-  /** NOTE: This takes care of `@offset` internally */
-  getColor(v: Vec): Color {
-    v = v.sub(this.offset).round();
+  getColorInternal(v: Vec): Color {
     if (!this.isInBounds(v)) { return null; }
 
     var i = ~~(v.x) + ~~(v.y) * this.width;
@@ -57,12 +68,12 @@ export class Layer {
     );
   }
 
-  blitBlended(otherLayer: Layer) {
+  blitBlended(otherLayer: Layer): void {
     var offsetDiff = otherLayer.offset.sub(this.offset).round();
     for (var y = 0; y < this.height; y++) {
       for (var x = 0; x < this.width; x++) {
 
-        var myPos = new Vec(x,y);
+        var myPos = new Vec(x, y);
         var theirPos = myPos.sub(offsetDiff);
 
         if (!otherLayer.isInBounds(theirPos)) {
