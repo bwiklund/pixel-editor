@@ -73,9 +73,11 @@ export class App {
         new MenuItemCommand("Delete Layer", Commands.DeleteLayer, this),
       ]),
       // new Menu("Image", [
-      //   new Menu("Not implemented yet", () => console.log("you clicked me")),
-      //   new Menu("Sorry!", () => console.log("you clicked me")),
+      //   new MenuItemCommand("New Layer", Commands.NewLayer, this),
       // ]),
+      new Menu("Layer", [
+        new MenuItemCommand("Duplicate", Commands.DuplicateLayer, this),
+      ]),
     ]);
   }
 

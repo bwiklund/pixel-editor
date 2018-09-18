@@ -29,22 +29,22 @@ export class Layer {
     return !(v.x < 0 || v.x >= this.width || v.y < 0 || v.y >= this.height);
   }
 
+  /** NOTE: This takes care of `offset` internally */
   setPixel(v: Vec, r: number, g: number, b: number, a: number) {
-    v = v.sub(this.offset);
+    v = v.sub(this.offset).round();
     if (!this.isInBounds(v)) { return; }
 
-    var i = ~~(v.x) + ~~(v.y) * this.width;
-    var I = i * 4;
+    var I = (v.x + v.y * this.width) * 4;
     this.pixels[I + 0] = r;
     this.pixels[I + 1] = g;
     this.pixels[I + 2] = b;
     this.pixels[I + 3] = a;
   }
 
+  /** NOTE: This takes care of `@offset` internally */
   getColor(v: Vec): Color {
-    if (v.x < 0 || v.x >= this.width || v.y < 0 || v.y >= this.height) {
-      return null;
-    }
+    v = v.sub(this.offset).round();
+    if (!this.isInBounds(v)) { return null; }
 
     var i = ~~(v.x) + ~~(v.y) * this.width;
     var I = i * 4;

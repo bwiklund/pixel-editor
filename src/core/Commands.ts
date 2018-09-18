@@ -6,6 +6,9 @@ import { Command } from './Command';
 import { PngExportHandler } from './formats/Handlers';
 import { saveBlobFile } from '../util/io';
 
+// it's kind of redundant to write the name of each command twice, but
+// i want lots of these to be refered to directly in code elsewhere
+// (menus, etc). so it's nice to have them exported by name
 
 export const NewFile = new Command("NewFile", "&n", (app: App) => {
   app.newDoc();
@@ -73,4 +76,12 @@ export const QuickExport = new Command("QuickExport", "&%#s", (app: App) => {
   handler.action(app.activeDoc, (blob: Blob) => {
     saveBlobFile(doc.name + '.png', blob, () => { });
   });
+});
+
+export const DuplicateLayer = new Command("DuplicateLayer", null, (app: App) => {
+  var doc = app.activeDoc;
+  var duplicateLayer = doc.activeLayer.deepClone();
+  doc.layers.push(duplicateLayer);
+  doc.activeLayer = duplicateLayer;
+doc.touch();
 });

@@ -36,8 +36,10 @@ export class Fill extends Tool {
     var targetColor = layer.getColor(context.pos);;
     var replacementColor = context.app.colorFg;
 
+    if (!targetColor) { return; }
+
     if (targetColor.equalTo(replacementColor)) { return; }
-    
+
     layer.setPixel(context.pos, replacementColor.r, replacementColor.g, replacementColor.b, replacementColor.a);
 
     var queue: Vec[] = [];
@@ -62,6 +64,7 @@ export class Fill extends Tool {
         var newPos = directions[i];
         if (layer.isInBounds(newPos)) {
           var newNodeColor = layer.getColor(newPos);
+          if (!newNodeColor) { continue; }
           if (newNodeColor.equalTo(targetColor)) {
             layer.setPixel(newPos, replacementColor.r, replacementColor.g, replacementColor.b, replacementColor.a);
             queue.push(newPos);
