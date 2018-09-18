@@ -1,7 +1,6 @@
 import { Vec } from './Vec';
 import { Color } from './Color';
-import { Layer, Bounds } from './Layer';
-import { TestBed } from '@angular/core/testing';
+import { Layer } from './Layer';
 
 
 describe("Foo", () => {
@@ -36,19 +35,5 @@ describe("Foo", () => {
     var newLayer2 = newLayer.expandToFitOrReturnSelf(new Vec(-8, -10));
     expect([newLayer2.offset, newLayer2.width, newLayer2.height]).toEqual([new Vec(-8, -10), 32, 32]);
     expect(newLayer2.getColor(new Vec(0, 0))).toEqual(new Color(1, 2, 3, 4));
-  });
-
-  // TODO move bounds to another file
-  it("has a bounds class that helps out", () => {
-    var a = new Bounds(new Vec(0, 0), new Vec(16, 16));
-    expect([a.width, a.height]).toEqual([16, 16]);
-
-    var b = a.newBoundsIncluding(new Vec(17, 18));
-    expect(b.br).toEqual(new Vec(17, 18));
-    expect([b.width, b.height]).toEqual([17, 18]);
-
-    var c = b.newBoundsIncluding(new Vec(-1, -2));
-    expect(c.tl).toEqual(new Vec(-1, -2));
-    expect([c.width, c.height]).toEqual([18, 20]);
   });
 });
