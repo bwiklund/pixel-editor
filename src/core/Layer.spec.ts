@@ -3,13 +3,12 @@ import { Color } from './Color';
 import { Layer } from './Layer';
 
 
-describe("Foo", () => {
+describe("Layer", () => {
   let l: Layer;
 
   beforeEach(() => {
     l = new Layer("asdf", 16, 16);
   });
-
 
   it("can be drawn to", () => {
     l.setPixel(new Vec(0, 0), 1, 2, 3, 4);

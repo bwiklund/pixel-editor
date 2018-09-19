@@ -9,7 +9,8 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "build-electron": "ng build --base-href . && cp src/electron/* dist/",
-    "electron": "npm run build-electron && electron dist/"
+    "run-electron": "npm run build-electron && electron dist/",
+    "package": "npm run build-electron && electron-packager dist --overwrite --out build"
   },
   "private": true,
   "dependencies": {
@@ -36,6 +37,7 @@
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "~8.9.4",
     "codelyzer": "~4.3.0",
+    "electron-packager": "^12.1.2",
     "jasmine-core": "~2.99.1",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~3.0.0",

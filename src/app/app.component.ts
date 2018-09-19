@@ -21,17 +21,17 @@ export class AppComponent {
     this.app.docs.push(newDocFromImage("assets/lunaAvatar_neutral_0.png", () => { }));
     this.app.docs.push(newDocFromImage("assets/peepAvatar_neutral_0.png", () => { }));
 
-    if (electronService.isElectron()) {
-      this.electronService.ipcRenderer.send('openFile', () => {
-        console.log("Event sent.");
-      })
+    // if (electronService.isElectron()) {
+    //   this.electronService.ipcRenderer.send('openFile', () => {
+    //     console.log("Event sent.");
+    //   })
 
-      this.electronService.ipcRenderer.on('fileData', (event, data) => {
-        var file = new Blob([data], { type: "image/png" });
-        debugger
-        this.app.handleMysteriousIncomingBlob(file);
-      })
-    }
+    //   this.electronService.ipcRenderer.on('fileData', (event, data) => {
+    //     var file = new Blob([data], { type: "image/png" });
+    //     debugger
+    //     this.app.handleMysteriousIncomingBlob(file);
+    //   })
+    // }
   }
 
   @HostListener('window:keydown', ['$event'])
