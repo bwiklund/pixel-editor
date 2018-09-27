@@ -37,7 +37,16 @@ describe("color", () => {
     hsvPairs.forEach(pair => expect(pair.hsv.toRGB()).toEqual(pair.color));
   });
 
+  it("returns null for invalid hex", () => {
+    expect(Color.fromHex("this is not a hex")).toBeNull();
+  });
+
+  it("preserves alpha between hsv and color", () => {
+    expect(new HSV(0, 0, 0, 0).toRGB()).toEqual(new Color(0, 0, 0, 0));
+    expect(new HSV(1, 1, 1, 1).toRGB()).toEqual(new Color(255, 0, 0, 255));
+  });
+
   it("rounds incoming values to int", () => {
-    expect(new Color(0.1,0.1,0.1)).toEqual(new Color(0,0,0));
+    expect(new Color(0.1, 0.1, 0.1)).toEqual(new Color(0, 0, 0));
   });
 });

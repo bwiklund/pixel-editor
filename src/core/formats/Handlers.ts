@@ -1,6 +1,6 @@
 import { Doc } from '../Doc';
 import { App } from '../App';
-import { imgToLayer } from '../ImageImporter';
+import { imgToLayer } from '../../util/ImageImporter';
 
 export interface BlobLoaderHandler {
   test(blob: Blob): boolean;
