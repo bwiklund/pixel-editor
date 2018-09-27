@@ -29,10 +29,6 @@ export class Color {
     this.a = Math.round(a);
   }
 
-  equalTo(o: Color) {
-    return this.r == o.r && this.g == o.g && this.b == o.b && this.a == o.a;
-  }
-
   static fromHex(hex: string) {
     var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     return result ? new Color(
@@ -41,6 +37,14 @@ export class Color {
       parseInt(result[3], 16),
       255 // ;)
     ) : null;
+  }
+
+  copy() {
+    return new Color(this.r, this.g, this.b, this.a);
+  }
+
+  equalTo(o: Color) {
+    return this.r == o.r && this.g == o.g && this.b == o.b && this.a == o.a;
   }
 
   toHSV() {

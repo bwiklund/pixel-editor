@@ -46,6 +46,20 @@ describe("color", () => {
     expect(new HSV(1, 1, 1, 1).toRGB()).toEqual(new Color(255, 0, 0, 255));
   });
 
+  it("can make copies", () => {
+    var a = new Color(1,2,3,4);
+    var b = a.copy();
+    expect(a).toEqual(b);
+    expect(a).not.toBe(b);
+  });
+
+  it("can make hsv copies", () => {
+    var a = new HSV(0.1,0.2,0.3);
+    var b = a.copy();
+    expect(a).toEqual(b);
+    expect(a).not.toBe(b);
+  });
+
   it("rounds incoming values to int", () => {
     expect(new Color(0.1, 0.1, 0.1)).toEqual(new Color(0, 0, 0));
   });
