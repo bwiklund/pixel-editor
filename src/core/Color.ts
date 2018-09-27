@@ -22,7 +22,7 @@ export class Color {
   public b: number;
   public a: number;
 
-  constructor(r: number, g: number, b: number, a: number) {
+  constructor(r: number, g: number, b: number, a: number = 255) {
     this.r = Math.round(r);
     this.g = Math.round(g);
     this.b = Math.round(b);

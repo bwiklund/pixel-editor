@@ -22,6 +22,6 @@ export class Vec {
   }
 
   round() {
-    return new Vec(~~this.x, ~~this.y);
+    return new Vec(Math.round(this.x), Math.round(this.y));
   }
 }
