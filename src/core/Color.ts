@@ -55,4 +55,14 @@ export class Color {
   toHex() {
     return "#" + ((1 << 24) + (~~this.r << 16) + (~~this.g << 8) + ~~this.b).toString(16).slice(1);
   }
+
+  static lerp(a, b, v) {
+    var iv = 1 - v;
+    return new Color(
+      a.r * iv + b.r * v,
+      a.g * iv + b.g * v,
+      a.b * iv + b.b * v,
+      a.a * iv + b.a * v
+    );
+  }
 }

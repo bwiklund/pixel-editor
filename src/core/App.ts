@@ -1,5 +1,6 @@
 import { Color } from './Color';
 import { Doc } from './Doc';
+import { Layer } from './Layer';
 import { Preferences } from './Preferences';
 import { loadFilesAsBlobs, saveFile } from '../util/io';
 
@@ -37,6 +38,7 @@ export class App {
   moveTool: Tool = new Move();
   colorPickerTool: Tool = new Eyedropper();
   zoomTool: Tool = new Zoom();
+  selectionMask: Layer;
   
   activeTool: Tool = this.pencilTool;
   overriddenTool: Tool = null;

@@ -3,6 +3,23 @@ import { Bounds } from './Bounds';
 import { Color } from "./Color";
 
 
+const BlendModes = {
+  Replace(a: Color, b: Color) { return b; },
+
+  Normal(a: Color, b: Color) {
+    var fAlpha = b.a / 255;
+    var fAlphaOneMinus = 1 - fAlpha;
+    var fAlphaMine = a.a / 255;
+
+    return new Color(
+      a.r * fAlphaOneMinus + b.r * fAlpha,
+      a.g * fAlphaOneMinus + b.g * fAlpha,
+      a.b * fAlphaOneMinus + b.b * fAlpha,
+      255 * (1 - (1 - fAlphaMine) * fAlphaOneMinus)
+    );
+  }
+}
+
 export class Layer {
   name: string;
   width: number;
@@ -69,6 +86,20 @@ export class Layer {
     );
   }
 
+  fillRect(tl: Vec, br: Vec, c: Color) {
+    var actualTl = this.toInternalCoord(tl);
+    var actualBr = this.toInternalCoord(br);
+    for (var y = actualTl.y; y < actualBr.y; y++) {
+      for (var x = actualTl.x; x < actualBr.x; x++) {
+        var I = (x + y * this.width) * 4;
+        this.pixels[I + 0] = c.r;
+        this.pixels[I + 1] = c.g;
+        this.pixels[I + 2] = c.b;
+        this.pixels[I + 3] = c.a;
+      }
+    }
+  }
+
   /** NOTE: Expects position in document space, not internal pixel buffer space */
   expandToFitOrReturnSelf(v: Vec) {
     var actualV = this.toInternalCoord(v);
@@ -96,7 +127,7 @@ export class Layer {
     return newSelf;
   }
 
-  blitBlended(otherLayer: Layer): void {
+  blitBlended(otherLayer: Layer, blendMode: (a: Color, b: Color) => Color = BlendModes.Normal, mask: Layer = null): void {
     var offsetDiff = otherLayer.offset.sub(this.offset).round();
     for (var y = 0; y < this.height; y++) {
       for (var x = 0; x < this.width; x++) {
@@ -111,16 +142,22 @@ export class Layer {
         var I = (x + y * this.width) * 4;
         var theirI = (theirPos.x + theirPos.y * otherLayer.width) * 4;
 
-        var fAlpha = otherLayer.pixels[theirI + 3] / 255;
-        var fAlphaOneMinus = 1 - fAlpha;
-
-        var fAlphaMine = this.pixels[I + 3] / 255;
-
-        this.pixels[I + 0] = ~~(this.pixels[I + 0] * fAlphaOneMinus + otherLayer.pixels[theirI + 0] * fAlpha);
-        this.pixels[I + 1] = ~~(this.pixels[I + 1] * fAlphaOneMinus + otherLayer.pixels[theirI + 1] * fAlpha);
-        this.pixels[I + 2] = ~~(this.pixels[I + 2] * fAlphaOneMinus + otherLayer.pixels[theirI + 2] * fAlpha);
-        this.pixels[I + 3] = ~~(255 * (1 - (1 - fAlphaMine) * (1 - fAlpha)));
+        var a = this.getColorInternal(myPos);
+        var c = blendMode(a, otherLayer.getColorInternal(theirPos));
+        if (mask) {
+          var maskAmt = mask.getColorInternal(theirPos).a / 255;
+          c = Color.lerp(a, c, maskAmt);
+        }
+        this.setPixelInternal(myPos, c.r, c.g, c.b, c.a);
       }
     }
+  }
+
+  moveMasked(mask: Layer, moveOffset: Vec): void {
+    // make a copy of this layer, clear out where the mask was, and then use blitBlended to redraw it in the right place
+    var copy = this.deepClone();
+    copy.offset = copy.offset.add(moveOffset);
+    this.blitBlended(new Layer("clear", this.width, this.height), BlendModes.Replace, mask);
+    this.blitBlended(copy, BlendModes.Normal, mask);
   }
 }
