@@ -139,9 +139,6 @@ export class Layer {
           continue; // TODO: actually construct the loop bounds correctly from the start plz
         }
 
-        var I = (x + y * this.width) * 4;
-        var theirI = (theirPos.x + theirPos.y * otherLayer.width) * 4;
-
         var a = this.getColorInternal(myPos);
         var c = blendMode(a, otherLayer.getColorInternal(theirPos));
         if (mask) {
