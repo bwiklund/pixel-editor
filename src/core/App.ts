@@ -100,7 +100,12 @@ export class App {
 
   undo() {
     this.activeTool.interrupt(); // don't let anything keep editing if you still have mousedown and hit ctrlz while painting for example
-    this.activeDoc.undo();
+    this.activeDoc.history.undo();
+  }
+
+  redo() {
+    this.activeTool.interrupt(); // don't let anything keep editing if you still have mousedown and hit ctrlz while painting for example
+    this.activeDoc.history.redo();
   }
 
   selectTool(tool) {

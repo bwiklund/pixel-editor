@@ -69,6 +69,10 @@ export const Undo = new Command("Undo", "%z", (app: App) => {
   app.undo();
 });
 
+export const Redo = new Command("Redo", "%#z", (app: App) => {
+  app.redo();
+});
+
 export const QuickExport = new Command("QuickExport", "&%#s", (app: App) => {
   // TODO: dispatch this to some exporter service
   var handler = new PngExportHandler();

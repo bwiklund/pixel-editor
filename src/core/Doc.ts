@@ -122,17 +122,7 @@ export class Doc {
 
   record(label: string) {
     this.history.record(label);
-    console.log(this.history.states.map(s => s.label));
     this.touch();
-  }
-
-  undo() {
-    console.log(this.history.states.map(s => s.label));
-    this.history.undo();
-  }
-
-  redo() {
-    this.history.redo();
   }
 
   setFromHistory(prevState: Doc) {
