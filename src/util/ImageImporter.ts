@@ -20,6 +20,7 @@ export function newDocFromImage(path, done) {
     doc.width = img.width;
     doc.layers.push(layer);
     doc.isReady = true;
+    doc.enableHistory();
     doc.touch();
 
     done();

@@ -108,7 +108,7 @@ export class TimelineComponent {
   }
 
   reorderLayers(moveToIndex: number) {
-    this.doc.historyPush("Rearrange Layers");
+    this.doc.record("Rearrange Layers");
     var nextActiveLayer = this.doc.activeLayer;
     // if you click dragged from a non-selected layer, we select that and move that instead
     if (!this.selection.includes(this.dragStartedOnLayer)) {

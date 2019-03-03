@@ -25,7 +25,6 @@ export class Move extends Tool {
     if (this.mouseIsDown) {
       if (!this.hasStartedMoving) {
         this.hasStartedMoving = true;
-        context.doc.historyPush("Move selection");
         context.doc.cloneLayer(context.doc.activeLayer);
       }
       if (this.lastPos) {
@@ -56,5 +55,6 @@ export class Move extends Tool {
     this.mouseIsDown = false;
     this.doMoving(context);
     this.interrupt();
+    context.doc.record("Move selection");
   }
 }

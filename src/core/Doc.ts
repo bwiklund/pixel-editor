@@ -1,6 +1,7 @@
 import { Layer } from './Layer';
 import { Vec } from './Vec';
 import { saveFile } from '../util/io';
+import { UndoHistory } from 'undo-history';
 
 export class Doc {
   name: string;
@@ -8,13 +9,12 @@ export class Doc {
   height: number;
   needsUpdate: boolean = false;
   activeLayerIndex: number = 0;
-  historyLabel: string = "";
   //activeLayerPreview: Layer = null;
   layers: Layer[] = [];
 
   // a stack of copies of this document going back in time
   // we push and pop to this, but keep the reference to the original doc the same
-  history: Doc[] = [];
+  history: UndoHistory<Doc>;
 
   // volatile unsaved stuff
   isReady: boolean = true;
@@ -25,6 +25,11 @@ export class Doc {
     this.name = name;
     this.width = width;
     this.height = height;
+  }
+
+  enableHistory() {
+    this.history = new UndoHistory(50, this.shallowCloneForHistory.bind(this), this.setFromHistory.bind(this));
+    this.history.record("Initial state");
   }
 
   get activeLayer() {
@@ -38,10 +43,11 @@ export class Doc {
     this.activeLayerIndex = index;
   }
 
-  // clone a layer before mutating it. this happens after history push
+  // clone a layer before mutating it. do this before you do work on a layer and before you write to history
   cloneLayer(layer: Layer) {
+    this.layers = this.layers.slice(); // new instance of layers array, with same layer instances for memory compactness
     var index = this.layers.indexOf(layer);
-    this.layers[index] = layer.deepClone();
+    this.layers[index] = layer.deepClone(); // actually duplicate the layer we intend to modify
   }
 
   touch() {
@@ -49,19 +55,21 @@ export class Doc {
   }
 
   newLayer() {
-    this.historyPush("New layer");
     this.layers.push(new Layer("Layer " + (this.layers.length + 1), this.width, this.height));
     this.activeLayerIndex = this.layers.length - 1;
+    
+    this.record("New layer");
   }
 
   deleteLayers(layersToDelete: Layer[]) {
-    this.historyPush("Delete layer(s)");
     var newLayers = this.layers.filter(l => !layersToDelete.includes(l));
     if (newLayers.length > 0) {
       this.layers = newLayers;
     } else {
       throw new Error("You can't delete all layers!");
     }
+  
+    this.record("Delete layer(s)");
   }
 
   // make a new headless layer of everything and return it.
@@ -73,7 +81,7 @@ export class Doc {
       // if (layer == this.activeLayer && this.activeLayerPreview != null && !ignoreTempLayers) {
       //   finalLayer.blitBlended(this.activeLayerPreview);
       // } else {
-        finalLayer.blitBlended(layer);
+      finalLayer.blitBlended(layer);
       // }
     });
     return finalLayer;
@@ -112,30 +120,27 @@ export class Doc {
     return doc;
   }
 
-
-  // history magic /////////////////////////////////////////////////////////////////
-  historyPush(label: string) {
-    //this.activeLayerPreview = null;
-
-    this.historyLabel = label;
-    var historyClone = this.shallowCloneForHistory();
-    this.history.push(historyClone);
+  record(label: string) {
+    this.history.record(label);
+    console.log(this.history.states.map(s => s.label));
     this.touch();
-
-    // TODO: enforce a max history size or do we care?
   }
 
-  historyPop() {
-    //this.activeLayerPreview = null;
+  undo() {
+    console.log(this.history.states.map(s => s.label));
+    this.history.undo();
+  }
 
-    if (this.history.length == 0) { return; }
-    var prevState = this.history.pop();
+  redo() {
+    this.history.redo();
+  }
+
+  setFromHistory(prevState: Doc) {
     this.name = prevState.name;
     this.width = prevState.width;
     this.height = prevState.height;
     this.layers = prevState.layers;
     this.activeLayerIndex = prevState.activeLayerIndex;
-    this.historyLabel = prevState.historyLabel;
     this.touch();
   }
 
@@ -144,7 +149,6 @@ export class Doc {
     doc.layers = this.layers.slice();
     doc.needsUpdate = this.needsUpdate;
     doc.activeLayerIndex = this.activeLayerIndex;
-    doc.historyLabel = this.historyLabel;
     return doc;
   }
 

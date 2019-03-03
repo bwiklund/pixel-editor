@@ -20,7 +20,6 @@ export class Fill extends Tool {
   }
 
   onMouseDown(context: ToolContext) {
-    context.doc.historyPush("Fill");
     context.doc.cloneLayer(context.doc.activeLayer);
     //context.doc.activeLayerPreview = null;
 
@@ -29,6 +28,8 @@ export class Fill extends Tool {
     } else {
       this.globalReplaceColor(context);
     }
+    
+    context.doc.record("Fill");
   }
 
   floodFill(context: ToolContext) {
