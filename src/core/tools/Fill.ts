@@ -1,6 +1,7 @@
 import { Tool, ToolContext } from "./Tools";
 import { Color } from "../Color";
 import { Vec } from "../Vec";
+import { floodFill } from 'ts-flood-fill';
 
 export class Fill extends Tool {
   name = "Fill";
@@ -28,51 +29,22 @@ export class Fill extends Tool {
     } else {
       this.globalReplaceColor(context);
     }
-    
+
     context.doc.record("Fill");
   }
 
   floodFill(context: ToolContext) {
-    var layer = context.doc.activeLayer;
-    var targetColor = layer.getColor(context.pos);;
-    var replacementColor = context.app.colorFg;
+    floodFill(
+      ~~context.pos.x,
+      ~~context.pos.y,
+      context.app.colorFg,
+      (x, y) => context.doc.activeLayer.getColor(new Vec(x, y)),
+      (x, y, c) => context.doc.activeLayer.setPixel(new Vec(x, y), c.r, c.g, c.b, c.a),
+      (x, y) => context.doc.activeLayer.isInBounds(new Vec(x, y)),
+      (a, b) => a.equalTo(b) || (a.a == 0 && b.a == 0)
+    );
 
-    if (!targetColor) { return; }
-
-    if (targetColor.equalTo(replacementColor)) { return; }
-
-    layer.setPixel(context.pos, replacementColor.r, replacementColor.g, replacementColor.b, replacementColor.a);
-
-    var queue: Vec[] = [];
-    queue.push(context.pos);
-
-    var iterations = 0;
-    while (queue.length > 0) {
-
-      // if (iterations++ > layer.width * layer.height * 2) {
-      //   debugger
-      // }
-
-      var nodePos = queue.pop();
-      var directions = [
-        nodePos.add(new Vec(0, -1)),
-        nodePos.add(new Vec(1, 0)),
-        nodePos.add(new Vec(0, 1)),
-        nodePos.add(new Vec(-1, 0))
-      ];
-
-      for (var i = 0; i < directions.length; i++) {
-        var newPos = directions[i];
-        if (layer.isInBounds(newPos)) {
-          var newNodeColor = layer.getColor(newPos);
-          if (!newNodeColor) { continue; }
-          if (newNodeColor.equalTo(targetColor)) {
-            layer.setPixel(newPos, replacementColor.r, replacementColor.g, replacementColor.b, replacementColor.a);
-            queue.push(newPos);
-          }
-        }
-      }
-    }
+    context.doc.record("Flood fill");
   }
 
   globalReplaceColor(context: ToolContext) {

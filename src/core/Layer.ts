@@ -45,7 +45,7 @@ export class Layer {
   }
 
   isInBounds(v: Vec): boolean {
-    return !(v.x < 0 || v.x >= this.width || v.y < 0 || v.y >= this.height);
+    return v.x >= 0 && v.x < this.width && v.y >= 0 && v.y < this.height;
   }
 
   toInternalCoord(v: Vec): Vec {
